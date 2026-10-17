@@ -1,0 +1,387 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-10-16T09:30:29.015542+00:00",
+  "scope": "All six downloaded sources were visually reviewed in labeled contact sheets. This is sampled visual review, not continuous playback or physical-camera validation.",
+  "policy": "Preserve originals; prepare only reviewed full-body single-person references. Multi-person, clipped-body, or low-resolution sources remain documented teaching material rather than silently becoming automatic pose references.",
+  "sources": [
+    {
+      "id": "creator-front-24",
+      "filename": "01_24式完整正面示范_WushuAndKungFu.mp4",
+      "sourceUrl": "https://www.youtube.com/watch?v=jkyWbiBj5u4",
+      "sha256": "8d69e369e3254533a5a92e60c1441f5adb20fd03aeeb01d934aab8f56c5ba286",
+      "originalPreserved": true,
+      "actualMetadata": {
+        "width": 1920,
+        "height": 1080,
+        "fps": 30.0,
+        "frameCount": 8740,
+        "durationSeconds": 291.3333333333333
+      },
+      "status": "prepared-single-person-reference",
+      "clipCount": 24,
+      "playlist": "/practice-media/source-front-24-playlist.json",
+      "reviewContactSheets": [
+        "artifacts/teaching-review/01-page-1.jpg",
+        "artifacts/teaching-review/01-page-2.jpg",
+        "artifacts/teaching-review/01-page-3.jpg",
+        "artifacts/teaching-review/01-page-4.jpg"
+      ],
+      "clips": [
+        {
+          "id": "source-front-01",
+          "title": "Opening",
+          "startSeconds": 5.0,
+          "endSeconds": 18.5,
+          "durationSeconds": 13.5,
+          "selectionReason": "Title-card dissolve has cleared; the instructor is standing before the first opening step."
+        },
+        {
+          "id": "source-front-02",
+          "title": "Part the Wild Horse's Mane",
+          "startSeconds": 18.5,
+          "endSeconds": 43.5,
+          "durationSeconds": 25.0,
+          "selectionReason": "The opening press has reached the lower position; weight starts shifting for the first parting step."
+        },
+        {
+          "id": "source-front-03",
+          "title": "White Crane Spreads Its Wings",
+          "startSeconds": 43.5,
+          "endSeconds": 49.0,
+          "durationSeconds": 5.5,
+          "selectionReason": "The third parting stance settles and the rear foot begins gathering for the crane posture."
+        },
+        {
+          "id": "source-front-04",
+          "title": "Brush Knee and Push",
+          "startSeconds": 49.0,
+          "endSeconds": 75.5,
+          "durationSeconds": 26.5,
+          "selectionReason": "The crane posture settles; the elevated arm starts its circle for brush-knee preparation."
+        },
+        {
+          "id": "source-front-05",
+          "title": "Play the Lute",
+          "startSeconds": 75.5,
+          "endSeconds": 80.5,
+          "durationSeconds": 5.0,
+          "selectionReason": "The last brush-knee push settles; the rear foot begins its small gathering step."
+        },
+        {
+          "id": "source-front-06",
+          "title": "Repulse Monkey",
+          "startSeconds": 80.5,
+          "endSeconds": 102.0,
+          "durationSeconds": 21.5,
+          "selectionReason": "The lute posture settles; the rear arm opens for the first backward step."
+        },
+        {
+          "id": "source-front-07",
+          "title": "Grasp the Bird's Tail - Left",
+          "startSeconds": 102.0,
+          "endSeconds": 121.8,
+          "durationSeconds": 19.8,
+          "selectionReason": "The last backward push settles; the hands begin the left ward-off gathering motion."
+        },
+        {
+          "id": "source-front-08",
+          "title": "Grasp the Bird's Tail - Right",
+          "startSeconds": 121.8,
+          "endSeconds": 144.2,
+          "durationSeconds": 22.4,
+          "selectionReason": "The left sequence's final push settles; the torso begins turning toward the right sequence."
+        },
+        {
+          "id": "source-front-09",
+          "title": "Single Whip",
+          "startSeconds": 144.2,
+          "endSeconds": 155.0,
+          "durationSeconds": 10.8,
+          "selectionReason": "The right sequence's final push settles; both hands begin the long single-whip turn."
+        },
+        {
+          "id": "source-front-10",
+          "title": "Wave Hands Like Clouds",
+          "startSeconds": 155.0,
+          "endSeconds": 173.5,
+          "durationSeconds": 18.5,
+          "selectionReason": "The single-whip extension settles; weight shifts and the lower hand starts its cloud-hand circle."
+        },
+        {
+          "id": "source-front-11",
+          "title": "Single Whip Again",
+          "startSeconds": 173.5,
+          "endSeconds": 178.7,
+          "durationSeconds": 5.2,
+          "selectionReason": "The final cloud-hands gathering step settles; the hands begin forming the next single whip."
+        },
+        {
+          "id": "source-front-12",
+          "title": "High Pat on the Horse",
+          "startSeconds": 178.7,
+          "endSeconds": 184.5,
+          "durationSeconds": 5.8,
+          "selectionReason": "The second single-whip extension settles; the rear foot starts gathering for high pat."
+        },
+        {
+          "id": "source-front-13",
+          "title": "Right Heel Kick",
+          "startSeconds": 184.5,
+          "endSeconds": 192.0,
+          "durationSeconds": 7.5,
+          "selectionReason": "The high-pat reach settles; the arms begin crossing and opening for the right kick."
+        },
+        {
+          "id": "source-front-14",
+          "title": "Twin Fists Strike the Ears",
+          "startSeconds": 192.0,
+          "endSeconds": 196.5,
+          "durationSeconds": 4.5,
+          "selectionReason": "The right heel retracts from full extension; the arms begin lowering for the paired-fist step."
+        },
+        {
+          "id": "source-front-15",
+          "title": "Turn and Left Heel Kick",
+          "startSeconds": 196.5,
+          "endSeconds": 204.2,
+          "durationSeconds": 7.7,
+          "selectionReason": "The paired-fist strike settles; the torso starts turning for the left heel kick."
+        },
+        {
+          "id": "source-front-16",
+          "title": "Left Snake Creeps Down and Golden Rooster",
+          "startSeconds": 204.2,
+          "endSeconds": 214.5,
+          "durationSeconds": 10.3,
+          "selectionReason": "The left heel retracts; the leg begins lowering toward the first low sweeping stance."
+        },
+        {
+          "id": "source-front-17",
+          "title": "Right Snake Creeps Down and Golden Rooster",
+          "startSeconds": 214.5,
+          "endSeconds": 226.0,
+          "durationSeconds": 11.5,
+          "selectionReason": "The first one-leg posture settles; the lifted leg lowers into the opposite low stance."
+        },
+        {
+          "id": "source-front-18",
+          "title": "Work at Shuttles",
+          "startSeconds": 226.0,
+          "endSeconds": 243.5,
+          "durationSeconds": 17.5,
+          "selectionReason": "The second one-leg posture settles; the lifted leg begins the first diagonal shuttle step."
+        },
+        {
+          "id": "source-front-19",
+          "title": "Needle at the Sea Bottom",
+          "startSeconds": 243.5,
+          "endSeconds": 247.0,
+          "durationSeconds": 3.5,
+          "selectionReason": "The second shuttle push settles; the rear foot gathers before the low needle reach."
+        },
+        {
+          "id": "source-front-20",
+          "title": "Fan Through the Back",
+          "startSeconds": 247.0,
+          "endSeconds": 251.8,
+          "durationSeconds": 4.8,
+          "selectionReason": "The low needle reach is complete; the torso starts rising and the arms separate."
+        },
+        {
+          "id": "source-front-21",
+          "title": "Turn, Deflect, Parry, and Punch",
+          "startSeconds": 251.8,
+          "endSeconds": 262.7,
+          "durationSeconds": 10.9,
+          "selectionReason": "The fan-through-back extension settles; the body starts turning for deflect, parry, and punch."
+        },
+        {
+          "id": "source-front-22",
+          "title": "Apparent Close-Up",
+          "startSeconds": 262.7,
+          "endSeconds": 268.5,
+          "durationSeconds": 5.8,
+          "selectionReason": "The forward punch settles; the open hand moves under the punching forearm."
+        },
+        {
+          "id": "source-front-23",
+          "title": "Cross Hands",
+          "startSeconds": 268.5,
+          "endSeconds": 276.5,
+          "durationSeconds": 8.0,
+          "selectionReason": "The two-hand press settles; the body begins turning to the front for cross hands."
+        },
+        {
+          "id": "source-front-24",
+          "title": "Closing",
+          "startSeconds": 276.5,
+          "endSeconds": 285.0,
+          "durationSeconds": 8.5,
+          "selectionReason": "The crossed-hand posture settles; the hands begin to uncross before the closing press."
+        }
+      ],
+      "excludedRanges": [
+        {
+          "startSeconds": 0,
+          "endSeconds": 5,
+          "reason": "Title card/dissolve."
+        },
+        {
+          "startSeconds": 285,
+          "endSeconds": 291.333,
+          "reason": "Completed routine hold and separate salute."
+        }
+      ]
+    },
+    {
+      "id": "creator-wild-horse",
+      "filename": "02_野马分鬃_单式示范_WushuAndKungFu.mp4",
+      "sourceUrl": "https://www.youtube.com/watch?v=WlgsE2FN7xY",
+      "sha256": "9249e5f4a9a390426354840d89b5c7cf38808e235d394d6ba783c9d51557fc51",
+      "originalPreserved": true,
+      "actualMetadata": {
+        "width": 1080,
+        "height": 1920,
+        "fps": 30.0,
+        "frameCount": 1102,
+        "durationSeconds": 36.733333333333334
+      },
+      "status": "reviewed-teaching-only",
+      "clipCount": 0,
+      "playlist": null,
+      "reviewContactSheets": [
+        "artifacts/teaching-review/02-page-1.jpg",
+        "artifacts/teaching-review/02-page-2.jpg"
+      ],
+      "exclusionReason": "Two simultaneous bodies in the composite. The main-view rear foot reaches/passes the frame edge during the parting stance. A whole-frame single-person pose would be ambiguous. The inset would need separate orientation and edge auditing; no incomplete main-view clip is promoted.",
+      "usableAlternativePlaylist": "/practice-media/source-front-24-playlist.json"
+    },
+    {
+      "id": "creator-white-crane",
+      "filename": "03_白鹤亮翅_单式示范_WushuAndKungFu.mp4",
+      "sourceUrl": "https://www.youtube.com/watch?v=Mc8PKcpvPxI",
+      "sha256": "a438efc578abfcf3e9cc772e306e461e356ad6e816fcad33194be7d13dcf2477",
+      "originalPreserved": true,
+      "actualMetadata": {
+        "width": 1080,
+        "height": 1920,
+        "fps": 30.0,
+        "frameCount": 1597,
+        "durationSeconds": 53.233333333333334
+      },
+      "status": "prepared-single-person-reference",
+      "clipCount": 2,
+      "playlist": "/practice-media/source-white-crane-playlist.json",
+      "reviewContactSheets": [
+        "artifacts/teaching-review/03-page-1.jpg",
+        "artifacts/teaching-review/03-page-2.jpg",
+        "artifacts/teaching-review/03-page-3.jpg"
+      ],
+      "clips": [
+        {
+          "id": "source-crane-side",
+          "title": "White Crane - Side View",
+          "startSeconds": 6.2,
+          "endSeconds": 20.0,
+          "durationSeconds": 13.8,
+          "selectionReason": "Begin before the instructor lowers from the initial held posture; retain the gathering step, weight transfer, arm separation, and completed crane posture. Exclude the long initial hold and the transition graphic at 24 seconds."
+        },
+        {
+          "id": "source-crane-back",
+          "title": "White Crane - Back View",
+          "startSeconds": 32.0,
+          "endSeconds": 49.5,
+          "durationSeconds": 17.5,
+          "selectionReason": "Begin from the settled prior bow stance before the rear-foot gathering step; retain the complete slow demonstration and explanatory holds through the raised-hand finish. Exclude the previous scene and transition graphic."
+        }
+      ],
+      "excludedRanges": [
+        {
+          "startSeconds": 0,
+          "endSeconds": 6.2,
+          "reason": "Initial held finished posture."
+        },
+        {
+          "startSeconds": 20,
+          "endSeconds": 32,
+          "reason": "Long finishing hold, transition graphic and initial hold of the next view."
+        },
+        {
+          "startSeconds": 49.5,
+          "endSeconds": 53.233,
+          "reason": "Terminal finished-pose hold."
+        }
+      ]
+    },
+    {
+      "id": "university-lesson-1",
+      "filename": "04_山东建筑大学_起势野马分鬃白鹤亮翅.mp4",
+      "sourceUrl": "https://www.sdjzu.edu.cn/__local/C/98/5E/FCB0B0ECD4F6EE56AF8C57CB6AE_684C0ACF_C12796.mp4?e=.mp4",
+      "sha256": "0b673ab0b62d166473692a4da7660767f8410468286cced8d23793b8e373b864",
+      "originalPreserved": true,
+      "actualMetadata": {
+        "width": 640,
+        "height": 352,
+        "fps": 26.79385071309502,
+        "frameCount": 4822,
+        "durationSeconds": 179.96666666666667
+      },
+      "status": "reviewed-teaching-only",
+      "clipCount": 0,
+      "playlist": null,
+      "reviewContactSheets": [
+        "artifacts/teaching-review/04-page-1.jpg",
+        "artifacts/teaching-review/04-page-2.jpg"
+      ],
+      "exclusionReason": "640x352 split-view lecture with variable close-ups, long explanatory holds, labels and screen overlays. A stable front-panel crop leaves roughly 130-180 pixels of body height. Use the matching clean source-front opening, wild-horse, and crane clips for automatic imitation.",
+      "usableAlternativePlaylist": "/practice-media/source-front-24-playlist.json"
+    },
+    {
+      "id": "university-lesson-2",
+      "filename": "05_山东建筑大学_搂膝拗步手挥琵琶倒卷肱.mp4",
+      "sourceUrl": "https://www.sdjzu.edu.cn/__local/4/15/E7/5617EF7BF93B66CBF8368764256_018CC5A7_CBA221.mp4?e=.mp4",
+      "sha256": "5798a68c6a16a1479ffeabc5b45467ca714d412658dae16b98e801a3cdb7c536",
+      "originalPreserved": true,
+      "actualMetadata": {
+        "width": 640,
+        "height": 352,
+        "fps": 26.6857565121005,
+        "frameCount": 4815,
+        "durationSeconds": 180.43333333333334
+      },
+      "status": "reviewed-teaching-only",
+      "clipCount": 0,
+      "playlist": null,
+      "reviewContactSheets": [
+        "artifacts/teaching-review/05-page-1.jpg",
+        "artifacts/teaching-review/05-page-2.jpg"
+      ],
+      "exclusionReason": "640x352 split-view instruction with variable close-ups, captions, screen overlays and long holds. The small panel is insufficient for a reliable primary reference. Use source-front forms 4-6; the source remains available for human study.",
+      "usableAlternativePlaylist": "/practice-media/source-front-24-playlist.json"
+    },
+    {
+      "id": "university-full-24",
+      "filename": "06_山东建筑大学_24式完整示范.mp4",
+      "sourceUrl": "https://www.sdjzu.edu.cn/__local/6/19/08/362F8CF0ECE3A132DE7E1D06054_4755B91C_52B6FCE.mp4?e=.mp4",
+      "sha256": "343e150f1bd31256f114d27d9a9856655e129d79599d8e25cae85e00f06da264",
+      "originalPreserved": true,
+      "actualMetadata": {
+        "width": 960,
+        "height": 540,
+        "fps": 26.749441964285715,
+        "frameCount": 9587,
+        "durationSeconds": 358.4
+      },
+      "status": "reviewed-teaching-only",
+      "clipCount": 0,
+      "playlist": null,
+      "reviewContactSheets": [
+        "artifacts/teaching-review/06-page-1.jpg",
+        "artifacts/teaching-review/06-page-2.jpg",
+        "artifacts/teaching-review/06-page-3.jpg"
+      ],
+      "exclusionReason": "Composite rear view plus small front-view inset. The main instructor's extended hand approaches/overlaps the inset region in the left-facing sequence, so simply cropping off the inset would cut the main action. Mobile-player controls obscure the closing segment after about 335 seconds. Use the complete clean source-front routine for automatic imitation.",
+      "usableAlternativePlaylist": "/practice-media/source-front-24-playlist.json"
+    }
+  ]
+}
