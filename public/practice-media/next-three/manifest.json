@@ -1,0 +1,1103 @@
+{
+  "schemaVersion": "first-six-teaching-v1",
+  "title": "First six movements",
+  "source": {
+    "file": "24.mp4",
+    "src": "/practice-media/first-three/first-30-seconds.mp4",
+    "sha256": "2d62941ddebe1a75febee4423d0040d021a4247440e248f40d7ea1c69b17fab6",
+    "excerptSha256": "b886f82c7cc94845f7bfe908a8b1aee3fe5d28b8cbe2cf174c2c613f5768c40a",
+    "startSeconds": 0,
+    "endSeconds": 30,
+    "fps": 30,
+    "width": 640,
+    "height": 360,
+    "sourceFrames": 8621
+  },
+  "sources": [
+    {
+      "id": "opening",
+      "video": {
+        "src": "/practice-media/first-three/opening.mp4",
+        "width": 450,
+        "height": 360,
+        "fps": 30,
+        "durationSeconds": 12.3,
+        "sha256": "a8b47ec6ff06b8094f1b7b95e98234f91dfc2ca5c494b83eccd680e8b5e2a3fd",
+        "sourceStartSeconds": 1.0,
+        "sourceEndSeconds": 13.3,
+        "sourceCropPixels": {
+          "x": 50,
+          "y": 0,
+          "width": 450,
+          "height": 360
+        },
+        "provenance": "Byte-for-byte copy of existing 24-01.mp4, matching its existing real MediaPipe observations."
+      },
+      "poseSrc": "/practice-media/first-three/opening.poses.json",
+      "displayCrop": {
+        "x": 0.37,
+        "y": 0.12,
+        "width": 0.44,
+        "height": 0.86
+      },
+      "observationVisibilityThreshold": 0.45
+    },
+    {
+      "id": "parting",
+      "video": {
+        "src": "/practice-media/next-three/parting.mp4",
+        "width": 450,
+        "height": 360,
+        "fps": 30,
+        "durationSeconds": 24.4,
+        "sha256": "f36ff185714d4bbb4a4573b6e75009f6ca3a4f97117655c67081c81f907ab919",
+        "sourceStartSeconds": 13.3,
+        "sourceEndSeconds": 37.7,
+        "sourceCropPixels": {
+          "x": 50,
+          "y": 0,
+          "width": 450,
+          "height": 360
+        },
+        "provenance": "Byte-for-byte copy of the existing24-02.mp4 inference clip. Only the first4.2seconds are used by the new three-step continuation."
+      },
+      "poseSrc": "/practice-media/next-three/parting.poses.json",
+      "displayCrop": {
+        "x": 0.22,
+        "y": 0.12,
+        "width": 0.64,
+        "height": 0.86
+      },
+      "observationVisibilityThreshold": 0.65
+    }
+  ],
+  "steps": [
+    {
+      "id": "first-three-01",
+      "title": "Open the left stance",
+      "cue": "Lift your left foot, step left, and settle into the open stance.",
+      "startSeconds": 0.0,
+      "endSeconds": 5.5,
+      "motion": "left-step",
+      "sourceStartSeconds": 1.0,
+      "sourceEndSeconds": 6.5,
+      "sourceStartFrame": 30,
+      "sourceEndFrameExclusive": 195,
+      "focusJoints": [
+        27
+      ],
+      "durationSeconds": 5.5,
+      "screenshots": {
+        "start": "/practice-media/first-three/step-01-start.jpg",
+        "end": "/practice-media/first-three/step-01-end.jpg"
+      },
+      "screenshotSourceTimes": {
+        "start": 1.0,
+        "end": 6.466666666666667
+      },
+      "clipSrc": "/practice-media/first-three/step-01.mp4",
+      "clipSha256": "7cd667513d6a18f1230d3578e07d3d2d54f1caad5d80159c4a9daf52007fc803",
+      "quality": {
+        "visibilityThreshold": 0.65,
+        "sampleCount": 66,
+        "statusCounts": {
+          "pose": 66,
+          "no_pose": 0,
+          "inference_error": 0
+        },
+        "focusPoints": {
+          "27": {
+            "observedCount": 66,
+            "visibleCount": 66,
+            "coverage": 1.0,
+            "minimumVisibility": 0.9440661072731018,
+            "maximumVisibility": 0.9891356825828552
+          }
+        }
+      },
+      "boundaryEvidence": "Visually reviewed original-source 0.5-second contact sheet and original start/end frames. Editorial transition; approximately 0.5-second precision.",
+      "sourceId": "opening"
+    },
+    {
+      "id": "first-three-02",
+      "title": "Raise both hands",
+      "cue": "Slide both hands forward and upward to the demonstrated height.",
+      "startSeconds": 5.5,
+      "endSeconds": 8.5,
+      "motion": "raise",
+      "sourceStartSeconds": 6.5,
+      "sourceEndSeconds": 9.5,
+      "sourceStartFrame": 195,
+      "sourceEndFrameExclusive": 285,
+      "focusJoints": [
+        15,
+        16
+      ],
+      "durationSeconds": 3.0,
+      "screenshots": {
+        "start": "/practice-media/first-three/step-02-start.jpg",
+        "end": "/practice-media/first-three/step-02-end.jpg"
+      },
+      "screenshotSourceTimes": {
+        "start": 6.5,
+        "end": 9.466666666666667
+      },
+      "clipSrc": "/practice-media/first-three/step-02.mp4",
+      "clipSha256": "17c0dd5ae9a939253ca6c8a4038c31ae6c68cebd68122763ac6af04acc3d3669",
+      "quality": {
+        "visibilityThreshold": 0.65,
+        "sampleCount": 36,
+        "statusCounts": {
+          "pose": 36,
+          "no_pose": 0,
+          "inference_error": 0
+        },
+        "focusPoints": {
+          "15": {
+            "observedCount": 36,
+            "visibleCount": 36,
+            "coverage": 1.0,
+            "minimumVisibility": 0.9331977963447571,
+            "maximumVisibility": 0.9817211627960205
+          },
+          "16": {
+            "observedCount": 36,
+            "visibleCount": 36,
+            "coverage": 1.0,
+            "minimumVisibility": 0.9132437109947205,
+            "maximumVisibility": 0.9863308668136597
+          }
+        }
+      },
+      "boundaryEvidence": "Visually reviewed original-source 0.5-second contact sheet and original start/end frames. Editorial transition; approximately 0.5-second precision.",
+      "sourceId": "opening"
+    },
+    {
+      "id": "first-three-03",
+      "title": "Lower both hands",
+      "cue": "Bend gently and slide both hands down to the demonstrated end position.",
+      "startSeconds": 8.5,
+      "endSeconds": 12.0,
+      "motion": "lower",
+      "sourceStartSeconds": 9.5,
+      "sourceEndSeconds": 13.0,
+      "sourceStartFrame": 285,
+      "sourceEndFrameExclusive": 390,
+      "focusJoints": [
+        15,
+        16
+      ],
+      "durationSeconds": 3.5,
+      "screenshots": {
+        "start": "/practice-media/first-three/step-03-start.jpg",
+        "end": "/practice-media/first-three/step-03-end.jpg"
+      },
+      "screenshotSourceTimes": {
+        "start": 9.5,
+        "end": 12.966666666666667
+      },
+      "clipSrc": "/practice-media/first-three/step-03.mp4",
+      "clipSha256": "8044479309357e5b22fa1245ec99ca4d716f78ff57f8298678436aeff270e805",
+      "quality": {
+        "visibilityThreshold": 0.65,
+        "sampleCount": 42,
+        "statusCounts": {
+          "pose": 42,
+          "no_pose": 0,
+          "inference_error": 0
+        },
+        "focusPoints": {
+          "15": {
+            "observedCount": 42,
+            "visibleCount": 42,
+            "coverage": 1.0,
+            "minimumVisibility": 0.9424709677696228,
+            "maximumVisibility": 0.982241153717041
+          },
+          "16": {
+            "observedCount": 42,
+            "visibleCount": 42,
+            "coverage": 1.0,
+            "minimumVisibility": 0.9132416248321533,
+            "maximumVisibility": 0.9884302020072937
+          }
+        }
+      },
+      "boundaryEvidence": "Visually reviewed original-source 0.5-second contact sheet and original start/end frames. Editorial transition; approximately 0.5-second precision.",
+      "sourceId": "opening"
+    },
+    {
+      "id": "first-six-04",
+      "title": "Turn and open the hands",
+      "cue": "Turn with the teacher and open both hands along the demonstrated paths.",
+      "sourceStartSeconds": 13.3,
+      "sourceEndSeconds": 14.5,
+      "focusJoints": [
+        15,
+        16
+      ],
+      "motion": "open",
+      "sourceId": "parting",
+      "startSeconds": 0.0,
+      "endSeconds": 1.2,
+      "sourceStartFrame": 399,
+      "sourceEndFrameExclusive": 435,
+      "durationSeconds": 1.2,
+      "referenceVisibilityThreshold": 0.65,
+      "screenshots": {
+        "start": "/practice-media/next-three/step-04-start.jpg",
+        "end": "/practice-media/next-three/step-04-end.jpg"
+      },
+      "screenshotSourceTimes": {
+        "start": 13.3,
+        "end": 14.466666666666667
+      },
+      "clipSrc": "/practice-media/next-three/step-04.mp4",
+      "clipSha256": "38dcae2ab39276d11ee9f496116e81f293a3e802bac60d69dd66a3b30842eadf",
+      "clipProvenance": "Optional demonstration cut freshly encoded from original24.mp4. Player uses the byte-identical parting.mp4; real pose observations belong to that original encoded inference clip, not this new demonstration cut.",
+      "quality": {
+        "id": "first-six-04",
+        "title": "Turn and open the hands",
+        "cue": "Turn with the teacher and open both hands along the demonstrated paths.",
+        "sourceStartSeconds": 13.3,
+        "sourceEndSeconds": 14.5,
+        "focusJoints": [
+          15,
+          16
+        ],
+        "motion": "open",
+        "sampleCount": 15,
+        "torsoVisibleCount": 15,
+        "allFourPointAudit": [
+          {
+            "index": 15,
+            "required": true,
+            "visibleCount": 15,
+            "sampleCount": 15,
+            "visibilityCoverage": 1.0,
+            "minimumVisibility": 0.9442129135131836,
+            "maximumVisibility": 0.9636178016662598,
+            "startEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 13.383333333333335,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 83.33333333333333,
+                "point": {
+                  "index": 15,
+                  "x": 0.6475390195846558,
+                  "y": 0.49791911244392395,
+                  "z": -0.5232945680618286,
+                  "visibility": 0.9627019166946411
+                },
+                "bodyNormalized": {
+                  "x": 0.3503733488190337,
+                  "y": -0.4670531408087784
+                }
+              },
+              "supportSourceTimes": [
+                13.3,
+                13.383333333333335,
+                13.466666666666667
+              ]
+            },
+            "endEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 14.383333333333335,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 1083.3333333333333,
+                "point": {
+                  "index": 15,
+                  "x": 0.6937671303749084,
+                  "y": 0.31287842988967896,
+                  "z": -0.3200374245643616,
+                  "visibility": 0.9516090750694275
+                },
+                "bodyNormalized": {
+                  "x": 0.8301617664681147,
+                  "y": -1.1687889894911743
+                }
+              },
+              "supportSourceTimes": [
+                14.3,
+                14.383333333333335,
+                14.466666666666667
+              ]
+            }
+          },
+          {
+            "index": 16,
+            "required": true,
+            "visibleCount": 15,
+            "sampleCount": 15,
+            "visibilityCoverage": 1.0,
+            "minimumVisibility": 0.8981011509895325,
+            "maximumVisibility": 0.9562311172485352,
+            "startEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 13.466666666666667,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 166.66666666666666,
+                "point": {
+                  "index": 16,
+                  "x": 0.5095436573028564,
+                  "y": 0.5775764584541321,
+                  "z": -0.20562109351158142,
+                  "visibility": 0.904426634311676
+                },
+                "bodyNormalized": {
+                  "x": -0.40894693128628523,
+                  "y": -0.11112867330064621
+                }
+              },
+              "supportSourceTimes": [
+                13.3,
+                13.383333333333335,
+                13.466666666666667
+              ]
+            },
+            "endEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 14.383333333333335,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 1083.3333333333333,
+                "point": {
+                  "index": 16,
+                  "x": 0.3401888608932495,
+                  "y": 0.501365065574646,
+                  "z": -0.32405170798301697,
+                  "visibility": 0.9515876770019531
+                },
+                "bodyNormalized": {
+                  "x": -0.9743063701474318,
+                  "y": -0.399243669254171
+                }
+              },
+              "supportSourceTimes": [
+                14.3,
+                14.383333333333335,
+                14.466666666666667
+              ]
+            }
+          },
+          {
+            "index": 27,
+            "required": false,
+            "visibleCount": 15,
+            "sampleCount": 15,
+            "visibilityCoverage": 1.0,
+            "minimumVisibility": 0.9605311751365662,
+            "maximumVisibility": 0.9718436002731323,
+            "startEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 13.466666666666667,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 166.66666666666666,
+                "point": {
+                  "index": 27,
+                  "x": 0.6625589728355408,
+                  "y": 0.8535399436950684,
+                  "z": 0.2794511020183563,
+                  "visibility": 0.9691641330718994
+                },
+                "bodyNormalized": {
+                  "x": 0.4253025922530596,
+                  "y": 1.0925281254978099
+                }
+              },
+              "supportSourceTimes": [
+                13.3,
+                13.383333333333335,
+                13.466666666666667
+              ]
+            },
+            "endEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 14.383333333333335,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 1083.3333333333333,
+                "point": {
+                  "index": 27,
+                  "x": 0.658208429813385,
+                  "y": 0.8548088669776917,
+                  "z": 0.11736146360635757,
+                  "visibility": 0.961439311504364
+                },
+                "bodyNormalized": {
+                  "x": 0.648689804865987,
+                  "y": 1.0437818394142058
+                }
+              },
+              "supportSourceTimes": [
+                14.3,
+                14.383333333333335,
+                14.466666666666667
+              ]
+            }
+          },
+          {
+            "index": 28,
+            "required": false,
+            "visibleCount": 15,
+            "sampleCount": 15,
+            "visibilityCoverage": 1.0,
+            "minimumVisibility": 0.9457377791404724,
+            "maximumVisibility": 0.9797685742378235,
+            "startEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 13.466666666666667,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 166.66666666666666,
+                "point": {
+                  "index": 28,
+                  "x": 0.47753334045410156,
+                  "y": 0.8509687781333923,
+                  "z": 0.04136386886239052,
+                  "visibility": 0.9790307879447937
+                },
+                "bodyNormalized": {
+                  "x": -0.5834692755787627,
+                  "y": 1.0813135950448196
+                }
+              },
+              "supportSourceTimes": [
+                13.3,
+                13.383333333333335,
+                13.466666666666667
+              ]
+            },
+            "endEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 14.383333333333335,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 1083.3333333333333,
+                "point": {
+                  "index": 28,
+                  "x": 0.48904508352279663,
+                  "y": 0.8443466424942017,
+                  "z": 0.12283781170845032,
+                  "visibility": 0.948096752166748
+                },
+                "bodyNormalized": {
+                  "x": -0.2146264524145317,
+                  "y": 1.0010671086786258
+                }
+              },
+              "supportSourceTimes": [
+                14.3,
+                14.383333333333335,
+                14.466666666666667
+              ]
+            }
+          }
+        ],
+        "referenceEndpointsUsable": true,
+        "note": "Named required anatomical joints are selected from the demonstrated movement, not from which joint is easiest to track. Missing endpoints remain unknown."
+      },
+      "boundaryEvidence": "Original source half-second contact-sheet review and actual source start/end screenshots. Editorial transition precision approximately0.5seconds."
+    },
+    {
+      "id": "first-six-05",
+      "title": "Circle and gather the hands",
+      "cue": "Circle both hands into the demonstrated high-and-low preparation.",
+      "sourceStartSeconds": 14.5,
+      "sourceEndSeconds": 15.5,
+      "focusJoints": [
+        15,
+        16
+      ],
+      "motion": "circle",
+      "sourceId": "parting",
+      "startSeconds": 1.2,
+      "endSeconds": 2.2,
+      "sourceStartFrame": 435,
+      "sourceEndFrameExclusive": 465,
+      "durationSeconds": 1.0,
+      "referenceVisibilityThreshold": 0.65,
+      "screenshots": {
+        "start": "/practice-media/next-three/step-05-start.jpg",
+        "end": "/practice-media/next-three/step-05-end.jpg"
+      },
+      "screenshotSourceTimes": {
+        "start": 14.5,
+        "end": 15.466666666666667
+      },
+      "clipSrc": "/practice-media/next-three/step-05.mp4",
+      "clipSha256": "9b11b1df13229daee5170ed942baa8bfec5ea8e5aa31fbaec54335f5de48365d",
+      "clipProvenance": "Optional demonstration cut freshly encoded from original24.mp4. Player uses the byte-identical parting.mp4; real pose observations belong to that original encoded inference clip, not this new demonstration cut.",
+      "quality": {
+        "id": "first-six-05",
+        "title": "Circle and gather the hands",
+        "cue": "Circle both hands into the demonstrated high-and-low preparation.",
+        "sourceStartSeconds": 14.5,
+        "sourceEndSeconds": 15.5,
+        "focusJoints": [
+          15,
+          16
+        ],
+        "motion": "circle",
+        "sampleCount": 12,
+        "torsoVisibleCount": 12,
+        "allFourPointAudit": [
+          {
+            "index": 15,
+            "required": true,
+            "visibleCount": 12,
+            "sampleCount": 12,
+            "visibilityCoverage": 1.0,
+            "minimumVisibility": 0.945314884185791,
+            "maximumVisibility": 0.9540624618530273,
+            "startEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 14.633333333333335,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 1333.3333333333333,
+                "point": {
+                  "index": 15,
+                  "x": 0.6917950510978699,
+                  "y": 0.33050569891929626,
+                  "z": 0.08610505610704422,
+                  "visibility": 0.9531834125518799
+                },
+                "bodyNormalized": {
+                  "x": 0.9128271446045305,
+                  "y": -1.0865338557989366
+                }
+              },
+              "supportSourceTimes": [
+                14.55,
+                14.633333333333335,
+                14.716666666666667
+              ]
+            },
+            "endEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 15.383333333333333,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 2083.333333333333,
+                "point": {
+                  "index": 15,
+                  "x": 0.6487717032432556,
+                  "y": 0.45902273058891296,
+                  "z": 0.14094477891921997,
+                  "visibility": 0.9519855976104736
+                },
+                "bodyNormalized": {
+                  "x": 0.8316444350024219,
+                  "y": -0.5330083869250295
+                }
+              },
+              "supportSourceTimes": [
+                15.3,
+                15.383333333333333,
+                15.466666666666667
+              ]
+            }
+          },
+          {
+            "index": 16,
+            "required": true,
+            "visibleCount": 12,
+            "sampleCount": 12,
+            "visibilityCoverage": 1.0,
+            "minimumVisibility": 0.9604672789573669,
+            "maximumVisibility": 0.9865054488182068,
+            "startEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 14.633333333333335,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 1333.3333333333333,
+                "point": {
+                  "index": 16,
+                  "x": 0.28827935457229614,
+                  "y": 0.4595479369163513,
+                  "z": -0.48716768622398376,
+                  "visibility": 0.9642794728279114
+                },
+                "bodyNormalized": {
+                  "x": -1.0793058641417064,
+                  "y": -0.5768747688293094
+                }
+              },
+              "supportSourceTimes": [
+                14.55,
+                14.633333333333335,
+                14.716666666666667
+              ]
+            },
+            "endEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 15.383333333333333,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 2083.333333333333,
+                "point": {
+                  "index": 16,
+                  "x": 0.3504389226436615,
+                  "y": 0.302904337644577,
+                  "z": -0.7405505776405334,
+                  "visibility": 0.9851258397102356
+                },
+                "bodyNormalized": {
+                  "x": -0.608414571503482,
+                  "y": -1.1358779673683785
+                }
+              },
+              "supportSourceTimes": [
+                15.3,
+                15.383333333333333,
+                15.466666666666667
+              ]
+            }
+          },
+          {
+            "index": 27,
+            "required": false,
+            "visibleCount": 12,
+            "sampleCount": 12,
+            "visibilityCoverage": 1.0,
+            "minimumVisibility": 0.9500300884246826,
+            "maximumVisibility": 0.9627880454063416,
+            "startEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 14.633333333333335,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 1333.3333333333333,
+                "point": {
+                  "index": 27,
+                  "x": 0.6615644693374634,
+                  "y": 0.8457266688346863,
+                  "z": 0.18796400725841522,
+                  "visibility": 0.9597830772399902
+                },
+                "bodyNormalized": {
+                  "x": 0.7635805593612452,
+                  "y": 0.9483583871632166
+                }
+              },
+              "supportSourceTimes": [
+                14.55,
+                14.633333333333335,
+                14.716666666666667
+              ]
+            },
+            "endEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 15.383333333333333,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 2083.333333333333,
+                "point": {
+                  "index": 27,
+                  "x": 0.6225094199180603,
+                  "y": 0.8467559218406677,
+                  "z": -0.0658184289932251,
+                  "visibility": 0.9605534672737122
+                },
+                "bodyNormalized": {
+                  "x": 0.7048758058298328,
+                  "y": 0.964269044166967
+                }
+              },
+              "supportSourceTimes": [
+                15.3,
+                15.383333333333333,
+                15.466666666666667
+              ]
+            }
+          },
+          {
+            "index": 28,
+            "required": false,
+            "visibleCount": 12,
+            "sampleCount": 12,
+            "visibilityCoverage": 1.0,
+            "minimumVisibility": 0.9228900671005249,
+            "maximumVisibility": 0.938115119934082,
+            "startEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 14.633333333333335,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 1333.3333333333333,
+                "point": {
+                  "index": 28,
+                  "x": 0.4794142246246338,
+                  "y": 0.8509609699249268,
+                  "z": 0.241136834025383,
+                  "visibility": 0.9323430061340332
+                },
+                "bodyNormalized": {
+                  "x": -0.13568437176302636,
+                  "y": 0.9690315338474594
+                }
+              },
+              "supportSourceTimes": [
+                14.55,
+                14.633333333333335,
+                14.716666666666667
+              ]
+            },
+            "endEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 15.466666666666667,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 2166.6666666666665,
+                "point": {
+                  "index": 28,
+                  "x": 0.4684396982192993,
+                  "y": 0.8548242449760437,
+                  "z": 0.2572437822818756,
+                  "visibility": 0.9330279231071472
+                },
+                "bodyNormalized": {
+                  "x": -0.03863464425706224,
+                  "y": 1.0063298435958388
+                }
+              },
+              "supportSourceTimes": [
+                15.3,
+                15.383333333333333,
+                15.466666666666667
+              ]
+            }
+          }
+        ],
+        "referenceEndpointsUsable": true,
+        "note": "Named required anatomical joints are selected from the demonstrated movement, not from which joint is easiest to track. Missing endpoints remain unknown."
+      },
+      "boundaryEvidence": "Original source half-second contact-sheet review and actual source start/end screenshots. Editorial transition precision approximately0.5seconds."
+    },
+    {
+      "id": "first-six-06",
+      "title": "Lift and extend the left heel",
+      "cue": "Lift your left foot and extend the heel forward with the teacher.",
+      "sourceStartSeconds": 15.5,
+      "sourceEndSeconds": 17.5,
+      "focusJoints": [
+        27
+      ],
+      "motion": "left-heel",
+      "sourceId": "parting",
+      "startSeconds": 2.2,
+      "endSeconds": 4.2,
+      "sourceStartFrame": 465,
+      "sourceEndFrameExclusive": 525,
+      "durationSeconds": 2.0,
+      "referenceVisibilityThreshold": 0.65,
+      "screenshots": {
+        "start": "/practice-media/next-three/step-06-start.jpg",
+        "end": "/practice-media/next-three/step-06-end.jpg"
+      },
+      "screenshotSourceTimes": {
+        "start": 15.5,
+        "end": 17.466666666666665
+      },
+      "clipSrc": "/practice-media/next-three/step-06.mp4",
+      "clipSha256": "7a66b6e5f592faeffcf2d61522a465a263a0cdd486658a3b57f9030a2a77fee4",
+      "clipProvenance": "Optional demonstration cut freshly encoded from original24.mp4. Player uses the byte-identical parting.mp4; real pose observations belong to that original encoded inference clip, not this new demonstration cut.",
+      "quality": {
+        "id": "first-six-06",
+        "title": "Lift and extend the left heel",
+        "cue": "Lift your left foot and extend the heel forward with the teacher.",
+        "sourceStartSeconds": 15.5,
+        "sourceEndSeconds": 17.5,
+        "focusJoints": [
+          27
+        ],
+        "motion": "left-heel",
+        "sampleCount": 24,
+        "torsoVisibleCount": 24,
+        "allFourPointAudit": [
+          {
+            "index": 15,
+            "required": false,
+            "visibleCount": 10,
+            "sampleCount": 24,
+            "visibilityCoverage": 0.4166666666666667,
+            "minimumVisibility": 0.46710386872291565,
+            "maximumVisibility": 0.9289014935493469,
+            "startEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 15.633333333333333,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 2333.333333333333,
+                "point": {
+                  "index": 15,
+                  "x": 0.6043935418128967,
+                  "y": 0.5096940994262695,
+                  "z": -0.02494335174560547,
+                  "visibility": 0.9130232930183411
+                },
+                "bodyNormalized": {
+                  "x": 0.581618465050184,
+                  "y": -0.2980360469802592
+                }
+              },
+              "supportSourceTimes": [
+                15.55,
+                15.633333333333333,
+                15.716666666666667
+              ]
+            },
+            "endEndpoint": {
+              "valid": false,
+              "trustedSupportCount": 0,
+              "observationCount": 3,
+              "selected": null
+            }
+          },
+          {
+            "index": 16,
+            "required": false,
+            "visibleCount": 24,
+            "sampleCount": 24,
+            "visibilityCoverage": 1.0,
+            "minimumVisibility": 0.8662194013595581,
+            "maximumVisibility": 0.9880167841911316,
+            "startEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 15.633333333333333,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 2333.333333333333,
+                "point": {
+                  "index": 16,
+                  "x": 0.4080412685871124,
+                  "y": 0.26855364441871643,
+                  "z": -0.6471086144447327,
+                  "visibility": 0.9878159165382385
+                },
+                "bodyNormalized": {
+                  "x": -0.3542882768914583,
+                  "y": -1.2175465731942559
+                }
+              },
+              "supportSourceTimes": [
+                15.55,
+                15.633333333333333,
+                15.716666666666667
+              ]
+            },
+            "endEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 17.46666666666667,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 4166.666666666666,
+                "point": {
+                  "index": 16,
+                  "x": 0.574834942817688,
+                  "y": 0.36852413415908813,
+                  "z": -0.21269819140434265,
+                  "visibility": 0.8662194013595581
+                },
+                "bodyNormalized": {
+                  "x": 0.33223341007025803,
+                  "y": -1.0717497616182134
+                }
+              },
+              "supportSourceTimes": [
+                17.3,
+                17.383333333333333,
+                17.46666666666667
+              ]
+            }
+          },
+          {
+            "index": 27,
+            "required": true,
+            "visibleCount": 24,
+            "sampleCount": 24,
+            "visibilityCoverage": 1.0,
+            "minimumVisibility": 0.9073231816291809,
+            "maximumVisibility": 0.9638676047325134,
+            "startEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 15.633333333333333,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 2333.333333333333,
+                "point": {
+                  "index": 27,
+                  "x": 0.5541236400604248,
+                  "y": 0.8215884566307068,
+                  "z": 0.2586612403392792,
+                  "visibility": 0.9609524607658386
+                },
+                "bodyNormalized": {
+                  "x": 0.34200860877527184,
+                  "y": 0.891271423254237
+                }
+              },
+              "supportSourceTimes": [
+                15.55,
+                15.633333333333333,
+                15.716666666666667
+              ]
+            },
+            "endEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 17.383333333333333,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 4083.333333333333,
+                "point": {
+                  "index": 27,
+                  "x": 0.676854133605957,
+                  "y": 0.8228589296340942,
+                  "z": 0.12214402854442596,
+                  "visibility": 0.9154254198074341
+                },
+                "bodyNormalized": {
+                  "x": 0.9208532557987065,
+                  "y": 0.8488608370960254
+                }
+              },
+              "supportSourceTimes": [
+                17.3,
+                17.383333333333333,
+                17.46666666666667
+              ]
+            }
+          },
+          {
+            "index": 28,
+            "required": false,
+            "visibleCount": 24,
+            "sampleCount": 24,
+            "visibilityCoverage": 1.0,
+            "minimumVisibility": 0.8361252546310425,
+            "maximumVisibility": 0.9408029317855835,
+            "startEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 15.633333333333333,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 2333.333333333333,
+                "point": {
+                  "index": 28,
+                  "x": 0.4676850438117981,
+                  "y": 0.8566588759422302,
+                  "z": 0.2603629231452942,
+                  "visibility": 0.9371850490570068
+                },
+                "bodyNormalized": {
+                  "x": -0.0699981567386503,
+                  "y": 1.0250010362081248
+                }
+              },
+              "supportSourceTimes": [
+                15.55,
+                15.633333333333333,
+                15.716666666666667
+              ]
+            },
+            "endEndpoint": {
+              "valid": true,
+              "trustedSupportCount": 3,
+              "observationCount": 3,
+              "selected": {
+                "sourceTimeSeconds": 17.383333333333333,
+                "originalObservationSrc": "/practice-media/24-02.poses.json",
+                "sourceClipTimeMs": 4083.333333333333,
+                "point": {
+                  "index": 28,
+                  "x": 0.471436470746994,
+                  "y": 0.8724526166915894,
+                  "z": -0.08475198596715927,
+                  "visibility": 0.8390694856643677
+                },
+                "bodyNormalized": {
+                  "x": -0.16444338992840013,
+                  "y": 1.058478107446118
+                }
+              },
+              "supportSourceTimes": [
+                17.3,
+                17.383333333333333,
+                17.46666666666667
+              ]
+            }
+          }
+        ],
+        "referenceEndpointsUsable": true,
+        "note": "Named required anatomical joints are selected from the demonstrated movement, not from which joint is easiest to track. Missing endpoints remain unknown."
+      },
+      "boundaryEvidence": "Original source half-second contact-sheet review and actual source start/end screenshots. Editorial transition precision approximately0.5seconds."
+    }
+  ],
+  "editorialJoinGap": {
+    "sourceStartSeconds": 13.0,
+    "sourceEndSeconds": 13.3,
+    "reason": "The original three steps end at13.0s. The next step begins at the exact13.3s boundary of the matching24-02 encoded inference clip. The0.3s editorial join is omitted, not interpolated."
+  },
+  "orientation": {
+    "sourceMirrored": false,
+    "defaultDisplayMirror": true,
+    "anatomicalIndicesUnchanged": true
+  },
+  "rules": {
+    "stepCount": 6,
+    "sourceTeachingEndSeconds": 17.5,
+    "observationSampling": "Real recorded12Hz MediaPipe observations from two independently inferred original encoded clips. No frame interpolation, joint substitutions, or re-inference.",
+    "scope": "Three approved opening movements plus three conservative continuation microsteps. The later bow-stance hand separation is intentionally deferred because the recorded left-wrist start is occluded."
+  }
+}

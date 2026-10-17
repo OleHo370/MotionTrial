@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "practice-library-v1",
+  "defaultId": "24b",
+  "routines": [
+    { "id": "24b", "title": "24 forms · new indoor recording", "src": "/practice-media/24b-playlist.json", "sourceFile": "24b.mp4" },
+    { "id": "original24", "title": "24 forms · original outdoor recording", "src": "/practice-media/playlist.json", "sourceFile": "24.mp4" },
+    { "id": "front24", "title": "24 forms · front teaching recording", "src": "/practice-media/source-front-24-playlist.json", "sourceFile": "01_24式完整正面示范_WushuAndKungFu.mp4" },
+    { "id": "white-crane", "title": "White crane · side and back views", "src": "/practice-media/source-white-crane-playlist.json", "sourceFile": "03_白鹤亮翅_单式示范_WushuAndKungFu.mp4" },
+    { "id": "opening", "title": "Opening · 4 detailed stages", "src": "/practice-media/opening-playlist.json", "sourceFile": "Original opening tutorials" }
+  ]
+}

@@ -1,0 +1,207 @@
+{
+  "schemaVersion": "first-three-teaching-v1",
+  "title": "First three movements",
+  "source": {
+    "file": "24.mp4",
+    "src": "/practice-media/first-three/first-30-seconds.mp4",
+    "sha256": "2d62941ddebe1a75febee4423d0040d021a4247440e248f40d7ea1c69b17fab6",
+    "excerptSha256": "b886f82c7cc94845f7bfe908a8b1aee3fe5d28b8cbe2cf174c2c613f5768c40a",
+    "startSeconds": 0,
+    "endSeconds": 30,
+    "fps": 30,
+    "width": 640,
+    "height": 360,
+    "sourceFrames": 8621
+  },
+  "video": {
+    "src": "/practice-media/first-three/opening.mp4",
+    "width": 450,
+    "height": 360,
+    "fps": 30,
+    "durationSeconds": 12.3,
+    "sha256": "a8b47ec6ff06b8094f1b7b95e98234f91dfc2ca5c494b83eccd680e8b5e2a3fd",
+    "sourceStartSeconds": 1.0,
+    "sourceEndSeconds": 13.3,
+    "sourceCropPixels": {
+      "x": 50,
+      "y": 0,
+      "width": 450,
+      "height": 360
+    },
+    "provenance": "Byte-for-byte copy of existing 24-01.mp4, matching its existing real MediaPipe observations."
+  },
+  "poseSrc": "/practice-media/first-three/opening.poses.json",
+  "displayCrop": {
+    "x": 0.37,
+    "y": 0.12,
+    "width": 0.44,
+    "height": 0.86
+  },
+  "orientation": {
+    "sourceMirrored": false,
+    "defaultDisplayMirror": true,
+    "anatomicalIndicesUnchanged": true
+  },
+  "rules": {
+    "stepCount": 3,
+    "teachingEndSeconds": 12.0,
+    "sourceTeachingEndSeconds": 13.0,
+    "openingTailNote": "The unchanged opening clip is 12.3 seconds long; teaching stops at clip time 12.0 seconds before the next preparation.",
+    "observationSampling": "Existing real recorded 12 Hz MediaPipe Lite observations; no 30 fps pose interpolation.",
+    "gameGuides": "Straight paths between actual observed endpoints, separate from full movement correctness.",
+    "precisionNote": "Sample timestamps come from recorded clip presentation times; derived frame indices are estimates."
+  },
+  "steps": [
+    {
+      "id": "first-three-01",
+      "title": "Open the left stance",
+      "cue": "Lift your left foot, step left, and settle into the open stance.",
+      "startSeconds": 0.0,
+      "endSeconds": 5.5,
+      "motion": "left-step",
+      "sourceStartSeconds": 1.0,
+      "sourceEndSeconds": 6.5,
+      "sourceStartFrame": 30,
+      "sourceEndFrameExclusive": 195,
+      "focusJoints": [
+        27
+      ],
+      "durationSeconds": 5.5,
+      "screenshots": {
+        "start": "/practice-media/first-three/step-01-start.jpg",
+        "end": "/practice-media/first-three/step-01-end.jpg"
+      },
+      "screenshotSourceTimes": {
+        "start": 1.0,
+        "end": 6.466666666666667
+      },
+      "clipSrc": "/practice-media/first-three/step-01.mp4",
+      "clipSha256": "7cd667513d6a18f1230d3578e07d3d2d54f1caad5d80159c4a9daf52007fc803",
+      "quality": {
+        "visibilityThreshold": 0.65,
+        "sampleCount": 66,
+        "statusCounts": {
+          "pose": 66,
+          "no_pose": 0,
+          "inference_error": 0
+        },
+        "focusPoints": {
+          "27": {
+            "observedCount": 66,
+            "visibleCount": 66,
+            "coverage": 1.0,
+            "minimumVisibility": 0.9440661072731018,
+            "maximumVisibility": 0.9891356825828552
+          }
+        }
+      },
+      "boundaryEvidence": "Visually reviewed original-source 0.5-second contact sheet and original start/end frames. Editorial transition; approximately 0.5-second precision."
+    },
+    {
+      "id": "first-three-02",
+      "title": "Raise both hands",
+      "cue": "Slide both hands forward and upward to the demonstrated height.",
+      "startSeconds": 5.5,
+      "endSeconds": 8.5,
+      "motion": "raise",
+      "sourceStartSeconds": 6.5,
+      "sourceEndSeconds": 9.5,
+      "sourceStartFrame": 195,
+      "sourceEndFrameExclusive": 285,
+      "focusJoints": [
+        15,
+        16
+      ],
+      "durationSeconds": 3.0,
+      "screenshots": {
+        "start": "/practice-media/first-three/step-02-start.jpg",
+        "end": "/practice-media/first-three/step-02-end.jpg"
+      },
+      "screenshotSourceTimes": {
+        "start": 6.5,
+        "end": 9.466666666666667
+      },
+      "clipSrc": "/practice-media/first-three/step-02.mp4",
+      "clipSha256": "17c0dd5ae9a939253ca6c8a4038c31ae6c68cebd68122763ac6af04acc3d3669",
+      "quality": {
+        "visibilityThreshold": 0.65,
+        "sampleCount": 36,
+        "statusCounts": {
+          "pose": 36,
+          "no_pose": 0,
+          "inference_error": 0
+        },
+        "focusPoints": {
+          "15": {
+            "observedCount": 36,
+            "visibleCount": 36,
+            "coverage": 1.0,
+            "minimumVisibility": 0.9331977963447571,
+            "maximumVisibility": 0.9817211627960205
+          },
+          "16": {
+            "observedCount": 36,
+            "visibleCount": 36,
+            "coverage": 1.0,
+            "minimumVisibility": 0.9132437109947205,
+            "maximumVisibility": 0.9863308668136597
+          }
+        }
+      },
+      "boundaryEvidence": "Visually reviewed original-source 0.5-second contact sheet and original start/end frames. Editorial transition; approximately 0.5-second precision."
+    },
+    {
+      "id": "first-three-03",
+      "title": "Lower both hands",
+      "cue": "Bend gently and slide both hands down to the demonstrated end position.",
+      "startSeconds": 8.5,
+      "endSeconds": 12.0,
+      "motion": "lower",
+      "sourceStartSeconds": 9.5,
+      "sourceEndSeconds": 13.0,
+      "sourceStartFrame": 285,
+      "sourceEndFrameExclusive": 390,
+      "focusJoints": [
+        15,
+        16
+      ],
+      "durationSeconds": 3.5,
+      "screenshots": {
+        "start": "/practice-media/first-three/step-03-start.jpg",
+        "end": "/practice-media/first-three/step-03-end.jpg"
+      },
+      "screenshotSourceTimes": {
+        "start": 9.5,
+        "end": 12.966666666666667
+      },
+      "clipSrc": "/practice-media/first-three/step-03.mp4",
+      "clipSha256": "8044479309357e5b22fa1245ec99ca4d716f78ff57f8298678436aeff270e805",
+      "quality": {
+        "visibilityThreshold": 0.65,
+        "sampleCount": 42,
+        "statusCounts": {
+          "pose": 42,
+          "no_pose": 0,
+          "inference_error": 0
+        },
+        "focusPoints": {
+          "15": {
+            "observedCount": 42,
+            "visibleCount": 42,
+            "coverage": 1.0,
+            "minimumVisibility": 0.9424709677696228,
+            "maximumVisibility": 0.982241153717041
+          },
+          "16": {
+            "observedCount": 42,
+            "visibleCount": 42,
+            "coverage": 1.0,
+            "minimumVisibility": 0.9132416248321533,
+            "maximumVisibility": 0.9884302020072937
+          }
+        }
+      },
+      "boundaryEvidence": "Visually reviewed original-source 0.5-second contact sheet and original start/end frames. Editorial transition; approximately 0.5-second precision."
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "schemaVersion": "sixth-practice-targets-v1",
+  "version": "sixth-reviewed-four-point-rubric-v1",
+  "referenceEvidenceKind": "mixed-reviewed-teaching-targets",
+  "sourceSha256": "2d62941ddebe1a75febee4423d0040d021a4247440e248f40d7ea1c69b17fab6",
+  "sourceClipSha256": "55681d7b587c6082322fd5e02f53b969d56c27bdafd7f8c6983f83bd787b6ed9",
+  "width": 450,
+  "height": 360,
+  "fps": 30,
+  "stepId": "first-six-06",
+  "startFrame": 465,
+  "endFrame": 524,
+  "provenance": "Video-reviewed authored teaching targets for the four-point imitation game. Palm placement is approximate (+/-5 source pixels) from exact hash-verified source images, not measured ground truth or MediaPipe inference. Target interpolation specifies a practice path/timeline, not missing tracking. Learner evidence must still be fresh same-side MediaPipe data.",
+  "learnerPolicy": "All four current anatomical learner controls are required. Missing, stale or low-confidence learner data cannot pass.",
+  "leftFootPolicy": "Use independently supported genuine recorded left-foot observations at the unchanged 0.65 source threshold.",
+  "rightFootPolicy": "Maintain the previous designated planted-foot teaching target through this clip.",
+  "tracks": [
+    {
+      "index": 33,
+      "provenance": "Video-reviewed authored teaching targets for the four-point imitation game. Palm placement is approximate (+/-5 source pixels) from exact hash-verified source images, not measured ground truth or MediaPipe inference. Target interpolation specifies a practice path/timeline, not missing tracking. Learner evidence must still be fresh same-side MediaPipe data.",
+      "keyframes": [
+        {
+          "sourceFrameIndex": 480,
+          "x": 0.5444444444444444,
+          "y": 0.5527777777777778,
+          "inputPngSha256": "527789f1bed66034ad730dfff6649bdacdb1307cc0cbe9dc46452dc6379b6f40"
+        },
+        {
+          "sourceFrameIndex": 486,
+          "x": 0.5177777777777778,
+          "y": 0.5611111111111111,
+          "inputPngSha256": "bba2bf95223c861e94ea27118851965587dff736441afac6f63846d3e6adb667"
+        },
+        {
+          "sourceFrameIndex": 492,
+          "x": 0.49333333333333335,
+          "y": 0.5694444444444444,
+          "inputPngSha256": "e8bf777079159e18b48176cbcc103e93e11d89c4057eefa635a11bbe9f80bfb6"
+        },
+        {
+          "sourceFrameIndex": 498,
+          "x": 0.4711111111111111,
+          "y": 0.5694444444444444,
+          "inputPngSha256": "84de954a53db77e65e2b75e431afd3ecf7d6b28602c04eb5e61fd26c1e17ec0a"
+        },
+        {
+          "sourceFrameIndex": 504,
+          "x": 0.47333333333333333,
+          "y": 0.5777777777777777,
+          "inputPngSha256": "aaed19b11a578f8894d22bd51471f565ca8f50beb22907f9a016b24fc5254e57"
+        },
+        {
+          "sourceFrameIndex": 510,
+          "x": 0.4777777777777778,
+          "y": 0.5833333333333334,
+          "inputPngSha256": "8c5b6d52715070c26476ea64f7009f53cf23c1ba9fc1b96b4d80a511e28b6637"
+        },
+        {
+          "sourceFrameIndex": 516,
+          "x": 0.49777777777777776,
+          "y": 0.5805555555555556,
+          "inputPngSha256": "ef4733846ce9d97ca71e81190816db54f46d3d587644b6443d48dc7fd9209715"
+        },
+        {
+          "sourceFrameIndex": 520,
+          "x": 0.5155555555555555,
+          "y": 0.5694444444444444,
+          "inputPngSha256": "ea74f78ed922bbe7bb4b26fa6bb0bc27c2e19922bf216dcf1e3f955e5e3bc131"
+        },
+        {
+          "sourceFrameIndex": 524,
+          "x": 0.5355555555555556,
+          "y": 0.55,
+          "inputPngSha256": "e39cd34dd9f7ef7f08ef89d264e667c6d6a0a0dccc057b39f4c81176c58f5375"
+        }
+      ]
+    },
+    {
+      "index": 34,
+      "provenance": "Video-reviewed authored teaching targets for the four-point imitation game. Palm placement is approximate (+/-5 source pixels) from exact hash-verified source images, not measured ground truth or MediaPipe inference. Target interpolation specifies a practice path/timeline, not missing tracking. Learner evidence must still be fresh same-side MediaPipe data.",
+      "keyframes": [
+        {
+          "sourceFrameIndex": 480,
+          "x": 0.5,
+          "y": 0.2611111111111111,
+          "inputPngSha256": "527789f1bed66034ad730dfff6649bdacdb1307cc0cbe9dc46452dc6379b6f40"
+        },
+        {
+          "sourceFrameIndex": 486,
+          "x": 0.52,
+          "y": 0.26666666666666666,
+          "inputPngSha256": "bba2bf95223c861e94ea27118851965587dff736441afac6f63846d3e6adb667"
+        },
+        {
+          "sourceFrameIndex": 492,
+          "x": 0.5333333333333333,
+          "y": 0.275,
+          "inputPngSha256": "e8bf777079159e18b48176cbcc103e93e11d89c4057eefa635a11bbe9f80bfb6"
+        },
+        {
+          "sourceFrameIndex": 498,
+          "x": 0.5422222222222223,
+          "y": 0.2861111111111111,
+          "inputPngSha256": "84de954a53db77e65e2b75e431afd3ecf7d6b28602c04eb5e61fd26c1e17ec0a"
+        },
+        {
+          "sourceFrameIndex": 504,
+          "x": 0.5511111111111111,
+          "y": 0.3,
+          "inputPngSha256": "aaed19b11a578f8894d22bd51471f565ca8f50beb22907f9a016b24fc5254e57"
+        },
+        {
+          "sourceFrameIndex": 510,
+          "x": 0.5622222222222222,
+          "y": 0.3111111111111111,
+          "inputPngSha256": "8c5b6d52715070c26476ea64f7009f53cf23c1ba9fc1b96b4d80a511e28b6637"
+        },
+        {
+          "sourceFrameIndex": 516,
+          "x": 0.5777777777777777,
+          "y": 0.32222222222222224,
+          "inputPngSha256": "ef4733846ce9d97ca71e81190816db54f46d3d587644b6443d48dc7fd9209715"
+        },
+        {
+          "sourceFrameIndex": 520,
+          "x": 0.5911111111111111,
+          "y": 0.3333333333333333,
+          "inputPngSha256": "ea74f78ed922bbe7bb4b26fa6bb0bc27c2e19922bf216dcf1e3f955e5e3bc131"
+        },
+        {
+          "sourceFrameIndex": 524,
+          "x": 0.6088888888888889,
+          "y": 0.34444444444444444,
+          "inputPngSha256": "e39cd34dd9f7ef7f08ef89d264e667c6d6a0a0dccc057b39f4c81176c58f5375"
+        }
+      ]
+    }
+  ]
+}
