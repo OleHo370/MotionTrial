@@ -1,0 +1,42 @@
+{
+  "id": "24b-05",
+  "src": "/practice-media/24b-05.mp4",
+  "referencePoseSrc": "/practice-media/24b-05.poses.json",
+  "title": "Play the Lute",
+  "description": "Gather the stance, shift weight back, and bring both hands into the lute posture.",
+  "formNumber": 5,
+  "chineseTitle": "手挥琵琶",
+  "sourceFile": "24b.mp4",
+  "sourceDurationSeconds": 278.06666666666666,
+  "startSeconds": 66.8,
+  "endSeconds": 72.3,
+  "startFrame": 2004,
+  "endFrameExclusive": 2169,
+  "durationSeconds": 5.5,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 5.5,
+  "crop": {
+    "x": 0,
+    "y": 0,
+    "width": 640,
+    "height": 360
+  },
+  "width": 640,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    16,
+    28
+  ],
+  "trackingNotes": "The right wrist and right ankle are observed. The left wrist and left leg chain are frequently hidden in this side/back view.",
+  "selectionReason": "The third brush-knee push finishes; the rear foot gathers and weight shifts back for lute.",
+  "boundaryEvidence": "Actual one-second source frames manually reviewed in standard 24-form order. This recording has no form captions.",
+  "boundaryPrecision": "Editorial continuous-motion transition, approximately 0.5 seconds; exact encoding frames retained.",
+  "provenance": "User-provided 24b.mp4, one instructor, full original frame. Recorded reference observations use actual local MediaPipe inference, never live camera data.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "0df0f0cf436a94385e20157e647aba7624b0a625407bd605d33b6a578f40cc22",
+  "sha256": "0b6de4bb9a8278f6945327fb3ff51a13947b105a6b088eaaeb864676afdb74d4",
+  "bytes": 386403
+}

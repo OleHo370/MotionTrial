@@ -1,0 +1,43 @@
+{
+  "id": "24b-07",
+  "src": "/practice-media/24b-07.mp4",
+  "referencePoseSrc": "/practice-media/24b-07.poses.json",
+  "title": "Grasp the Bird's Tail - Left",
+  "description": "Turn into the left sequence, then follow ward-off, rollback, press, and push.",
+  "formNumber": 7,
+  "chineseTitle": "左揽雀尾",
+  "sourceFile": "24b.mp4",
+  "sourceDurationSeconds": 278.06666666666666,
+  "startSeconds": 91.7,
+  "endSeconds": 109.3,
+  "startFrame": 2751,
+  "endFrameExclusive": 3279,
+  "durationSeconds": 17.6,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 17.6,
+  "crop": {
+    "x": 0,
+    "y": 0,
+    "width": 640,
+    "height": 360
+  },
+  "width": 640,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    16,
+    27,
+    28
+  ],
+  "trackingNotes": "The right wrist and both ankles are observed through the left sequence. The far left wrist is occluded and is not independently assessed.",
+  "selectionReason": "The final backward push resolves; the torso turns and the hands gather for left ward-off.",
+  "boundaryEvidence": "Actual one-second source frames manually reviewed in standard 24-form order. This recording has no form captions.",
+  "boundaryPrecision": "Editorial continuous-motion transition, approximately 0.5 seconds; exact encoding frames retained.",
+  "provenance": "User-provided 24b.mp4, one instructor, full original frame. Recorded reference observations use actual local MediaPipe inference, never live camera data.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "0df0f0cf436a94385e20157e647aba7624b0a625407bd605d33b6a578f40cc22",
+  "sha256": "921955c17eacbff29a4b348efb80ec8618850ed2ab361937187bd8dd1a305fd0",
+  "bytes": 1367372
+}

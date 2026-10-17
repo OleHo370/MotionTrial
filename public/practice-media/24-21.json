@@ -1,0 +1,42 @@
+{
+  "id": "24-21",
+  "src": "/practice-media/24-21.mp4",
+  "referencePoseSrc": "/practice-media/24-21.poses.json",
+  "title": "Turn, Deflect, Parry, and Punch",
+  "description": "Turn, follow the deflecting and parrying steps, then finish with the forward punch.",
+  "formNumber": 21,
+  "chineseTitle": "转身搬拦捶",
+  "sourceFile": "24.mp4",
+  "sourceDurationSeconds": 287.3666666666667,
+  "startSeconds": 251.0,
+  "endSeconds": 263.0,
+  "startFrame": 7530,
+  "endFrameExclusive": 7890,
+  "durationSeconds": 12.0,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 12.0,
+  "crop": {
+    "x": 50,
+    "y": 0,
+    "width": 450,
+    "height": 360
+  },
+  "width": 450,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    16,
+    27,
+    28
+  ],
+  "selectionReason": "The fan-through-back extension is complete; the body begins its turn for the deflecting sequence.",
+  "boundaryEvidence": "Manually reviewed source movement transition; source caption identifies the form. Captions may appear after preparation starts.",
+  "boundaryPrecision": "Editorial continuous-routine transition, reviewed to approximately 0.5 seconds; frame indices are exact encoding cuts.",
+  "provenance": "User-provided 24.mp4 instructor recording. MediaPipe reference landmarks are inferred from this clip in the browser; no fabricated landmarks.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "2d62941ddebe1a75febee4423d0040d021a4247440e248f40d7ea1c69b17fab6",
+  "sha256": "affd8dddaf0bc73bee179169433a62ba42e4e969fc47bd83eac9e902df58576c",
+  "bytes": 1596851
+}

@@ -1,0 +1,40 @@
+{
+  "id": "24-22",
+  "src": "/practice-media/24-22.mp4",
+  "referencePoseSrc": "/practice-media/24-22.poses.json",
+  "title": "Apparent Close-Up",
+  "description": "Open the hands after the punch, shift back, then press both hands forward.",
+  "formNumber": 22,
+  "chineseTitle": "如封似闭",
+  "sourceFile": "24.mp4",
+  "sourceDurationSeconds": 287.3666666666667,
+  "startSeconds": 263.0,
+  "endSeconds": 269.3,
+  "startFrame": 7890,
+  "endFrameExclusive": 8079,
+  "durationSeconds": 6.3,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 6.3,
+  "crop": {
+    "x": 50,
+    "y": 0,
+    "width": 450,
+    "height": 360
+  },
+  "width": 450,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    16
+  ],
+  "selectionReason": "The punch is complete; the open hand begins to move beneath the punching forearm.",
+  "boundaryEvidence": "Manually reviewed source movement transition; source caption identifies the form. Captions may appear after preparation starts.",
+  "boundaryPrecision": "Editorial continuous-routine transition, reviewed to approximately 0.5 seconds; frame indices are exact encoding cuts.",
+  "provenance": "User-provided 24.mp4 instructor recording. MediaPipe reference landmarks are inferred from this clip in the browser; no fabricated landmarks.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "2d62941ddebe1a75febee4423d0040d021a4247440e248f40d7ea1c69b17fab6",
+  "sha256": "58985cb0478887d384f52ad348441ba2de935d22ebd4f7b33f13ad45f47597dd",
+  "bytes": 741293
+}

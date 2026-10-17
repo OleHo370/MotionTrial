@@ -1,0 +1,40 @@
+{
+  "id": "24-13",
+  "src": "/practice-media/24-13.mp4",
+  "referencePoseSrc": "/practice-media/24-13.poses.json",
+  "title": "Right Heel Kick",
+  "description": "Step through, gather the hands and right knee, then extend and recover the right heel kick.",
+  "formNumber": 13,
+  "chineseTitle": "右蹬脚",
+  "sourceFile": "24.mp4",
+  "sourceDurationSeconds": 287.3666666666667,
+  "startSeconds": 181.0,
+  "endSeconds": 190.8,
+  "startFrame": 5430,
+  "endFrameExclusive": 5724,
+  "durationSeconds": 9.8,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 9.8,
+  "crop": {
+    "x": 50,
+    "y": 0,
+    "width": 450,
+    "height": 360
+  },
+  "width": 450,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    28
+  ],
+  "selectionReason": "The high-pat reach is complete; the arms begin the crossing-and-lifting preparation for the kick.",
+  "boundaryEvidence": "Manually reviewed source movement transition; source caption identifies the form. Captions may appear after preparation starts.",
+  "boundaryPrecision": "Editorial continuous-routine transition, reviewed to approximately 0.5 seconds; frame indices are exact encoding cuts.",
+  "provenance": "User-provided 24.mp4 instructor recording. MediaPipe reference landmarks are inferred from this clip in the browser; no fabricated landmarks.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "2d62941ddebe1a75febee4423d0040d021a4247440e248f40d7ea1c69b17fab6",
+  "sha256": "4e3bbf9b8a91758996187b80a2b41d5243c734cad1659982aeea21ea0c8ef7f1",
+  "bytes": 1031919
+}

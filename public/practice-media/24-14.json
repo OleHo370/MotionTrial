@@ -1,0 +1,42 @@
+{
+  "id": "24-14",
+  "src": "/practice-media/24-14.mp4",
+  "referencePoseSrc": "/practice-media/24-14.poses.json",
+  "title": "Twin Fists Strike the Ears",
+  "description": "Recover the right knee, step down, and bring both fists forward together.",
+  "formNumber": 14,
+  "chineseTitle": "双峰贯耳",
+  "sourceFile": "24.mp4",
+  "sourceDurationSeconds": 287.3666666666667,
+  "startSeconds": 190.8,
+  "endSeconds": 196.0,
+  "startFrame": 5724,
+  "endFrameExclusive": 5880,
+  "durationSeconds": 5.2,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 5.2,
+  "crop": {
+    "x": 50,
+    "y": 0,
+    "width": 450,
+    "height": 360
+  },
+  "width": 450,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    16,
+    27,
+    28
+  ],
+  "selectionReason": "The right heel retracts after the kick; the arms begin opening for the downward step and paired strike.",
+  "boundaryEvidence": "Manually reviewed source movement transition; source caption identifies the form. Captions may appear after preparation starts.",
+  "boundaryPrecision": "Editorial continuous-routine transition, reviewed to approximately 0.5 seconds; frame indices are exact encoding cuts.",
+  "provenance": "User-provided 24.mp4 instructor recording. MediaPipe reference landmarks are inferred from this clip in the browser; no fabricated landmarks.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "2d62941ddebe1a75febee4423d0040d021a4247440e248f40d7ea1c69b17fab6",
+  "sha256": "79bc64dddd69cfc74161ff7af668f56f5439521c3bb570f888a42e855fa78f9f",
+  "bytes": 540441
+}

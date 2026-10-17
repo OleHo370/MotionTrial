@@ -1,0 +1,41 @@
+{
+  "id": "24-23",
+  "src": "/practice-media/24-23.mp4",
+  "referencePoseSrc": "/practice-media/24-23.poses.json",
+  "title": "Cross Hands",
+  "description": "Turn to the front, open the arms, gather the stance, and cross both hands at chest height.",
+  "formNumber": 23,
+  "chineseTitle": "十字手",
+  "sourceFile": "24.mp4",
+  "sourceDurationSeconds": 287.3666666666667,
+  "startSeconds": 269.3,
+  "endSeconds": 277.5,
+  "startFrame": 8079,
+  "endFrameExclusive": 8325,
+  "durationSeconds": 8.2,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 8.2,
+  "crop": {
+    "x": 50,
+    "y": 0,
+    "width": 450,
+    "height": 360
+  },
+  "width": 450,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    15,
+    16
+  ],
+  "selectionReason": "The forward press is complete; the torso begins to turn to the front as both arms open.",
+  "boundaryEvidence": "Manually reviewed source movement transition; source caption identifies the form. Captions may appear after preparation starts.",
+  "boundaryPrecision": "Editorial continuous-routine transition, reviewed to approximately 0.5 seconds; frame indices are exact encoding cuts.",
+  "provenance": "User-provided 24.mp4 instructor recording. MediaPipe reference landmarks are inferred from this clip in the browser; no fabricated landmarks.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "2d62941ddebe1a75febee4423d0040d021a4247440e248f40d7ea1c69b17fab6",
+  "sha256": "6f86a3705e6f4fa9d74b248878e53ea238e504d79a7a25143f1bd17b17a88adf",
+  "bytes": 993879
+}

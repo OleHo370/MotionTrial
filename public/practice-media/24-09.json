@@ -1,0 +1,41 @@
+{
+  "id": "24-09",
+  "src": "/practice-media/24-09.mp4",
+  "referencePoseSrc": "/practice-media/24-09.poses.json",
+  "title": "Single Whip",
+  "description": "Turn, form the arm shape, step out, and finish the single-whip stance.",
+  "formNumber": 9,
+  "chineseTitle": "单鞭",
+  "sourceFile": "24.mp4",
+  "sourceDurationSeconds": 287.3666666666667,
+  "startSeconds": 143.0,
+  "endSeconds": 152.0,
+  "startFrame": 4290,
+  "endFrameExclusive": 4560,
+  "durationSeconds": 9.0,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 9.0,
+  "crop": {
+    "x": 50,
+    "y": 0,
+    "width": 450,
+    "height": 360
+  },
+  "width": 450,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    15,
+    16
+  ],
+  "selectionReason": "The right push has finished; the torso and hands begin to turn into single whip.",
+  "boundaryEvidence": "Manually reviewed source movement transition; source caption identifies the form. Captions may appear after preparation starts.",
+  "boundaryPrecision": "Editorial continuous-routine transition, reviewed to approximately 0.5 seconds; frame indices are exact encoding cuts.",
+  "provenance": "User-provided 24.mp4 instructor recording. MediaPipe reference landmarks are inferred from this clip in the browser; no fabricated landmarks.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "2d62941ddebe1a75febee4423d0040d021a4247440e248f40d7ea1c69b17fab6",
+  "sha256": "ab95a40f8dc7b920c9c0549e9e9ff9d5366020214b2f768aecc751edf3544f0b",
+  "bytes": 1054141
+}
