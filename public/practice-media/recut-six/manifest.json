@@ -1,0 +1,344 @@
+{
+  "schemaVersion": "recut-six-teaching-v1",
+  "title": "Six continuous movements",
+  "source": {
+    "file": "24.mp4",
+    "sha256": "2d62941ddebe1a75febee4423d0040d021a4247440e248f40d7ea1c69b17fab6",
+    "src": "/practice-media/recut-six/master.mp4",
+    "excerptSha256": "55681d7b587c6082322fd5e02f53b969d56c27bdafd7f8c6983f83bd787b6ed9",
+    "startSeconds": 0,
+    "endSeconds": 17.5,
+    "fps": 30,
+    "width": 640,
+    "height": 360,
+    "sourceFrames": 8621,
+    "sourceDurationSeconds": 287.3666666666667,
+    "scope": "Practice clips cover all demonstration frames15–524 (0.5–17.5s). Only the opening title is excluded. The original full master is retained for observation provenance."
+  },
+  "sources": [
+    {
+      "id": "master",
+      "video": {
+        "src": "/practice-media/recut-six/master.mp4",
+        "width": 450,
+        "height": 360,
+        "fps": 30,
+        "frameCount": 525,
+        "durationSeconds": 17.5,
+        "sha256": "55681d7b587c6082322fd5e02f53b969d56c27bdafd7f8c6983f83bd787b6ed9",
+        "sourceStartSeconds": 0,
+        "sourceEndSeconds": 17.5,
+        "sourceStartFrame": 0,
+        "sourceEndFrameExclusive": 525,
+        "sourceCropPixels": {
+          "x": 50,
+          "y": 0,
+          "width": 450,
+          "height": 360
+        },
+        "provenance": "One continuous 30fps master encoded from every original source frame0 through524, in order. No omitted frames, temporal resampling, inserted motion, or model reset at teaching cuts."
+      },
+      "poseSrc": "/practice-media/recut-six/master.poses.json",
+      "displayCrop": {
+        "x": 0.22,
+        "y": 0.12,
+        "width": 0.64,
+        "height": 0.86
+      },
+      "observationVisibilityThreshold": 0.65
+    }
+  ],
+  "steps": [
+    {
+      "id": "first-three-01",
+      "title": "Open the left stance",
+      "cue": "Lift your left foot, step left, and settle into the open stance.",
+      "motion": "left-step",
+      "focusJoints": [
+        27
+      ],
+      "sourceId": "master",
+      "startSeconds": 0.5,
+      "endSeconds": 6.5,
+      "sourceStartSeconds": 0.5,
+      "sourceEndSeconds": 6.5,
+      "sourceStartFrame": 15,
+      "sourceEndFrameExclusive": 195,
+      "durationSeconds": 6.0,
+      "referenceStartFrame": 15,
+      "referenceEndFrame": 195,
+      "referenceStartSeconds": 0.5,
+      "referenceEndSeconds": 6.5,
+      "practiceStartSeconds": 0.5,
+      "teacherFreezeSeconds": 6.5,
+      "referenceVisibilityThreshold": 0.45,
+      "clipSrc": "/practice-media/recut-six/step-01.mp4",
+      "clipSha256": "aea3227151edb8c9ec6442e89dc560f97f70ec1d9792f3fcb931c02563d2a8f1",
+      "clipFrameCount": 180,
+      "screenshots": {
+        "start": "/practice-media/recut-six/step-01-start.png",
+        "end": "/practice-media/recut-six/step-01-end.png"
+      },
+      "screenshotSourceFrames": {
+        "start": 15,
+        "end": 195
+      },
+      "screenshotSourceTimes": {
+        "start": 0.5,
+        "end": 6.5
+      },
+      "boundaryEvidence": "Exact decoded source-frame identity. Interior reference ending frame is shared with the following start; encoded playback partitions remain half-open with no dropped or duplicated frames.",
+      "clipProvenance": "Starts directly on neutral instructor frame15. Only the opening title frames0–14 are excluded; all subsequent demonstration frames are retained.",
+      "observationVisibilityThreshold": 0.45
+    },
+    {
+      "id": "first-three-02",
+      "title": "Raise both hands",
+      "cue": "Slide both hands forward and upward to the demonstrated height.",
+      "motion": "raise",
+      "focusJoints": [
+        15,
+        16
+      ],
+      "sourceId": "master",
+      "startSeconds": 6.5,
+      "endSeconds": 9.5,
+      "sourceStartSeconds": 6.5,
+      "sourceEndSeconds": 9.5,
+      "sourceStartFrame": 195,
+      "sourceEndFrameExclusive": 285,
+      "durationSeconds": 3.0,
+      "referenceStartFrame": 195,
+      "referenceEndFrame": 285,
+      "referenceStartSeconds": 6.5,
+      "referenceEndSeconds": 9.5,
+      "practiceStartSeconds": 6.5,
+      "teacherFreezeSeconds": 9.5,
+      "referenceVisibilityThreshold": 0.45,
+      "clipSrc": "/practice-media/recut-six/step-02.mp4",
+      "clipSha256": "ecd5cc110d6c4270cdc6a597712ce0b3b826d706077410c6cd4e4eab0c0df3d8",
+      "clipFrameCount": 90,
+      "screenshots": {
+        "start": "/practice-media/recut-six/step-02-start.png",
+        "end": "/practice-media/recut-six/step-02-end.png"
+      },
+      "screenshotSourceFrames": {
+        "start": 195,
+        "end": 285
+      },
+      "screenshotSourceTimes": {
+        "start": 6.5,
+        "end": 9.5
+      },
+      "boundaryEvidence": "Exact decoded source-frame identity. Interior reference ending frame is shared with the following start; encoded playback partitions remain half-open with no dropped or duplicated frames.",
+      "clipProvenance": "Independent demonstration cut encoded from this exact contiguous source-frame range. Player uses one continuous master; observations must come from the lossless PNG schedule.",
+      "observationVisibilityThreshold": 0.45
+    },
+    {
+      "id": "first-three-03",
+      "title": "Lower both hands",
+      "cue": "Bend gently and slide both hands down to the demonstrated end position.",
+      "motion": "lower",
+      "focusJoints": [
+        15,
+        16
+      ],
+      "sourceId": "master",
+      "startSeconds": 9.5,
+      "endSeconds": 13.3,
+      "sourceStartSeconds": 9.5,
+      "sourceEndSeconds": 13.3,
+      "sourceStartFrame": 285,
+      "sourceEndFrameExclusive": 399,
+      "durationSeconds": 3.8,
+      "referenceStartFrame": 285,
+      "referenceEndFrame": 399,
+      "referenceStartSeconds": 9.5,
+      "referenceEndSeconds": 13.3,
+      "practiceStartSeconds": 9.5,
+      "teacherFreezeSeconds": 13.3,
+      "referenceVisibilityThreshold": 0.45,
+      "clipSrc": "/practice-media/recut-six/step-03.mp4",
+      "clipSha256": "8f9f28a4a254e83e777961f75c0864fecb9032158b75df851b2c31292726a778",
+      "clipFrameCount": 114,
+      "screenshots": {
+        "start": "/practice-media/recut-six/step-03-start.png",
+        "end": "/practice-media/recut-six/step-03-end.png"
+      },
+      "screenshotSourceFrames": {
+        "start": 285,
+        "end": 399
+      },
+      "screenshotSourceTimes": {
+        "start": 9.5,
+        "end": 13.3
+      },
+      "boundaryEvidence": "Exact decoded source-frame identity. Interior reference ending frame is shared with the following start; encoded playback partitions remain half-open with no dropped or duplicated frames.",
+      "clipProvenance": "Independent demonstration cut encoded from this exact contiguous source-frame range. Player uses one continuous master; observations must come from the lossless PNG schedule.",
+      "observationVisibilityThreshold": 0.45
+    },
+    {
+      "id": "first-six-04",
+      "title": "Turn and open the hands",
+      "cue": "Turn with the teacher and open both hands along the demonstrated paths.",
+      "motion": "open",
+      "focusJoints": [
+        15,
+        16
+      ],
+      "sourceId": "master",
+      "startSeconds": 13.3,
+      "endSeconds": 14.5,
+      "sourceStartSeconds": 13.3,
+      "sourceEndSeconds": 14.5,
+      "sourceStartFrame": 399,
+      "sourceEndFrameExclusive": 435,
+      "durationSeconds": 1.2,
+      "referenceStartFrame": 399,
+      "referenceEndFrame": 435,
+      "referenceStartSeconds": 13.3,
+      "referenceEndSeconds": 14.5,
+      "practiceStartSeconds": 13.3,
+      "teacherFreezeSeconds": 14.5,
+      "referenceVisibilityThreshold": 0.65,
+      "clipSrc": "/practice-media/recut-six/step-04.mp4",
+      "clipSha256": "f09cbfa56034057177fe0040821a9199e847a985b9bcb0f47f1cf7899e1c66b5",
+      "clipFrameCount": 36,
+      "screenshots": {
+        "start": "/practice-media/recut-six/step-04-start.png",
+        "end": "/practice-media/recut-six/step-04-end.png"
+      },
+      "screenshotSourceFrames": {
+        "start": 399,
+        "end": 435
+      },
+      "screenshotSourceTimes": {
+        "start": 13.3,
+        "end": 14.5
+      },
+      "boundaryEvidence": "Exact decoded source-frame identity. Interior reference ending frame is shared with the following start; encoded playback partitions remain half-open with no dropped or duplicated frames.",
+      "clipProvenance": "Independent demonstration cut encoded from this exact contiguous source-frame range. Player uses one continuous master; observations must come from the lossless PNG schedule.",
+      "observationVisibilityThreshold": 0.65
+    },
+    {
+      "id": "first-six-05",
+      "title": "Circle and gather the hands",
+      "cue": "Circle both hands into the demonstrated high-and-low preparation.",
+      "motion": "circle",
+      "focusJoints": [
+        15,
+        16
+      ],
+      "sourceId": "master",
+      "startSeconds": 14.5,
+      "endSeconds": 15.5,
+      "sourceStartSeconds": 14.5,
+      "sourceEndSeconds": 15.5,
+      "sourceStartFrame": 435,
+      "sourceEndFrameExclusive": 465,
+      "durationSeconds": 1.0,
+      "referenceStartFrame": 435,
+      "referenceEndFrame": 465,
+      "referenceStartSeconds": 14.5,
+      "referenceEndSeconds": 15.5,
+      "practiceStartSeconds": 14.5,
+      "teacherFreezeSeconds": 15.5,
+      "referenceVisibilityThreshold": 0.65,
+      "clipSrc": "/practice-media/recut-six/step-05.mp4",
+      "clipSha256": "06ac04ce654f16eaf873fefa7a0c01fa17bfed6d4f5245f21c1659a8e3fe68a2",
+      "clipFrameCount": 30,
+      "screenshots": {
+        "start": "/practice-media/recut-six/step-05-start.png",
+        "end": "/practice-media/recut-six/step-05-end.png"
+      },
+      "screenshotSourceFrames": {
+        "start": 435,
+        "end": 465
+      },
+      "screenshotSourceTimes": {
+        "start": 14.5,
+        "end": 15.5
+      },
+      "boundaryEvidence": "Exact decoded source-frame identity. Interior reference ending frame is shared with the following start; encoded playback partitions remain half-open with no dropped or duplicated frames.",
+      "clipProvenance": "Independent demonstration cut encoded from this exact contiguous source-frame range. Player uses one continuous master; observations must come from the lossless PNG schedule.",
+      "observationVisibilityThreshold": 0.65
+    },
+    {
+      "id": "first-six-06",
+      "title": "Lift and extend the left heel",
+      "cue": "Lift your left foot and extend the heel forward with the teacher.",
+      "motion": "left-heel",
+      "focusJoints": [
+        27
+      ],
+      "sourceId": "master",
+      "startSeconds": 15.5,
+      "endSeconds": 17.5,
+      "sourceStartSeconds": 15.5,
+      "sourceEndSeconds": 17.5,
+      "sourceStartFrame": 465,
+      "sourceEndFrameExclusive": 525,
+      "durationSeconds": 2.0,
+      "referenceStartFrame": 465,
+      "referenceEndFrame": 524,
+      "referenceStartSeconds": 15.5,
+      "referenceEndSeconds": 17.466666666666665,
+      "practiceStartSeconds": 15.5,
+      "teacherFreezeSeconds": 17.466666666666665,
+      "referenceVisibilityThreshold": 0.65,
+      "clipSrc": "/practice-media/recut-six/step-06.mp4",
+      "clipSha256": "f99f45614017d39c97bb8bc7a0dc93a8e2a51e0856294a854ca8286e0207d04e",
+      "clipFrameCount": 60,
+      "screenshots": {
+        "start": "/practice-media/recut-six/step-06-start.png",
+        "end": "/practice-media/recut-six/step-06-end.png"
+      },
+      "screenshotSourceFrames": {
+        "start": 465,
+        "end": 524
+      },
+      "screenshotSourceTimes": {
+        "start": 15.5,
+        "end": 17.466666666666665
+      },
+      "boundaryEvidence": "Exact decoded source-frame identity. Interior reference ending frame is shared with the following start; encoded playback partitions remain half-open with no dropped or duplicated frames.",
+      "clipProvenance": "Independent demonstration cut encoded from this exact contiguous source-frame range. Player uses one continuous master; observations must come from the lossless PNG schedule.",
+      "observationVisibilityThreshold": 0.65
+    }
+  ],
+  "cutFrames": [
+    15,
+    195,
+    285,
+    399,
+    435,
+    465,
+    525
+  ],
+  "scheduleSrc": "/practice-media/recut-six/schedule.json",
+  "orientation": {
+    "sourceMirrored": false,
+    "defaultDisplayMirror": true,
+    "anatomicalIndicesUnchanged": true
+  },
+  "rules": {
+    "stepCount": 6,
+    "sourceTeachingStartSeconds": 0.5,
+    "sourceTeachingEndSeconds": 17.5,
+    "noOmittedFrames": true,
+    "singleSourceTimeline": true,
+    "constantDisplayCrop": true,
+    "observationSampling": "Requires fresh genuine local MediaPipe inference on exact lossless PNG frames at15Hz plus exact boundary frames. No archived observations relabeled as new inference.",
+    "initialTitleCard": "Opening title frames0–14 are excluded from teaching clips and practice playback. The preserved master and exact-frame observations are unchanged.",
+    "referenceBoundaryPolicy": "Same actual source frame at both sides of every interior cut. Last endpoint is final decodable frame524.",
+    "sourceTeachingStartFrame": 15
+  },
+  "demonstrationPreview": {
+    "src": "/practice-media/recut-six/demonstration.mp4",
+    "sha256": "26f59bc7f4f9a1d99f7464e69bf6cd91f0eccf92d446981ee8d19267c2b2e109",
+    "durationSeconds": 17.0,
+    "frameCount": 510,
+    "sourceStartFrame": 15,
+    "sourceEndFrameExclusive": 525
+  }
+}
