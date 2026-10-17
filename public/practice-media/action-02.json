@@ -1,0 +1,30 @@
+{
+  "id": "action-02",
+  "src": "/practice-media/action-02.webm",
+  "title": "Lift the left foot",
+  "description": "Begin with feet together. Follow the instructor as the left foot lifts and begins to move outward.",
+  "sourceFile": "太极拳入门_起势完整教学_5分17秒.mp4",
+  "sourceDurationSeconds": 316.566666,
+  "startSeconds": 82,
+  "endSeconds": 85,
+  "durationSeconds": 4.0,
+  "sourcePlaybackRate": 0.75,
+  "sourceSegmentSeconds": 3,
+  "crop": {
+    "x": 760,
+    "y": 140,
+    "width": 700,
+    "height": 888
+  },
+  "width": 520,
+  "height": 660,
+  "selectionReason": "The visible left-foot lifting phase immediately before the step opens; full-body frontal view.",
+  "provenance": "User-provided prerecorded instructor video; actual MediaPipe reference inference runs in the browser.",
+  "audio": false,
+  "opencvVersion": "4.11.0",
+  "sourceSha256": "0089a67bbe03355e3723d8b9144df7d882209d655d8b4bb7598ad07807932c29",
+  "sha256": "c9f8979955bbf8bb1fde1b0feb9a883a1409fcfcebea80017c26657fd93f9e86",
+  "focusJoints": [
+    27
+  ]
+}

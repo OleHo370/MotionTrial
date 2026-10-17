@@ -1,0 +1,43 @@
+{
+  "id": "24b-12",
+  "src": "/practice-media/24b-12.mp4",
+  "referencePoseSrc": "/practice-media/24b-12.poses.json",
+  "title": "High Pat on the Horse",
+  "description": "Shift back from single whip, gather the foot, and reach forward with the upper hand.",
+  "formNumber": 12,
+  "chineseTitle": "高探马",
+  "sourceFile": "24b.mp4",
+  "sourceDurationSeconds": 278.06666666666666,
+  "startSeconds": 164.0,
+  "endSeconds": 168.5,
+  "startFrame": 4920,
+  "endFrameExclusive": 5055,
+  "durationSeconds": 4.5,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 4.5,
+  "crop": {
+    "x": 0,
+    "y": 0,
+    "width": 640,
+    "height": 360
+  },
+  "width": 640,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    16,
+    27,
+    28
+  ],
+  "trackingNotes": "The right wrist and both ankles are observed in this rear/side view. The far left wrist is hidden and is not independently assessed.",
+  "selectionReason": "The second single-whip stance settles; the rear foot gathers for high pat.",
+  "boundaryEvidence": "Actual one-second source frames manually reviewed in standard 24-form order. This recording has no form captions.",
+  "boundaryPrecision": "Editorial continuous-motion transition, approximately 0.5 seconds; exact encoding frames retained.",
+  "provenance": "User-provided 24b.mp4, one instructor, full original frame. Recorded reference observations use actual local MediaPipe inference, never live camera data.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "0df0f0cf436a94385e20157e647aba7624b0a625407bd605d33b6a578f40cc22",
+  "sha256": "6a3246a37ee5e61e52d13589d185c917581fb6943b8c9984a1171b3c18f7c4ed",
+  "bytes": 461220
+}

@@ -1,0 +1,31 @@
+{
+  "id": "action-04",
+  "src": "/practice-media/action-04.webm",
+  "title": "Press both hands down",
+  "description": "Begin with both arms raised. Follow both hands downward toward the waist while the knees soften.",
+  "sourceFile": "太极拳入门_起势完整教学_5分17秒.mp4",
+  "sourceDurationSeconds": 316.566666,
+  "startSeconds": 114,
+  "endSeconds": 129,
+  "durationSeconds": 4.0,
+  "sourcePlaybackRate": 3.75,
+  "sourceSegmentSeconds": 15,
+  "crop": {
+    "x": 760,
+    "y": 140,
+    "width": 700,
+    "height": 888
+  },
+  "width": 520,
+  "height": 660,
+  "selectionReason": "The complete visible hand-lowering phase. Palm orientation is not scored by the pose matcher.",
+  "provenance": "User-provided prerecorded instructor video; actual MediaPipe reference inference runs in the browser.",
+  "audio": false,
+  "opencvVersion": "4.11.0",
+  "sourceSha256": "0089a67bbe03355e3723d8b9144df7d882209d655d8b4bb7598ad07807932c29",
+  "sha256": "dbb9a169c7a0475a50659cc08c83c0a7f28078c9410bbe736180431aad87cbaa",
+  "focusJoints": [
+    15,
+    16
+  ]
+}

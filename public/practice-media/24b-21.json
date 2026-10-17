@@ -1,0 +1,43 @@
+{
+  "id": "24b-21",
+  "src": "/practice-media/24b-21.mp4",
+  "referencePoseSrc": "/practice-media/24b-21.poses.json",
+  "title": "Turn, Deflect, Parry, and Punch",
+  "description": "Turn, follow the deflecting and parrying steps, then finish with the forward punch.",
+  "formNumber": 21,
+  "chineseTitle": "转身搬拦捶",
+  "sourceFile": "24b.mp4",
+  "sourceDurationSeconds": 278.06666666666666,
+  "startSeconds": 242.5,
+  "endSeconds": 254.3,
+  "startFrame": 7275,
+  "endFrameExclusive": 7629,
+  "durationSeconds": 11.8,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 11.8,
+  "crop": {
+    "x": 0,
+    "y": 0,
+    "width": 640,
+    "height": 360
+  },
+  "width": 640,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    16,
+    27,
+    28
+  ],
+  "trackingNotes": "The visible right wrist and both ankles are assessed through the turn and punch. The far left wrist is frequently hidden; fist shape is not measured.",
+  "selectionReason": "The fan-through-back extension resolves; the torso and rear hand begin the turn for deflection.",
+  "boundaryEvidence": "Actual one-second source frames manually reviewed in standard 24-form order. This recording has no form captions.",
+  "boundaryPrecision": "Editorial continuous-motion transition, approximately 0.5 seconds; exact encoding frames retained.",
+  "provenance": "User-provided 24b.mp4, one instructor, full original frame. Recorded reference observations use actual local MediaPipe inference, never live camera data.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "0df0f0cf436a94385e20157e647aba7624b0a625407bd605d33b6a578f40cc22",
+  "sha256": "0423525eb86294a666dbb0a2c9093b65e9f812b8497a74113a42fd396f145fb7",
+  "bytes": 1140613
+}

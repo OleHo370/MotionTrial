@@ -1,0 +1,42 @@
+{
+  "id": "24b-20",
+  "src": "/practice-media/24b-20.mp4",
+  "referencePoseSrc": "/practice-media/24b-20.poses.json",
+  "title": "Fan Through the Back",
+  "description": "Rise from the low reach, step forward, and separate the arms into the final posture.",
+  "formNumber": 20,
+  "chineseTitle": "闪通背",
+  "sourceFile": "24b.mp4",
+  "sourceDurationSeconds": 278.06666666666666,
+  "startSeconds": 238.5,
+  "endSeconds": 242.5,
+  "startFrame": 7155,
+  "endFrameExclusive": 7275,
+  "durationSeconds": 4.0,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 4.0,
+  "crop": {
+    "x": 0,
+    "y": 0,
+    "width": 640,
+    "height": 360
+  },
+  "width": 640,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    15,
+    27
+  ],
+  "trackingNotes": "The visible left wrist and left ankle are assessed while rising. The opposite wrist and right leg chain are intermittent and are not independently assessed.",
+  "selectionReason": "The needle reach reaches its low point; the body begins rising and the arms separate for fan.",
+  "boundaryEvidence": "Actual one-second source frames manually reviewed in standard 24-form order. This recording has no form captions.",
+  "boundaryPrecision": "Editorial continuous-motion transition, approximately 0.5 seconds; exact encoding frames retained.",
+  "provenance": "User-provided 24b.mp4, one instructor, full original frame. Recorded reference observations use actual local MediaPipe inference, never live camera data.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "0df0f0cf436a94385e20157e647aba7624b0a625407bd605d33b6a578f40cc22",
+  "sha256": "cf2d5228655a948158cad6a22ad0d908e91b9e2549eea9c9123e860864b3d88a",
+  "bytes": 415018
+}

@@ -1,0 +1,43 @@
+{
+  "id": "24b-18",
+  "src": "/practice-media/24b-18.mp4",
+  "referencePoseSrc": "/practice-media/24b-18.poses.json",
+  "title": "Work at Shuttles",
+  "description": "Follow both diagonal steps, overhead arm arcs, and forward hand pushes.",
+  "formNumber": 18,
+  "chineseTitle": "左右穿梭",
+  "sourceFile": "24b.mp4",
+  "sourceDurationSeconds": 278.06666666666666,
+  "startSeconds": 217.5,
+  "endSeconds": 233.5,
+  "startFrame": 6525,
+  "endFrameExclusive": 7005,
+  "durationSeconds": 16.0,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 16.0,
+  "crop": {
+    "x": 0,
+    "y": 0,
+    "width": 640,
+    "height": 360
+  },
+  "width": 640,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    15,
+    27,
+    28
+  ],
+  "trackingNotes": "The left wrist and both diagonal-stepping ankles supply evidence. The right wrist is frequently hidden; right-ankle observations are intermittent.",
+  "selectionReason": "The second golden-rooster balance settles; the raised foot begins the first diagonal shuttle step.",
+  "boundaryEvidence": "Actual one-second source frames manually reviewed in standard 24-form order. This recording has no form captions.",
+  "boundaryPrecision": "Editorial continuous-motion transition, approximately 0.5 seconds; exact encoding frames retained.",
+  "provenance": "User-provided 24b.mp4, one instructor, full original frame. Recorded reference observations use actual local MediaPipe inference, never live camera data.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "0df0f0cf436a94385e20157e647aba7624b0a625407bd605d33b6a578f40cc22",
+  "sha256": "cc5799c3a9e32310cd0c64f7cf712fb2ab244309d7976c3b761dfdc8a9d37e6c",
+  "bytes": 1318613
+}

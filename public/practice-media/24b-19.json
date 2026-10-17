@@ -1,0 +1,42 @@
+{
+  "id": "24b-19",
+  "src": "/practice-media/24b-19.mp4",
+  "referencePoseSrc": "/practice-media/24b-19.poses.json",
+  "title": "Needle at the Sea Bottom",
+  "description": "Gather the rear foot, shift back, then lower the body and reach downward.",
+  "formNumber": 19,
+  "chineseTitle": "海底针",
+  "sourceFile": "24b.mp4",
+  "sourceDurationSeconds": 278.06666666666666,
+  "startSeconds": 233.5,
+  "endSeconds": 238.5,
+  "startFrame": 7005,
+  "endFrameExclusive": 7155,
+  "durationSeconds": 5.0,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 5.0,
+  "crop": {
+    "x": 0,
+    "y": 0,
+    "width": 640,
+    "height": 360
+  },
+  "width": 640,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    15,
+    27
+  ],
+  "trackingNotes": "The visible left wrist and left ankle are assessed through the low reach. The opposite wrist and right leg chain are frequently hidden.",
+  "selectionReason": "The second shuttle push resolves; the rear foot gathers and the body starts lowering for needle.",
+  "boundaryEvidence": "Actual one-second source frames manually reviewed in standard 24-form order. This recording has no form captions.",
+  "boundaryPrecision": "Editorial continuous-motion transition, approximately 0.5 seconds; exact encoding frames retained.",
+  "provenance": "User-provided 24b.mp4, one instructor, full original frame. Recorded reference observations use actual local MediaPipe inference, never live camera data.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "0df0f0cf436a94385e20157e647aba7624b0a625407bd605d33b6a578f40cc22",
+  "sha256": "c0b064146c8b366816fd71631626ace906f2f17985c6158b2e430813fa062bbe",
+  "bytes": 526842
+}

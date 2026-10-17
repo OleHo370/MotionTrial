@@ -1,0 +1,43 @@
+{
+  "id": "24b-14",
+  "src": "/practice-media/24b-14.mp4",
+  "referencePoseSrc": "/practice-media/24b-14.poses.json",
+  "title": "Twin Fists Strike the Ears",
+  "description": "Recover the right knee, step down, and bring both fists forward together.",
+  "formNumber": 14,
+  "chineseTitle": "双峰贯耳",
+  "sourceFile": "24b.mp4",
+  "sourceDurationSeconds": 278.06666666666666,
+  "startSeconds": 178.5,
+  "endSeconds": 182.5,
+  "startFrame": 5355,
+  "endFrameExclusive": 5475,
+  "durationSeconds": 4.0,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 4.0,
+  "crop": {
+    "x": 0,
+    "y": 0,
+    "width": 640,
+    "height": 360
+  },
+  "width": 640,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    16,
+    27,
+    28
+  ],
+  "trackingNotes": "The right wrist and both ankles supply visible step-and-strike evidence. The left fist is hidden, so paired-fist symmetry and fist shape cannot be verified.",
+  "selectionReason": "The right heel starts retracting; the arms gather downward for the paired-fist step.",
+  "boundaryEvidence": "Actual one-second source frames manually reviewed in standard 24-form order. This recording has no form captions.",
+  "boundaryPrecision": "Editorial continuous-motion transition, approximately 0.5 seconds; exact encoding frames retained.",
+  "provenance": "User-provided 24b.mp4, one instructor, full original frame. Recorded reference observations use actual local MediaPipe inference, never live camera data.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "0df0f0cf436a94385e20157e647aba7624b0a625407bd605d33b6a578f40cc22",
+  "sha256": "d1502644485e1c215fefe8316dfe7fd7db2bdcf4b2bdfe4f834dd9a1f732ebe6",
+  "bytes": 414781
+}

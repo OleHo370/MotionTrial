@@ -1,0 +1,29 @@
+{
+  "id": "action-01",
+  "src": "/practice-media/action-01.webm",
+  "title": "Lift both arms forward",
+  "description": "Begin in the open stance with arms lowered. Lift both arms forward with the instructor.",
+  "sourceFile": "太极拳最简入门_起势示范节选.mp4",
+  "sourceDurationSeconds": 21.5,
+  "startSeconds": 6.5,
+  "endSeconds": 8.5,
+  "durationSeconds": 4.0,
+  "sourcePlaybackRate": 0.5,
+  "sourceSegmentSeconds": 2.0,
+  "crop": {
+    "x": 430,
+    "y": 130,
+    "width": 260,
+    "height": 330
+  },
+  "width": 520,
+  "height": 660,
+  "selectionReason": "One visible transition from arms lowered to arms raised, after the stance opens. Crop isolates the central instructor and retains the whole body. Played at half the source speed for a four-second learning attempt.",
+  "provenance": "User-provided prerecorded instructor video; actual MediaPipe reference inference runs in the browser.",
+  "audio": false,
+  "sha256": "018d4dc0351af0186eea8d165be4bf057472afb394acc27948a8ae9387b77de8",
+  "focusJoints": [
+    15,
+    16
+  ]
+}

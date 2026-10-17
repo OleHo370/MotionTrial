@@ -1,0 +1,42 @@
+{
+  "id": "24b-16",
+  "src": "/practice-media/24b-16.mp4",
+  "referencePoseSrc": "/practice-media/24b-16.poses.json",
+  "title": "Left Snake Creeps Down and Golden Rooster",
+  "description": "Lower into the left sweeping stance, rise, and finish balanced on one leg.",
+  "formNumber": 16,
+  "chineseTitle": "左下势独立",
+  "sourceFile": "24b.mp4",
+  "sourceDurationSeconds": 278.06666666666666,
+  "startSeconds": 191.5,
+  "endSeconds": 203.5,
+  "startFrame": 5745,
+  "endFrameExclusive": 6105,
+  "durationSeconds": 12.0,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 12.0,
+  "crop": {
+    "x": 0,
+    "y": 0,
+    "width": 640,
+    "height": 360
+  },
+  "width": 640,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    15,
+    27
+  ],
+  "trackingNotes": "The visible left wrist and left ankle are assessed through lowering and rising. The opposite wrist and right leg chain are frequently hidden in the low stance.",
+  "selectionReason": "The left heel has retracted; the raised leg starts lowering toward the first low sweeping stance.",
+  "boundaryEvidence": "Actual one-second source frames manually reviewed in standard 24-form order. This recording has no form captions.",
+  "boundaryPrecision": "Editorial continuous-motion transition, approximately 0.5 seconds; exact encoding frames retained.",
+  "provenance": "User-provided 24b.mp4, one instructor, full original frame. Recorded reference observations use actual local MediaPipe inference, never live camera data.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "0df0f0cf436a94385e20157e647aba7624b0a625407bd605d33b6a578f40cc22",
+  "sha256": "3b3d7273dbadbbf4a67388daf47cf6a3b025cd752506f46c684326b0126319fb",
+  "bytes": 1190962
+}

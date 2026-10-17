@@ -1,0 +1,30 @@
+{
+  "id": "action-03",
+  "src": "/practice-media/action-03.webm",
+  "title": "Step out to the left",
+  "description": "Begin with your left foot lifted as shown. Lower it to the side and settle into the open stance.",
+  "sourceFile": "太极拳入门_起势完整教学_5分17秒.mp4",
+  "sourceDurationSeconds": 316.566666,
+  "startSeconds": 85,
+  "endSeconds": 96,
+  "durationSeconds": 4.0,
+  "sourcePlaybackRate": 2.75,
+  "sourceSegmentSeconds": 11,
+  "crop": {
+    "x": 760,
+    "y": 140,
+    "width": 700,
+    "height": 888
+  },
+  "width": 520,
+  "height": 660,
+  "selectionReason": "The consecutive outward foot placement and settling phase, ending before the arms rise.",
+  "provenance": "User-provided prerecorded instructor video; actual MediaPipe reference inference runs in the browser.",
+  "audio": false,
+  "opencvVersion": "4.11.0",
+  "sourceSha256": "0089a67bbe03355e3723d8b9144df7d882209d655d8b4bb7598ad07807932c29",
+  "sha256": "aa19a9f1e4e702789eb0e5f519da82cbca04657553acd2bb5410c9e6e860fbaa",
+  "focusJoints": [
+    27
+  ]
+}
