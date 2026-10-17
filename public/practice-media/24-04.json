@@ -1,0 +1,42 @@
+{
+  "id": "24-04",
+  "src": "/practice-media/24-04.mp4",
+  "referencePoseSrc": "/practice-media/24-04.poses.json",
+  "title": "Brush Knee and Push",
+  "description": "Follow the alternating brush-knee steps and forward pushes.",
+  "formNumber": 4,
+  "chineseTitle": "左右搂膝拗步",
+  "sourceFile": "24.mp4",
+  "sourceDurationSeconds": 287.3666666666667,
+  "startSeconds": 43.7,
+  "endSeconds": 70.0,
+  "startFrame": 1311,
+  "endFrameExclusive": 2100,
+  "durationSeconds": 26.3,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 26.3,
+  "crop": {
+    "x": 50,
+    "y": 0,
+    "width": 450,
+    "height": 360
+  },
+  "width": 450,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    16,
+    27,
+    28
+  ],
+  "selectionReason": "The crane posture settles; the raised arm begins to circle into the first brush-knee preparation.",
+  "boundaryEvidence": "Manually reviewed source movement transition; source caption identifies the form. Captions may appear after preparation starts.",
+  "boundaryPrecision": "Editorial continuous-routine transition, reviewed to approximately 0.5 seconds; frame indices are exact encoding cuts.",
+  "provenance": "User-provided 24.mp4 instructor recording. MediaPipe reference landmarks are inferred from this clip in the browser; no fabricated landmarks.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "2d62941ddebe1a75febee4423d0040d021a4247440e248f40d7ea1c69b17fab6",
+  "sha256": "8c6213a033be6e56466db616d2fac703c0770970e02127a83b7f45eb2769c727",
+  "bytes": 2909107
+}

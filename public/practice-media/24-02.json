@@ -1,0 +1,40 @@
+{
+  "id": "24-02",
+  "src": "/practice-media/24-02.mp4",
+  "referencePoseSrc": "/practice-media/24-02.poses.json",
+  "title": "Part the Wild Horse's Mane",
+  "description": "Follow all three alternating steps and arm separations.",
+  "formNumber": 2,
+  "chineseTitle": "左右野马分鬃",
+  "sourceFile": "24.mp4",
+  "sourceDurationSeconds": 287.3666666666667,
+  "startSeconds": 13.3,
+  "endSeconds": 37.7,
+  "startFrame": 399,
+  "endFrameExclusive": 1131,
+  "durationSeconds": 24.4,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 24.4,
+  "crop": {
+    "x": 50,
+    "y": 0,
+    "width": 450,
+    "height": 360
+  },
+  "width": 450,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    16
+  ],
+  "selectionReason": "The opening hand press finishes; the torso begins to turn and gather for the first parting step.",
+  "boundaryEvidence": "Manually reviewed source movement transition; source caption identifies the form. Captions may appear after preparation starts.",
+  "boundaryPrecision": "Editorial continuous-routine transition, reviewed to approximately 0.5 seconds; frame indices are exact encoding cuts.",
+  "provenance": "User-provided 24.mp4 instructor recording. MediaPipe reference landmarks are inferred from this clip in the browser; no fabricated landmarks.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "2d62941ddebe1a75febee4423d0040d021a4247440e248f40d7ea1c69b17fab6",
+  "sha256": "f36ff185714d4bbb4a4573b6e75009f6ca3a4f97117655c67081c81f907ab919",
+  "bytes": 2735112
+}

@@ -1,0 +1,41 @@
+{
+  "id": "24-01",
+  "src": "/practice-media/24-01.mp4",
+  "referencePoseSrc": "/practice-media/24-01.poses.json",
+  "title": "Opening",
+  "description": "Step into the open stance, raise both arms, then lower both hands.",
+  "formNumber": 1,
+  "chineseTitle": "起势",
+  "sourceFile": "24.mp4",
+  "sourceDurationSeconds": 287.3666666666667,
+  "startSeconds": 1.0,
+  "endSeconds": 13.3,
+  "startFrame": 30,
+  "endFrameExclusive": 399,
+  "durationSeconds": 12.3,
+  "sourcePlaybackRate": 1,
+  "sourceSegmentSeconds": 12.3,
+  "crop": {
+    "x": 50,
+    "y": 0,
+    "width": 450,
+    "height": 360
+  },
+  "width": 450,
+  "height": 360,
+  "fps": 30,
+  "focusJoints": [
+    15,
+    16
+  ],
+  "selectionReason": "Start from the visible standing preparation after the title card.",
+  "boundaryEvidence": "Manually reviewed source movement transition; source caption identifies the form. Captions may appear after preparation starts.",
+  "boundaryPrecision": "Editorial continuous-routine transition, reviewed to approximately 0.5 seconds; frame indices are exact encoding cuts.",
+  "provenance": "User-provided 24.mp4 instructor recording. MediaPipe reference landmarks are inferred from this clip in the browser; no fabricated landmarks.",
+  "audio": false,
+  "codec": "h264",
+  "pixelFormat": "yuv420p",
+  "sourceSha256": "2d62941ddebe1a75febee4423d0040d021a4247440e248f40d7ea1c69b17fab6",
+  "sha256": "a8b47ec6ff06b8094f1b7b95e98234f91dfc2ca5c494b83eccd680e8b5e2a3fd",
+  "bytes": 1403803
+}
