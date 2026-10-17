@@ -1,0 +1,2746 @@
+[
+  {
+    "formNumber": 1,
+    "sourceFile": "24.mp4",
+    "steps": [
+      {
+        "startSeconds": 1.0,
+        "endSeconds": 2.3,
+        "title": "Prepare to step",
+        "cue": "Stand upright and begin lifting the stepping foot.",
+        "chineseTitle": "准备抬脚",
+        "chineseCue": "站稳，开始提起要迈出的脚。",
+        "focusJoints": [
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "At 2.0s the feet begin to separate; arms stay lowered.",
+        "evidenceTimesSeconds": [
+          1.0,
+          1.65,
+          2.267
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-01-01.jpg"
+      },
+      {
+        "startSeconds": 2.3,
+        "endSeconds": 3.4,
+        "title": "Lift the stepping foot",
+        "cue": "Bring the foot clear of the ground before moving it sideways.",
+        "chineseTitle": "提起迈步脚",
+        "chineseCue": "将迈步脚提离地面，准备向侧面打开。",
+        "focusJoints": [
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "At 3.0s the stepping knee is raised and the foot is off the ground.",
+        "evidenceTimesSeconds": [
+          2.3,
+          2.85,
+          3.367
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-01-01.jpg"
+      },
+      {
+        "startSeconds": 3.4,
+        "endSeconds": 5.0,
+        "title": "Place the foot to the side",
+        "cue": "Set the lifted foot down to make a wider stance.",
+        "chineseTitle": "向侧面落脚",
+        "chineseCue": "将提起的脚落向侧面，站距打开。",
+        "focusJoints": [
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "The foot travels outward at 4.0s and is planted by 5.0s.",
+        "evidenceTimesSeconds": [
+          3.4,
+          4.2,
+          4.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-01-01.jpg"
+      },
+      {
+        "startSeconds": 5.0,
+        "endSeconds": 7.2,
+        "title": "Settle the open stance",
+        "cue": "Let both legs share the stance as the hands begin to float forward.",
+        "chineseTitle": "站稳并准备抬手",
+        "chineseCue": "双脚站稳，双手开始向前抬起。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "At 6.0s feet are planted; hands start moving forward by 7.0s.",
+        "evidenceTimesSeconds": [
+          5.0,
+          6.1,
+          7.167
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-01-01.jpg"
+      },
+      {
+        "startSeconds": 7.2,
+        "endSeconds": 9.5,
+        "title": "Raise both arms",
+        "cue": "Lift both arms forward to about shoulder height.",
+        "chineseTitle": "双臂前举",
+        "chineseCue": "双臂一起向前上方抬至约肩高。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "At 8.0s hands rise; at 9.0s they reach upper chest to shoulder level.",
+        "evidenceTimesSeconds": [
+          7.2,
+          8.35,
+          9.467
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-01-01.jpg"
+      },
+      {
+        "startSeconds": 9.5,
+        "endSeconds": 11.2,
+        "title": "Bend and lower the arms",
+        "cue": "Bend the elbows and lower the hands while the knees soften.",
+        "chineseTitle": "屈臂下落",
+        "chineseCue": "双肘弯曲，手向下落，双膝随之微屈。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "Elbows fold at 10.0s; by 11.0s the hands and body have lowered.",
+        "evidenceTimesSeconds": [
+          9.5,
+          10.35,
+          11.167
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-01-01.jpg"
+      },
+      {
+        "startSeconds": 11.2,
+        "endSeconds": 13.3,
+        "title": "Finish the downward press",
+        "cue": "Bring both hands down in front of the hips and settle.",
+        "chineseTitle": "双手下按完成",
+        "chineseCue": "双手继续落到胯前，完成这一小步。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "At 12.0-13.0s hands finish lowering in front of the hips.",
+        "evidenceTimesSeconds": [
+          11.2,
+          12.25,
+          13.267
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-01-01.jpg"
+      }
+    ]
+  },
+  {
+    "formNumber": 2,
+    "sourceFile": "24.mp4",
+    "steps": [
+      {
+        "startSeconds": 13.3,
+        "endSeconds": 14.8,
+        "title": "Round 1: turn and open",
+        "cue": "Turn the torso as one arm rises and the other opens low.",
+        "chineseTitle": "第一轮：转体展臂",
+        "chineseCue": "身体转动，一臂升高，另一臂向低处打开。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "13.3s hands are low; 14.3s one forearm is raised while the other opens sideways.",
+        "evidenceTimesSeconds": [
+          13.3,
+          14.05,
+          14.767
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-02-01.jpg"
+      },
+      {
+        "startSeconds": 14.8,
+        "endSeconds": 16.6,
+        "title": "Round 1: gather foot and arms",
+        "cue": "Draw the stepping foot in and round the arms in front of the body.",
+        "chineseTitle": "第一轮：收脚合臂",
+        "chineseCue": "迈步脚收近，双臂在身前围合。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "At 15.8-16.3s the stepping knee is lifted; one arm is high and the other low in front.",
+        "evidenceTimesSeconds": [
+          14.8,
+          15.7,
+          16.567
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-02-01.jpg"
+      },
+      {
+        "startSeconds": 16.6,
+        "endSeconds": 17.6,
+        "title": "Round 1: reach with the heel",
+        "cue": "Extend the lifted leg and touch the heel ahead.",
+        "chineseTitle": "第一轮：伸脚落跟",
+        "chineseCue": "提起的腿向前伸出，脚跟先落。",
+        "focusJoints": [
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "At 16.8-17.3s the lifted foot extends forward with its toes raised.",
+        "evidenceTimesSeconds": [
+          16.6,
+          17.1,
+          17.567
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-02-01.jpg"
+      },
+      {
+        "startSeconds": 17.6,
+        "endSeconds": 18.9,
+        "title": "Round 1: shift and separate",
+        "cue": "Move toward the front leg as the front arm opens and the rear hand lowers.",
+        "chineseTitle": "第一轮：移重心分臂",
+        "chineseCue": "身体向前腿移动，前臂打开，后手下落。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "17.8s forearms pass near the chest; 18.8s front arm extends and rear hand lowers.",
+        "evidenceTimesSeconds": [
+          17.6,
+          18.25,
+          18.867
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-02-01.jpg"
+      },
+      {
+        "startSeconds": 18.9,
+        "endSeconds": 20.1,
+        "title": "Round 1: finish the stance",
+        "cue": "Finish the forward shift and let the two arms settle apart.",
+        "chineseTitle": "第一轮：完成弓步",
+        "chineseCue": "完成向前的重心移动，双臂在分开的位置落稳。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "19.3-19.8s show the completed forward stance with separated arms.",
+        "evidenceTimesSeconds": [
+          18.9,
+          19.5,
+          20.067
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-02-01.jpg"
+      },
+      {
+        "startSeconds": 20.1,
+        "endSeconds": 21.6,
+        "title": "Round 2: sit back and turn foot",
+        "cue": "Move back onto the rear leg and turn the front foot.",
+        "chineseTitle": "第二轮：后坐转脚",
+        "chineseCue": "身体后移到后腿，前脚随转体调整方向。",
+        "focusJoints": [
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "20.8-21.3s front knee straightens and front toes lift as the body moves back.",
+        "evidenceTimesSeconds": [
+          20.1,
+          20.85,
+          21.567
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-02-01.jpg"
+      },
+      {
+        "startSeconds": 21.6,
+        "endSeconds": 23.6,
+        "title": "Round 2: gather the rear foot",
+        "cue": "Turn forward again and bring the rear foot in while the arms circle.",
+        "chineseTitle": "第二轮：跟步合臂",
+        "chineseCue": "身体再次转向前方，后脚收近，双臂同时绕回。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "22.3s body passes forward; 22.8-23.3s rear foot lifts and travels close to the standing leg.",
+        "evidenceTimesSeconds": [
+          21.6,
+          22.6,
+          23.567
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-02-01.jpg"
+      },
+      {
+        "startSeconds": 23.6,
+        "endSeconds": 25.6,
+        "title": "Round 2: lift and reach heel",
+        "cue": "Lift the stepping knee, then extend the heel ahead with the arms rounded.",
+        "chineseTitle": "第二轮：提膝伸跟",
+        "chineseCue": "迈步腿提起后向前伸跟，保持身前围合的双臂。",
+        "focusJoints": [
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "24.3s knee is lifted; 24.8-25.3s the heel reaches ahead.",
+        "evidenceTimesSeconds": [
+          23.6,
+          24.6,
+          25.567
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-02-01.jpg"
+      },
+      {
+        "startSeconds": 25.6,
+        "endSeconds": 27.1,
+        "title": "Round 2: shift and separate",
+        "cue": "Move into the new front leg while opening the front arm and lowering the rear hand.",
+        "chineseTitle": "第二轮：移重心分臂",
+        "chineseCue": "身体移向新的前腿，前臂打开，后手下落。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "25.8s foot is placed; 26.3-26.8s torso turns and arms separate.",
+        "evidenceTimesSeconds": [
+          25.6,
+          26.35,
+          27.067
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-02-02.jpg"
+      },
+      {
+        "startSeconds": 27.1,
+        "endSeconds": 28.8,
+        "title": "Round 2: finish the stance",
+        "cue": "Finish opening the two arms and settle into the forward stance.",
+        "chineseTitle": "第二轮：完成弓步",
+        "chineseCue": "双臂继续分开，完成前腿弯曲的站姿。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "27.3-28.3s show the front arm extended and the rear hand lowered.",
+        "evidenceTimesSeconds": [
+          27.1,
+          27.95,
+          28.767
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-02-02.jpg"
+      },
+      {
+        "startSeconds": 28.8,
+        "endSeconds": 30.6,
+        "title": "Round 3: sit back and turn foot",
+        "cue": "Shift back and adjust the front foot before the next step.",
+        "chineseTitle": "第三轮：后坐转脚",
+        "chineseCue": "重心后移，前脚调整方向，准备再迈步。",
+        "focusJoints": [
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "29.3-30.3s front knee straightens and the front toes rise.",
+        "evidenceTimesSeconds": [
+          28.8,
+          29.7,
+          30.567
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-02-02.jpg"
+      },
+      {
+        "startSeconds": 30.6,
+        "endSeconds": 32.6,
+        "title": "Round 3: gather foot and arms",
+        "cue": "Bring the rear foot close as the hands circle into a rounded position.",
+        "chineseTitle": "第三轮：收脚合臂",
+        "chineseCue": "后脚收近，双手同时绕回身前围合。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "31.3-32.3s rear foot lifts toward the standing leg while both arms gather.",
+        "evidenceTimesSeconds": [
+          30.6,
+          31.6,
+          32.567
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-02-02.jpg"
+      },
+      {
+        "startSeconds": 32.6,
+        "endSeconds": 34.5,
+        "title": "Round 3: reach with the heel",
+        "cue": "Extend the raised leg and place its heel ahead.",
+        "chineseTitle": "第三轮：伸脚落跟",
+        "chineseCue": "提起的腿向前伸出，脚跟落地。",
+        "focusJoints": [
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "32.8s knee is raised; 33.8-34.3s the leg extends with toes lifted.",
+        "evidenceTimesSeconds": [
+          32.6,
+          33.55,
+          34.467
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-02-02.jpg"
+      },
+      {
+        "startSeconds": 34.5,
+        "endSeconds": 36.1,
+        "title": "Round 3: shift and separate",
+        "cue": "Move toward the front leg and separate the hands to high and low positions.",
+        "chineseTitle": "第三轮：移重心分臂",
+        "chineseCue": "身体移向前腿，双手分向一高一低的位置。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "34.8s arms pass the chest; 35.3-35.8s front arm rises and rear hand lowers.",
+        "evidenceTimesSeconds": [
+          34.5,
+          35.3,
+          36.067
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-02-02.jpg"
+      },
+      {
+        "startSeconds": 36.1,
+        "endSeconds": 37.7,
+        "title": "Round 3: finish the stance",
+        "cue": "Finish the forward stance with the arms apart.",
+        "chineseTitle": "第三轮：完成弓步",
+        "chineseCue": "完成向前的站姿，双臂分开放稳。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "36.3-37.3s show the final parting stance; the rear heel begins to release only at the next transition.",
+        "evidenceTimesSeconds": [
+          36.1,
+          36.9,
+          37.667
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-02-02.jpg"
+      }
+    ]
+  },
+  {
+    "formNumber": 3,
+    "sourceFile": "24.mp4",
+    "steps": [
+      {
+        "startSeconds": 37.7,
+        "endSeconds": 39.0,
+        "title": "Bring the rear foot closer",
+        "cue": "Take the small gathering step while the hands start to lower.",
+        "chineseTitle": "后脚跟近",
+        "chineseCue": "后脚小步收近，双手开始下落。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "37.7s rear heel releases; 38.7s the rear foot has moved close to the front leg.",
+        "evidenceTimesSeconds": [
+          37.7,
+          38.35,
+          38.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-03-01.jpg"
+      },
+      {
+        "startSeconds": 39.0,
+        "endSeconds": 40.5,
+        "title": "Shift back and raise the arms",
+        "cue": "Move onto the gathered rear leg and bring the forearms upward.",
+        "chineseTitle": "后移并抬臂",
+        "chineseCue": "重心转到收近的后腿，双前臂向上绕起。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "39.7s weight transfers back; forearms rise in front of the chest by 40.7s.",
+        "evidenceTimesSeconds": [
+          39.0,
+          39.75,
+          40.467
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-03-01.jpg"
+      },
+      {
+        "startSeconds": 40.5,
+        "endSeconds": 41.8,
+        "title": "Lift the front foot and open",
+        "cue": "Lift the front knee while one arm rises high and the other opens low.",
+        "chineseTitle": "提脚上下分臂",
+        "chineseCue": "前膝提起，同时一臂向上、一臂向下打开。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "41.7s the front knee is raised with one hand above the head and the other forward-low.",
+        "evidenceTimesSeconds": [
+          40.5,
+          41.15,
+          41.767
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-03-01.jpg"
+      },
+      {
+        "startSeconds": 41.8,
+        "endSeconds": 43.7,
+        "title": "Set the front foot lightly",
+        "cue": "Place the front foot ahead and settle the high and low arm positions.",
+        "chineseTitle": "前脚轻落定势",
+        "chineseCue": "前脚向前落下，双臂一高一低落稳。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "42.7-43.65s front foot extends and lowers while the arms stay separated.",
+        "evidenceTimesSeconds": [
+          41.8,
+          42.75,
+          43.667
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-03-01.jpg"
+      }
+    ]
+  },
+  {
+    "formNumber": 4,
+    "sourceFile": "24.mp4",
+    "steps": [
+      {
+        "startSeconds": 43.7,
+        "endSeconds": 45.6,
+        "title": "Round 1: lower and circle",
+        "cue": "Let the high arm circle down as the torso turns.",
+        "chineseTitle": "第一轮：落臂转体",
+        "chineseCue": "高举的手臂向下绕，身体随之转动。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "43.7s one hand is high; 45.7s both arms have lowered and opened.",
+        "evidenceTimesSeconds": [
+          43.7,
+          44.65,
+          45.567
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-04-01.jpg"
+      },
+      {
+        "startSeconds": 45.6,
+        "endSeconds": 47.8,
+        "title": "Round 1: gather and raise",
+        "cue": "Bring the foot in as one arm circles up and the other crosses the front.",
+        "chineseTitle": "第一轮：收脚绕臂",
+        "chineseCue": "脚收近，一臂向上绕，另一臂经过身前。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "46.7s body turns toward the camera; 47.7s knee lifts with arms at high and middle levels.",
+        "evidenceTimesSeconds": [
+          45.6,
+          46.7,
+          47.767
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-04-01.jpg"
+      },
+      {
+        "startSeconds": 47.8,
+        "endSeconds": 49.1,
+        "title": "Round 1: reach the heel",
+        "cue": "Extend the stepping heel as the rear hand folds near the head.",
+        "chineseTitle": "第一轮：伸跟屈臂",
+        "chineseCue": "迈步脚跟向前伸出，后手屈回头侧。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "48.7s forward heel extends while one hand is close to the head.",
+        "evidenceTimesSeconds": [
+          47.8,
+          48.45,
+          49.067
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-04-01.jpg"
+      },
+      {
+        "startSeconds": 49.1,
+        "endSeconds": 50.9,
+        "title": "Round 1: brush and push",
+        "cue": "Shift forward as the low hand passes the knee and the other hand pushes ahead.",
+        "chineseTitle": "第一轮：搂膝前推",
+        "chineseCue": "身体前移，低手经过膝旁，另一手向前推。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "49.7s low hand crosses the knee area; 50.7s other hand is extended forward.",
+        "evidenceTimesSeconds": [
+          49.1,
+          50.0,
+          50.867
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-04-01.jpg"
+      },
+      {
+        "startSeconds": 50.9,
+        "endSeconds": 52.0,
+        "title": "Round 1: finish the push",
+        "cue": "Complete the front-leg bend and let the forward hand settle.",
+        "chineseTitle": "第一轮：完成推掌",
+        "chineseCue": "前腿弯曲到位，向前的手落稳。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "51.7s shows the completed push with rear leg extended.",
+        "evidenceTimesSeconds": [
+          50.9,
+          51.45,
+          51.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-04-01.jpg"
+      },
+      {
+        "startSeconds": 52.0,
+        "endSeconds": 53.5,
+        "title": "Round 2: shift back and turn",
+        "cue": "Move back and adjust the front foot as the arms begin to circle.",
+        "chineseTitle": "第二轮：后坐转脚",
+        "chineseCue": "身体后移、前脚转向，双臂开始绕动。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "52.7-53.7s body moves back, front toes lift and both arms begin circling.",
+        "evidenceTimesSeconds": [
+          52.0,
+          52.75,
+          53.467
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-04-01.jpg"
+      },
+      {
+        "startSeconds": 53.5,
+        "endSeconds": 55.6,
+        "title": "Round 2: gather the foot",
+        "cue": "Bring the rear foot close while the two arms pass in front.",
+        "chineseTitle": "第二轮：收脚过手",
+        "chineseCue": "后脚收近，双臂经过身前。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "54.7s rear heel lifts; 55.7s rear foot is close to the standing leg.",
+        "evidenceTimesSeconds": [
+          53.5,
+          54.55,
+          55.567
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-04-01.jpg"
+      },
+      {
+        "startSeconds": 55.6,
+        "endSeconds": 57.8,
+        "title": "Round 2: lift and reach",
+        "cue": "Raise the stepping knee, extend the heel, and fold the rear arm.",
+        "chineseTitle": "第二轮：提膝伸跟",
+        "chineseCue": "迈步腿提起再伸跟，后臂屈回。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "56.7s knee lifts; 57.7s heel extends and rear hand is near the shoulder.",
+        "evidenceTimesSeconds": [
+          55.6,
+          56.7,
+          57.767
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-04-01.jpg"
+      },
+      {
+        "startSeconds": 57.8,
+        "endSeconds": 59.5,
+        "title": "Round 2: brush and push",
+        "cue": "Move forward as one hand brushes low and the other pushes.",
+        "chineseTitle": "第二轮：搂膝前推",
+        "chineseCue": "身体前移，一手从低处绕过膝旁，另一手向前推。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "58.7s front foot plants and low hand passes across; 59.7s forward hand extends.",
+        "evidenceTimesSeconds": [
+          57.8,
+          58.65,
+          59.467
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-04-01.jpg"
+      },
+      {
+        "startSeconds": 59.5,
+        "endSeconds": 61.1,
+        "title": "Round 2: finish the push",
+        "cue": "Finish transferring forward with the arms apart.",
+        "chineseTitle": "第二轮：完成推掌",
+        "chineseCue": "完成向前的重心移动，双臂分开放稳。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "60.7s shows the completed second forward push.",
+        "evidenceTimesSeconds": [
+          59.5,
+          60.3,
+          61.067
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-04-01.jpg"
+      },
+      {
+        "startSeconds": 61.1,
+        "endSeconds": 63.0,
+        "title": "Round 3: shift back and turn",
+        "cue": "Move back and turn the front foot before gathering.",
+        "chineseTitle": "第三轮：后坐转脚",
+        "chineseCue": "身体后移，前脚转向，准备收脚。",
+        "focusJoints": [
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "61.7-62.7s front knee straightens and toes lift.",
+        "evidenceTimesSeconds": [
+          61.1,
+          62.05,
+          62.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-04-01.jpg"
+      },
+      {
+        "startSeconds": 63.0,
+        "endSeconds": 65.0,
+        "title": "Round 3: gather and circle",
+        "cue": "Bring the rear foot in while circling the arms upward.",
+        "chineseTitle": "第三轮：收脚绕臂",
+        "chineseCue": "后脚收近，双臂向上绕回。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "63.7-64.7s rear foot gathers; one arm rises as body turns toward camera.",
+        "evidenceTimesSeconds": [
+          63.0,
+          64.0,
+          64.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-04-01.jpg"
+      },
+      {
+        "startSeconds": 65.0,
+        "endSeconds": 67.0,
+        "title": "Round 3: lift and reach",
+        "cue": "Lift the stepping knee and reach the heel out with the rear arm folded.",
+        "chineseTitle": "第三轮：提膝伸跟",
+        "chineseCue": "迈步膝提起后伸出脚跟，后臂屈回头侧。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "65.7s knee lifts; 66.7s heel extends and rear hand is near the head.",
+        "evidenceTimesSeconds": [
+          65.0,
+          66.0,
+          66.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-04-01.jpg"
+      },
+      {
+        "startSeconds": 67.0,
+        "endSeconds": 68.6,
+        "title": "Round 3: brush and push",
+        "cue": "Shift forward with the low hand passing the knee and the other hand pressing ahead.",
+        "chineseTitle": "第三轮：搂膝前推",
+        "chineseCue": "身体前移，低手经过膝旁，另一手向前推出。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "67.7s low hand passes knee; 68.7s forward hand extends.",
+        "evidenceTimesSeconds": [
+          67.0,
+          67.8,
+          68.567
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-04-02.jpg"
+      },
+      {
+        "startSeconds": 68.6,
+        "endSeconds": 70.0,
+        "title": "Round 3: finish the push",
+        "cue": "Complete the forward stance and settle the arms.",
+        "chineseTitle": "第三轮：完成推掌",
+        "chineseCue": "完成向前站姿，双臂落稳。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "69.7s the third push is completed before the rear foot releases.",
+        "evidenceTimesSeconds": [
+          68.6,
+          69.3,
+          69.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-04-02.jpg"
+      }
+    ]
+  },
+  {
+    "formNumber": 5,
+    "sourceFile": "24.mp4",
+    "steps": [
+      {
+        "startSeconds": 70.0,
+        "endSeconds": 71.8,
+        "title": "Bring the rear foot closer",
+        "cue": "Take a small gathering step as the arms soften forward.",
+        "chineseTitle": "后脚跟近",
+        "chineseCue": "后脚小步收近，双臂向前缓缓收拢。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "70.0s rear foot lifts; 71.0s it is gathered near the other foot.",
+        "evidenceTimesSeconds": [
+          70.0,
+          70.9,
+          71.767
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-05-01.jpg"
+      },
+      {
+        "startSeconds": 71.8,
+        "endSeconds": 73.4,
+        "title": "Shift back and lift the front foot",
+        "cue": "Move onto the rear leg while lifting the front knee and gathering the forearms.",
+        "chineseTitle": "后坐提脚合臂",
+        "chineseCue": "重心转到后腿，前膝提起，双前臂收拢。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "72.0s body shifts back; 73.0s front knee lifts with forearms in front.",
+        "evidenceTimesSeconds": [
+          71.8,
+          72.6,
+          73.367
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-05-01.jpg"
+      },
+      {
+        "startSeconds": 73.4,
+        "endSeconds": 75.5,
+        "title": "Place the heel and finish the hands",
+        "cue": "Set the front heel ahead and bring one hand forward with the other near its elbow.",
+        "chineseTitle": "前跟落地并定手",
+        "chineseCue": "前脚跟向前落下，一手向前，另一手留在其肘旁。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "74.0-75.0s front heel extends and hands finish at upper and lower levels.",
+        "evidenceTimesSeconds": [
+          73.4,
+          74.45,
+          75.467
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-05-01.jpg"
+      }
+    ]
+  },
+  {
+    "formNumber": 6,
+    "sourceFile": "24.mp4",
+    "steps": [
+      {
+        "startSeconds": 75.5,
+        "endSeconds": 76.8,
+        "title": "Step 1: open the rear arm",
+        "cue": "Turn the torso and open the rear arm while keeping the other arm forward.",
+        "chineseTitle": "退步一：转体展臂",
+        "chineseCue": "身体转动，后臂打开，另一臂留在前方。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "76.5s arms are open at opposing sides.",
+        "evidenceTimesSeconds": [
+          75.5,
+          76.15,
+          76.767
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-06-01.jpg"
+      },
+      {
+        "startSeconds": 76.8,
+        "endSeconds": 78.0,
+        "title": "Step 1: lift and fold",
+        "cue": "Lift the stepping foot as the rear hand folds toward the head.",
+        "chineseTitle": "退步一：提脚屈臂",
+        "chineseCue": "迈步脚提起，后手同时屈向头侧。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "77.5s foot is lifted and rear hand is high beside the head.",
+        "evidenceTimesSeconds": [
+          76.8,
+          77.4,
+          77.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-06-01.jpg"
+      },
+      {
+        "startSeconds": 78.0,
+        "endSeconds": 79.1,
+        "title": "Step 1: place the foot behind",
+        "cue": "Reach the lifted foot backward while the folded hand starts forward.",
+        "chineseTitle": "退步一：后落脚",
+        "chineseCue": "提起的脚向后落，屈回的手开始向前。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "78.5s rear foot reaches down behind the standing leg.",
+        "evidenceTimesSeconds": [
+          78.0,
+          78.55,
+          79.067
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-06-01.jpg"
+      },
+      {
+        "startSeconds": 79.1,
+        "endSeconds": 80.5,
+        "title": "Step 1: shift back and push",
+        "cue": "Shift onto the new rear leg while one hand pushes and the other draws in.",
+        "chineseTitle": "退步一：后移前推",
+        "chineseCue": "重心转到新的后腿，一手前推，另一手收回。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "79.5-80.5s show the completed hand exchange and backward weight shift.",
+        "evidenceTimesSeconds": [
+          79.1,
+          79.8,
+          80.467
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-06-01.jpg"
+      },
+      {
+        "startSeconds": 80.5,
+        "endSeconds": 81.8,
+        "title": "Step 2: open the other arm",
+        "cue": "Turn and open the next rear arm.",
+        "chineseTitle": "退步二：换侧展臂",
+        "chineseCue": "转体，打开另一侧后臂。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "81.5s torso turns away and the rear arm opens low.",
+        "evidenceTimesSeconds": [
+          80.5,
+          81.15,
+          81.767
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-06-01.jpg"
+      },
+      {
+        "startSeconds": 81.8,
+        "endSeconds": 83.3,
+        "title": "Step 2: lift and fold",
+        "cue": "Lift the stepping leg as the rear hand comes toward the head.",
+        "chineseTitle": "退步二：提脚屈臂",
+        "chineseCue": "迈步腿提起，后手向头侧屈回。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "82.5s knee rises; 83.5s lifted foot is moving backward with the rear arm folded.",
+        "evidenceTimesSeconds": [
+          81.8,
+          82.55,
+          83.267
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-06-01.jpg"
+      },
+      {
+        "startSeconds": 83.3,
+        "endSeconds": 84.7,
+        "title": "Step 2: place the foot behind",
+        "cue": "Step backward and let the folded arm begin its forward path.",
+        "chineseTitle": "退步二：后落脚",
+        "chineseCue": "向后迈脚，屈回的手臂开始向前。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "84.5s back foot is placed and both hands pass near the chest.",
+        "evidenceTimesSeconds": [
+          83.3,
+          84.0,
+          84.667
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-06-01.jpg"
+      },
+      {
+        "startSeconds": 84.7,
+        "endSeconds": 86.3,
+        "title": "Step 2: shift back and push",
+        "cue": "Move onto the rear leg and finish the hand exchange.",
+        "chineseTitle": "退步二：后移前推",
+        "chineseCue": "重心后移，完成一手前推、一手收回。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "85.5-86.5s show front leg extending and hand finishing forward.",
+        "evidenceTimesSeconds": [
+          84.7,
+          85.5,
+          86.267
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-06-01.jpg"
+      },
+      {
+        "startSeconds": 86.3,
+        "endSeconds": 87.8,
+        "title": "Step 3: open the rear arm",
+        "cue": "Turn the torso and spread the rear arm away from the body.",
+        "chineseTitle": "退步三：转体展臂",
+        "chineseCue": "转体，后臂向身体外侧打开。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "87.5s arms are spread with one low-rear and the other forward.",
+        "evidenceTimesSeconds": [
+          86.3,
+          87.05,
+          87.767
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-06-01.jpg"
+      },
+      {
+        "startSeconds": 87.8,
+        "endSeconds": 89.3,
+        "title": "Step 3: lift and fold",
+        "cue": "Lift the stepping foot and fold the rear hand near the head.",
+        "chineseTitle": "退步三：提脚屈臂",
+        "chineseCue": "迈步脚提起，后手屈回头侧。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "88.5s front knee lifts with rear arm high; 89.5s foot has moved backward.",
+        "evidenceTimesSeconds": [
+          87.8,
+          88.55,
+          89.267
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-06-01.jpg"
+      },
+      {
+        "startSeconds": 89.3,
+        "endSeconds": 90.6,
+        "title": "Step 3: place the foot behind",
+        "cue": "Set the lifted foot back as the hands pass each other.",
+        "chineseTitle": "退步三：后落脚",
+        "chineseCue": "提起的脚向后落，双手在身前交替经过。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "90.5s back foot is planted and hands pass near chest height.",
+        "evidenceTimesSeconds": [
+          89.3,
+          89.95,
+          90.567
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-06-01.jpg"
+      },
+      {
+        "startSeconds": 90.6,
+        "endSeconds": 92.1,
+        "title": "Step 3: shift back and push",
+        "cue": "Move back and finish the forward hand position.",
+        "chineseTitle": "退步三：后移前推",
+        "chineseCue": "身体后移，完成前手位置。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "91.5s hand push finishes; 92.5s body begins the next turn.",
+        "evidenceTimesSeconds": [
+          90.6,
+          91.35,
+          92.067
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-06-01.jpg"
+      },
+      {
+        "startSeconds": 92.1,
+        "endSeconds": 93.5,
+        "title": "Step 4: open the other arm",
+        "cue": "Turn and open the other rear arm for the final backward step.",
+        "chineseTitle": "退步四：换侧展臂",
+        "chineseCue": "转体，打开另一侧后臂，准备最后一次退步。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "93.5s both arms open during the turn.",
+        "evidenceTimesSeconds": [
+          92.1,
+          92.8,
+          93.467
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-06-01.jpg"
+      },
+      {
+        "startSeconds": 93.5,
+        "endSeconds": 94.9,
+        "title": "Step 4: lift and fold",
+        "cue": "Lift the stepping foot as the rear hand folds in beside the head.",
+        "chineseTitle": "退步四：提脚屈臂",
+        "chineseCue": "迈步脚提起，后手屈向头侧。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "94.5s knee is raised with the rear hand beside the head.",
+        "evidenceTimesSeconds": [
+          93.5,
+          94.2,
+          94.867
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-06-01.jpg"
+      },
+      {
+        "startSeconds": 94.9,
+        "endSeconds": 96.3,
+        "title": "Step 4: place the foot behind",
+        "cue": "Place the foot behind as the folded hand moves forward.",
+        "chineseTitle": "退步四：后落脚",
+        "chineseCue": "脚向后落，屈回的手向前经过。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "95.5s foot reaches back; 96.5s arms have exchanged positions.",
+        "evidenceTimesSeconds": [
+          94.9,
+          95.6,
+          96.267
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-06-01.jpg"
+      },
+      {
+        "startSeconds": 96.3,
+        "endSeconds": 98.0,
+        "title": "Step 4: shift back and finish",
+        "cue": "Settle onto the rear leg and finish the forward hand.",
+        "chineseTitle": "退步四：后移完成",
+        "chineseCue": "重心后移到位，完成前手的位置。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "97.5-97.95s show the final backward stance and forward hand.",
+        "evidenceTimesSeconds": [
+          96.3,
+          97.15,
+          97.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-06-01.jpg"
+      }
+    ]
+  },
+  {
+    "formNumber": 7,
+    "sourceFile": "24.mp4",
+    "steps": [
+      {
+        "startSeconds": 98.0,
+        "endSeconds": 99.3,
+        "title": "Turn and open the arms",
+        "cue": "Turn toward the front as the two arms open.",
+        "chineseTitle": "转体展臂",
+        "chineseCue": "身体转向正面，双臂打开。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "99.0s torso faces nearer the camera and both arms are spread.",
+        "evidenceTimesSeconds": [
+          98.0,
+          98.65,
+          99.267
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-07-01.jpg"
+      },
+      {
+        "startSeconds": 99.3,
+        "endSeconds": 100.4,
+        "title": "Gather foot and arms",
+        "cue": "Bring the foot close and round the hands in front.",
+        "chineseTitle": "收脚合臂",
+        "chineseCue": "脚收近，双手围到身前。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "100.0s stepping knee lifts with high and low rounded arms.",
+        "evidenceTimesSeconds": [
+          99.3,
+          99.85,
+          100.367
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-07-01.jpg"
+      },
+      {
+        "startSeconds": 100.4,
+        "endSeconds": 101.5,
+        "title": "Reach the heel ahead",
+        "cue": "Extend the lifted leg and set its heel ahead.",
+        "chineseTitle": "向前伸跟",
+        "chineseCue": "提起的腿向前伸出，脚跟落地。",
+        "focusJoints": [
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "101.0s stepping heel extends with toes up.",
+        "evidenceTimesSeconds": [
+          100.4,
+          100.95,
+          101.467
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-07-01.jpg"
+      },
+      {
+        "startSeconds": 101.5,
+        "endSeconds": 103.1,
+        "title": "Shift forward and open",
+        "cue": "Move into the front leg as the front forearm opens outward.",
+        "chineseTitle": "前移打开前臂",
+        "chineseCue": "身体移向前腿，前臂向外打开。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "102.0-103.0s show weight moving forward and front arm opening.",
+        "evidenceTimesSeconds": [
+          101.5,
+          102.3,
+          103.067
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-07-01.jpg"
+      },
+      {
+        "startSeconds": 103.1,
+        "endSeconds": 104.8,
+        "title": "Bring the other hand forward",
+        "cue": "Circle the rear hand forward toward the raised forearm.",
+        "chineseTitle": "后手绕向前臂",
+        "chineseCue": "后手向前绕到抬起的前臂附近。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "104.0s rear arm begins to rise; 105.0s both hands are near the forward side.",
+        "evidenceTimesSeconds": [
+          103.1,
+          103.95,
+          104.767
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-07-01.jpg"
+      },
+      {
+        "startSeconds": 104.8,
+        "endSeconds": 106.8,
+        "title": "Turn and lower both hands",
+        "cue": "Turn the torso and let both forearms travel downward together.",
+        "chineseTitle": "转体双手下带",
+        "chineseCue": "身体转动，双前臂一起向下带。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "105.0s hands are high-forward; 106.0s they have lowered with torso turning.",
+        "evidenceTimesSeconds": [
+          104.8,
+          105.8,
+          106.767
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-07-01.jpg"
+      },
+      {
+        "startSeconds": 106.8,
+        "endSeconds": 108.5,
+        "title": "Shift back and sweep across",
+        "cue": "Move back as both arms sweep across the front of the body.",
+        "chineseTitle": "后坐横向带臂",
+        "chineseCue": "身体后移，双臂经过身前向另一侧带。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "107.0s hands are low and body faces camera; 108.0s one arm has swept upward across.",
+        "evidenceTimesSeconds": [
+          106.8,
+          107.65,
+          108.467
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-07-01.jpg"
+      },
+      {
+        "startSeconds": 108.5,
+        "endSeconds": 110.0,
+        "title": "Fold the forearms to the chest",
+        "cue": "Bring the two forearms close together in front of the chest.",
+        "chineseTitle": "双臂合到胸前",
+        "chineseCue": "双前臂收近，放到胸前。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "109.0s arms gather; 110.0s forearms are folded close to chest.",
+        "evidenceTimesSeconds": [
+          108.5,
+          109.25,
+          109.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-07-01.jpg"
+      },
+      {
+        "startSeconds": 110.0,
+        "endSeconds": 112.0,
+        "title": "Shift forward with the press",
+        "cue": "Move toward the front leg as both forearms press forward.",
+        "chineseTitle": "前移并前挤",
+        "chineseCue": "身体移向前腿，双前臂一起向前送。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "111.0-112.0s body moves forward and both arms extend.",
+        "evidenceTimesSeconds": [
+          110.0,
+          111.0,
+          111.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-07-01.jpg"
+      },
+      {
+        "startSeconds": 112.0,
+        "endSeconds": 113.9,
+        "title": "Finish the forward press",
+        "cue": "Complete the forward transfer with both arms in front.",
+        "chineseTitle": "完成前挤",
+        "chineseCue": "完成向前移重心，双臂留在前方。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "112.0-113.0s show the completed press before hands separate.",
+        "evidenceTimesSeconds": [
+          112.0,
+          112.95,
+          113.867
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-07-01.jpg"
+      },
+      {
+        "startSeconds": 113.9,
+        "endSeconds": 115.8,
+        "title": "Separate and draw the hands back",
+        "cue": "Separate both hands and bring them back as the body shifts rearward.",
+        "chineseTitle": "分手后引",
+        "chineseCue": "双手分开收回，身体随之后移。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "114.0s hands separate; 115.0s front toes lift and hands draw toward chest.",
+        "evidenceTimesSeconds": [
+          113.9,
+          114.85,
+          115.767
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-07-01.jpg"
+      },
+      {
+        "startSeconds": 115.8,
+        "endSeconds": 117.0,
+        "title": "Lower and bring the hands forward",
+        "cue": "Let the hands lower, then start them forward as the body returns.",
+        "chineseTitle": "落手再向前",
+        "chineseCue": "双手先下落，再随身体开始前移。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "116.0s hands are low; 117.0s they rise forward as weight returns.",
+        "evidenceTimesSeconds": [
+          115.8,
+          116.4,
+          116.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-07-01.jpg"
+      },
+      {
+        "startSeconds": 117.0,
+        "endSeconds": 119.0,
+        "title": "Finish the two-hand push",
+        "cue": "Finish moving forward with both hands extended.",
+        "chineseTitle": "完成双手前推",
+        "chineseCue": "身体前移到位，双手向前伸出。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "118.0-118.95s show the completed two-hand push.",
+        "evidenceTimesSeconds": [
+          117.0,
+          118.0,
+          118.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-07-01.jpg"
+      }
+    ]
+  },
+  {
+    "formNumber": 8,
+    "sourceFile": "24.mp4",
+    "steps": [
+      {
+        "startSeconds": 119.0,
+        "endSeconds": 120.6,
+        "title": "Shift back and turn",
+        "cue": "Move back and turn across the front as the arms open.",
+        "chineseTitle": "后坐转体",
+        "chineseCue": "身体后移并转过正面，双臂打开。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "120.0s body has shifted back and begins turning toward camera.",
+        "evidenceTimesSeconds": [
+          119.0,
+          119.8,
+          120.567
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-08-01.jpg"
+      },
+      {
+        "startSeconds": 120.6,
+        "endSeconds": 122.4,
+        "title": "Continue the turn and gather",
+        "cue": "Turn to the other side and gather the arms in front.",
+        "chineseTitle": "转向另一侧合臂",
+        "chineseCue": "身体继续转向另一侧，双臂在身前围合。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "121.0s arms are open; 122.0s foot gathers with torso turned to the other side.",
+        "evidenceTimesSeconds": [
+          120.6,
+          121.5,
+          122.367
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-08-01.jpg"
+      },
+      {
+        "startSeconds": 122.4,
+        "endSeconds": 123.6,
+        "title": "Lift the stepping knee",
+        "cue": "Bring the stepping foot in and lift the knee with arms rounded.",
+        "chineseTitle": "收脚提膝",
+        "chineseCue": "迈步脚收近并提起膝，双臂保持围合。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "123.0s lifted knee and rounded arms are visible.",
+        "evidenceTimesSeconds": [
+          122.4,
+          123.0,
+          123.567
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-08-01.jpg"
+      },
+      {
+        "startSeconds": 123.6,
+        "endSeconds": 124.8,
+        "title": "Reach the heel ahead",
+        "cue": "Extend the lifted heel toward the new direction.",
+        "chineseTitle": "转向伸跟",
+        "chineseCue": "提起的脚跟向新的方向伸出。",
+        "focusJoints": [
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "124.0s leg extends with heel leading.",
+        "evidenceTimesSeconds": [
+          123.6,
+          124.2,
+          124.767
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-08-01.jpg"
+      },
+      {
+        "startSeconds": 124.8,
+        "endSeconds": 126.7,
+        "title": "Shift forward and open",
+        "cue": "Move onto the new front leg and open the front forearm.",
+        "chineseTitle": "前移打开前臂",
+        "chineseCue": "身体移向新的前腿，前臂向外打开。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "125.0s forearms pass near chest; 126.0s front arm opens and rear hand lowers.",
+        "evidenceTimesSeconds": [
+          124.8,
+          125.75,
+          126.667
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-08-01.jpg"
+      },
+      {
+        "startSeconds": 126.7,
+        "endSeconds": 128.7,
+        "title": "Bring both hands forward",
+        "cue": "Circle the rear hand forward so both forearms rise in front.",
+        "chineseTitle": "双臂向前合起",
+        "chineseCue": "后手绕到前方，双前臂在身前抬起。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "127.0s rear hand is low; 128.0-129.0s both hands move high-forward.",
+        "evidenceTimesSeconds": [
+          126.7,
+          127.7,
+          128.667
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-08-01.jpg"
+      },
+      {
+        "startSeconds": 128.7,
+        "endSeconds": 130.7,
+        "title": "Turn and lower the forearms",
+        "cue": "Turn the torso as the two forearms move downward.",
+        "chineseTitle": "转体下带双臂",
+        "chineseCue": "身体转动，双前臂向下带。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "129.0s hands are high; 130.0s hands lower as torso turns toward camera.",
+        "evidenceTimesSeconds": [
+          128.7,
+          129.7,
+          130.667
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-08-01.jpg"
+      },
+      {
+        "startSeconds": 130.7,
+        "endSeconds": 132.3,
+        "title": "Shift back and sweep across",
+        "cue": "Move back and sweep the arms across the front to the other side.",
+        "chineseTitle": "后坐横向带臂",
+        "chineseCue": "身体后移，双臂经过身前带向另一侧。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "131.0s hands are low-center; 132.0s arm has swept upward across.",
+        "evidenceTimesSeconds": [
+          130.7,
+          131.5,
+          132.267
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-08-01.jpg"
+      },
+      {
+        "startSeconds": 132.3,
+        "endSeconds": 134.0,
+        "title": "Fold the forearms inward",
+        "cue": "Bring both forearms close together in front of the chest.",
+        "chineseTitle": "合臂到胸前",
+        "chineseCue": "双前臂收拢到胸前。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "133.0s hands gather; 134.0s both forearms are folded close to chest.",
+        "evidenceTimesSeconds": [
+          132.3,
+          133.15,
+          133.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-08-01.jpg"
+      },
+      {
+        "startSeconds": 134.0,
+        "endSeconds": 136.0,
+        "title": "Shift forward with the press",
+        "cue": "Move into the front leg while pressing the forearms forward.",
+        "chineseTitle": "前移并前挤",
+        "chineseCue": "身体移向前腿，双前臂向前送。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "135.0-136.0s body and both arms move forward together.",
+        "evidenceTimesSeconds": [
+          134.0,
+          135.0,
+          135.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-08-01.jpg"
+      },
+      {
+        "startSeconds": 136.0,
+        "endSeconds": 137.8,
+        "title": "Finish the forward press",
+        "cue": "Finish the front-leg bend and settle both forearms in front.",
+        "chineseTitle": "完成前挤",
+        "chineseCue": "前腿弯曲到位，双前臂在身前落稳。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "136.0-137.0s show the completed press before the hands separate.",
+        "evidenceTimesSeconds": [
+          136.0,
+          136.9,
+          137.767
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-08-01.jpg"
+      },
+      {
+        "startSeconds": 137.8,
+        "endSeconds": 139.6,
+        "title": "Separate and draw back",
+        "cue": "Separate the hands and shift back while drawing the arms in.",
+        "chineseTitle": "分手后引",
+        "chineseCue": "双手分开收回，身体后移。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "138.0s hands separate; 139.0s body has shifted back and front toes lift.",
+        "evidenceTimesSeconds": [
+          137.8,
+          138.7,
+          139.567
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-08-01.jpg"
+      },
+      {
+        "startSeconds": 139.6,
+        "endSeconds": 141.0,
+        "title": "Lower hands and begin returning",
+        "cue": "Lower the hands and start the body forward again.",
+        "chineseTitle": "落手准备前移",
+        "chineseCue": "双手下落，身体开始再次向前移动。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "140.0s hands are at waist level; 141.0s hands and body begin forward together.",
+        "evidenceTimesSeconds": [
+          139.6,
+          140.3,
+          140.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-08-01.jpg"
+      },
+      {
+        "startSeconds": 141.0,
+        "endSeconds": 143.0,
+        "title": "Finish the two-hand push",
+        "cue": "Complete the forward shift with both hands extended.",
+        "chineseTitle": "完成双手前推",
+        "chineseCue": "完成前移，双手向前伸出。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "142.0-142.95s show the finished forward push.",
+        "evidenceTimesSeconds": [
+          141.0,
+          142.0,
+          142.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-08-01.jpg"
+      }
+    ]
+  },
+  {
+    "formNumber": 9,
+    "sourceFile": "24.mp4",
+    "steps": [
+      {
+        "startSeconds": 143.0,
+        "endSeconds": 144.5,
+        "title": "Shift back and turn front",
+        "cue": "Move back and turn toward the front as one hand lowers.",
+        "chineseTitle": "后坐转向正面",
+        "chineseCue": "身体后移转向正面，一手下落。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "144.0s torso turns toward camera as one arm remains raised and one lowers.",
+        "evidenceTimesSeconds": [
+          143.0,
+          143.75,
+          144.467
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-09-01.jpg"
+      },
+      {
+        "startSeconds": 144.5,
+        "endSeconds": 146.3,
+        "title": "Sweep the arms across",
+        "cue": "Turn across the front while the arms pass across the body.",
+        "chineseTitle": "转体横向绕臂",
+        "chineseCue": "身体继续转动，双臂经过身前。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "145.0s arms begin crossing; 146.0s torso has turned to the other side.",
+        "evidenceTimesSeconds": [
+          144.5,
+          145.4,
+          146.267
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-09-01.jpg"
+      },
+      {
+        "startSeconds": 146.3,
+        "endSeconds": 147.9,
+        "title": "Gather foot and circle the arms",
+        "cue": "Bring the foot close while one arm rises and the other circles low.",
+        "chineseTitle": "收脚绕臂",
+        "chineseCue": "脚收近，一臂向上，另一臂向低处绕。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "147.0s feet draw close; 148.0s both arms pass in front.",
+        "evidenceTimesSeconds": [
+          146.3,
+          147.1,
+          147.867
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-09-01.jpg"
+      },
+      {
+        "startSeconds": 147.9,
+        "endSeconds": 149.1,
+        "title": "Lift the knee and extend one arm",
+        "cue": "Lift the stepping knee while the opposite arm extends to the side.",
+        "chineseTitle": "提膝展臂",
+        "chineseCue": "迈步膝提起，另一侧手臂向侧面伸出。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "149.0s stepping knee is raised with one arm extended sideways.",
+        "evidenceTimesSeconds": [
+          147.9,
+          148.5,
+          149.067
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-09-01.jpg"
+      },
+      {
+        "startSeconds": 149.1,
+        "endSeconds": 150.3,
+        "title": "Reach the heel and turn",
+        "cue": "Extend the lifted heel and turn the other arm toward the new front.",
+        "chineseTitle": "伸跟转体",
+        "chineseCue": "提起的脚跟伸出，另一臂随转体朝向新的前方。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "150.0s heel extends while front hand remains near face height.",
+        "evidenceTimesSeconds": [
+          149.1,
+          149.7,
+          150.267
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-09-01.jpg"
+      },
+      {
+        "startSeconds": 150.3,
+        "endSeconds": 152.0,
+        "title": "Open into the wide stance",
+        "cue": "Move toward the front leg and open the arms to either side.",
+        "chineseTitle": "前移展开定势",
+        "chineseCue": "身体移向前腿，双臂向两侧展开。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "151.0-151.95s show the open final stance.",
+        "evidenceTimesSeconds": [
+          150.3,
+          151.15,
+          151.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-09-01.jpg"
+      }
+    ]
+  },
+  {
+    "formNumber": 10,
+    "sourceFile": "24.mp4",
+    "steps": [
+      {
+        "startSeconds": 152.0,
+        "endSeconds": 154.1,
+        "title": "Begin the cloud turn",
+        "cue": "Turn across the front, keeping one arm high as the other lowers.",
+        "chineseTitle": "开始云手转体",
+        "chineseCue": "身体转过正面，一臂保持高位，另一臂下绕。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "152.0s arms are spread; 154.0s body faces nearer the front and one arm lowers.",
+        "evidenceTimesSeconds": [
+          152.0,
+          153.05,
+          154.067
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-10-01.jpg"
+      },
+      {
+        "startSeconds": 154.1,
+        "endSeconds": 155.7,
+        "title": "Shift across and circle",
+        "cue": "Move across the open stance while the arms trade high and low paths.",
+        "chineseTitle": "横移换臂",
+        "chineseCue": "身体在开立站姿间横移，双臂交换一高一低的路径。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "155.0s body turns to the other side and arms have traded height.",
+        "evidenceTimesSeconds": [
+          154.1,
+          154.9,
+          155.667
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-10-01.jpg"
+      },
+      {
+        "startSeconds": 155.7,
+        "endSeconds": 157.3,
+        "title": "Bring the trailing foot in",
+        "cue": "Draw the trailing foot close while continuing the arm circles.",
+        "chineseTitle": "后随脚收近",
+        "chineseCue": "后随的脚收近，双臂继续绕动。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "156.0s trailing foot moves inward; 157.0s feet are close.",
+        "evidenceTimesSeconds": [
+          155.7,
+          156.5,
+          157.267
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-10-01.jpg"
+      },
+      {
+        "startSeconds": 157.3,
+        "endSeconds": 158.7,
+        "title": "Finish the circle with feet close",
+        "cue": "Keep the feet close as the upper arm crosses the front.",
+        "chineseTitle": "并步完成绕臂",
+        "chineseCue": "双脚收近，较高的手臂经过身前。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "157.0-158.0s feet stay close as hands complete the circle.",
+        "evidenceTimesSeconds": [
+          157.3,
+          158.0,
+          158.667
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-10-01.jpg"
+      },
+      {
+        "startSeconds": 158.7,
+        "endSeconds": 160.5,
+        "title": "Step out with the next circle",
+        "cue": "Lift the stepping foot and place it sideways while the arms circle.",
+        "chineseTitle": "绕臂侧开步",
+        "chineseCue": "双臂绕动时，迈步脚提起并向侧面落下。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "159.0s knee lifts; 160.0s foot extends sideways.",
+        "evidenceTimesSeconds": [
+          158.7,
+          159.6,
+          160.467
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-10-01.jpg"
+      },
+      {
+        "startSeconds": 160.5,
+        "endSeconds": 162.0,
+        "title": "Shift across the open stance",
+        "cue": "Move across the open feet and exchange the high and low arms.",
+        "chineseTitle": "开步横移换臂",
+        "chineseCue": "身体在打开的双脚间横移，双臂交换高低。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "161.0s feet are wide; 162.0s weight travels across and trailing foot starts moving in.",
+        "evidenceTimesSeconds": [
+          160.5,
+          161.25,
+          161.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-10-01.jpg"
+      },
+      {
+        "startSeconds": 162.0,
+        "endSeconds": 163.7,
+        "title": "Bring the trailing foot in",
+        "cue": "Bring the following foot close while the arms keep circling.",
+        "chineseTitle": "后随脚收近",
+        "chineseCue": "后随的脚收近，双臂继续绕动。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "162.0-163.0s trailing foot travels toward the other foot.",
+        "evidenceTimesSeconds": [
+          162.0,
+          162.85,
+          163.667
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-10-01.jpg"
+      },
+      {
+        "startSeconds": 163.7,
+        "endSeconds": 164.8,
+        "title": "Finish the circle with feet close",
+        "cue": "Keep the narrowed stance as one arm passes in front.",
+        "chineseTitle": "并步完成绕臂",
+        "chineseCue": "保持收近的站距，一臂经过身前。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "164.0s feet are close with hands passing in front.",
+        "evidenceTimesSeconds": [
+          163.7,
+          164.25,
+          164.767
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-10-01.jpg"
+      },
+      {
+        "startSeconds": 164.8,
+        "endSeconds": 166.4,
+        "title": "Take the next sideways step",
+        "cue": "Lift and place the stepping foot sideways as the arms circle.",
+        "chineseTitle": "再次侧开步",
+        "chineseCue": "双臂绕动时，迈步脚再次提起并向侧面落下。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "165.0s stepping knee lifts; 166.0s foot reaches out sideways.",
+        "evidenceTimesSeconds": [
+          164.8,
+          165.6,
+          166.367
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-10-01.jpg"
+      },
+      {
+        "startSeconds": 166.4,
+        "endSeconds": 167.8,
+        "title": "Shift across and exchange arms",
+        "cue": "Move across the wide stance while the two arms exchange height.",
+        "chineseTitle": "横移交换高低手",
+        "chineseCue": "身体在开立的双脚间横移，双臂交换高低。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "167.0s stance is wide and arms pass at opposing heights.",
+        "evidenceTimesSeconds": [
+          166.4,
+          167.1,
+          167.767
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-10-01.jpg"
+      },
+      {
+        "startSeconds": 167.8,
+        "endSeconds": 169.2,
+        "title": "Gather the following foot",
+        "cue": "Draw the following foot close with the arm circle continuing.",
+        "chineseTitle": "后随脚收近",
+        "chineseCue": "后随的脚收近，双臂继续完成这一圈。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "168.0s trailing foot lifts inward; 169.0s feet are close.",
+        "evidenceTimesSeconds": [
+          167.8,
+          168.5,
+          169.167
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-10-01.jpg"
+      },
+      {
+        "startSeconds": 169.2,
+        "endSeconds": 170.3,
+        "title": "Finish the final cloud circle",
+        "cue": "Keep the feet close and finish the arms across the front.",
+        "chineseTitle": "完成最后一圈云手",
+        "chineseCue": "双脚收近，双臂完成经过身前的绕动。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "169.0-170.25s feet remain close while arms finish crossing the front.",
+        "evidenceTimesSeconds": [
+          169.2,
+          169.75,
+          170.267
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-10-01.jpg"
+      }
+    ]
+  },
+  {
+    "formNumber": 11,
+    "sourceFile": "24.mp4",
+    "steps": [
+      {
+        "startSeconds": 170.3,
+        "endSeconds": 171.7,
+        "title": "Gather the arms in front",
+        "cue": "Circle both arms in front while keeping the feet close.",
+        "chineseTitle": "并步合臂",
+        "chineseCue": "保持脚收近，双臂绕到身前。",
+        "focusJoints": [
+          13,
+          14,
+          15,
+          16
+        ],
+        "boundaryEvidence": "170.3-171.3s feet remain close and hands gather in front.",
+        "evidenceTimesSeconds": [
+          170.3,
+          171.0,
+          171.667
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-11-01.jpg"
+      },
+      {
+        "startSeconds": 171.7,
+        "endSeconds": 172.8,
+        "title": "Lift the knee and extend the arm",
+        "cue": "Raise the stepping knee as one arm extends sideways.",
+        "chineseTitle": "提膝侧展臂",
+        "chineseCue": "迈步膝提起，同时一臂向侧面伸出。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "172.3s knee lifts with one arm extended to the side.",
+        "evidenceTimesSeconds": [
+          171.7,
+          172.25,
+          172.767
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-11-01.jpg"
+      },
+      {
+        "startSeconds": 172.8,
+        "endSeconds": 174.2,
+        "title": "Place the heel and open",
+        "cue": "Reach the heel out and open the other arm toward the front.",
+        "chineseTitle": "伸跟展开前臂",
+        "chineseCue": "脚跟伸出落地，另一臂向新的前方打开。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "173.3s heel reaches out; 174.3s body transfers into the front leg.",
+        "evidenceTimesSeconds": [
+          172.8,
+          173.5,
+          174.167
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-11-01.jpg"
+      },
+      {
+        "startSeconds": 174.2,
+        "endSeconds": 176.0,
+        "title": "Finish the wide stance",
+        "cue": "Complete the forward shift with both arms spread.",
+        "chineseTitle": "完成开步定势",
+        "chineseCue": "身体前移到位，双臂展开。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "175.3s open final stance; 175.95s rear foot begins the next gathering transition.",
+        "evidenceTimesSeconds": [
+          174.2,
+          175.1,
+          175.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-11-01.jpg"
+      }
+    ]
+  },
+  {
+    "formNumber": 12,
+    "sourceFile": "24.mp4",
+    "steps": [
+      {
+        "startSeconds": 176.0,
+        "endSeconds": 177.6,
+        "title": "Gather the rear foot",
+        "cue": "Bring the rear foot closer as the two arms open upward.",
+        "chineseTitle": "后脚跟近并展臂",
+        "chineseCue": "后脚收近，双臂同时向上打开。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "176.0s rear foot lifts; 177.0s it gathers while both arms open high.",
+        "evidenceTimesSeconds": [
+          176.0,
+          176.8,
+          177.567
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-12-01.jpg"
+      },
+      {
+        "startSeconds": 177.6,
+        "endSeconds": 179.1,
+        "title": "Shift back and fold the arms",
+        "cue": "Move onto the rear leg as one hand folds toward the head and the other draws in.",
+        "chineseTitle": "后坐屈臂",
+        "chineseCue": "身体移向后腿，一手屈向头侧，另一手收回。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "178.0s rear hand is beside the head; 179.0s front foot is lifted and hands gather.",
+        "evidenceTimesSeconds": [
+          177.6,
+          178.35,
+          179.067
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-12-01.jpg"
+      },
+      {
+        "startSeconds": 179.1,
+        "endSeconds": 181.0,
+        "title": "Set the front foot and press",
+        "cue": "Place the front foot ahead while one hand extends forward.",
+        "chineseTitle": "前脚落地并前推",
+        "chineseCue": "前脚向前落下，同时一手向前伸出。",
+        "focusJoints": [
+          15,
+          16,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "boundaryEvidence": "180.0-180.95s front foot is down and forward hand extends.",
+        "evidenceTimesSeconds": [
+          179.1,
+          180.05,
+          180.967
+        ],
+        "reviewSheet": "artifacts/teaching-step-review-a/form-12-01.jpg"
+      }
+    ]
+  }
+]

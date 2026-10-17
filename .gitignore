@@ -1,0 +1,19 @@
+node_modules/
+.next/
+data/
+.test-data*/
+.test-data/
+tests/fixtures/*.y4m
+test-results*/
+playwright-report/
+.env*
+hardware/**/arduino_secrets.h
+hardware/arduino-feedback.local.json
+.arduino-tools/
+*.tsbuildinfo
+artifacts/
+
+# Local logs and operating-system files
+*.log
+Thumbs.db
+.DS_Store

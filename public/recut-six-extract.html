@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Recorded teacher extraction</title>
+<style>body{font:16px system-ui;max-width:850px;margin:35px auto;padding:20px;color:#17352b;background:#f4f6ef}button,a{padding:12px;display:inline-block}canvas{display:block;max-width:100%;margin-top:20px;border:1px solid #b6c6b8}progress{display:block;width:100%;margin:20px 0}pre{white-space:pre-wrap}a[hidden]{display:none}</style>
+<h1>Recorded teacher extraction</h1>
+<p>Local MediaPipe on exact decoded frames from 24.mp4. This processes the recorded teacher; it does not use a webcam.</p>
+<button id="run" disabled>Process recorded teacher</button>
+<a id="download" hidden download="master.poses.json">Download recorded observations</a>
+<progress id="progress" max="1" value="0"></progress><p id="status" role="status">Loading frame schedule…</p>
+<canvas id="frame" width="450" height="360" aria-label="Current exact recorded source frame"></canvas>
+<pre id="summary"></pre>
+<script type="module" src="/recut-six-extract.js"></script></html>

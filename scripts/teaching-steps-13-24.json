@@ -1,0 +1,2309 @@
+{
+  "schemaVersion": 1,
+  "sourceFile": "24.mp4",
+  "sourceSha256": "2d62941ddebe1a75febee4423d0040d021a4247440e248f40d7ea1c69b17fab6",
+  "timing": "Absolute source-video seconds. Each form is fully covered with adjacent exclusive-end intervals.",
+  "provenance": "Manual visual teaching-phase review of the supplied recording at 0.5-second intervals, with source-picture contact sheets. Cues describe visible movement only; Pose does not verify palm/finger orientation.",
+  "teachingNotes": "Small visible phases, including synchronized arm/leg movement, are preserved. Settle phases provide a separate pause target. Use a comfortable kick height and stance depth; exact instructor range is not required. The last target is before the source fade.",
+  "forms": [
+    {
+      "formNumber": 13,
+      "title": "Right Heel Kick",
+      "chineseTitle": "右蹬脚",
+      "startSeconds": 181.0,
+      "endSeconds": 190.8,
+      "steps": [
+        {
+          "startSeconds": 181,
+          "endSeconds": 181.8,
+          "title": "Gather the stepping knee",
+          "cue": "Bring the stepping foot in as both hands begin to rise.",
+          "chineseTitle": "收脚提膝",
+          "chineseCue": "随着双手开始上提，把准备迈出的脚收拢。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 181.7667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-13-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              181.0,
+              181.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 181.8,
+          "endSeconds": 183.3,
+          "title": "Place the forward heel",
+          "cue": "Reach the foot forward while both arms continue their upward arc.",
+          "chineseTitle": "向前落跟",
+          "chineseCue": "脚向前伸出，同时双臂继续向上画弧。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 183.2667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-13-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              182.0,
+              182.5,
+              183.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 183.3,
+          "endSeconds": 184.6,
+          "title": "Settle and lower the arms",
+          "cue": "Settle into the step as the hands sweep down in front.",
+          "chineseTitle": "落步下落双手",
+          "chineseCue": "落稳这一步，双手随身体在身前向下落。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 184.5667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-13-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              183.5,
+              184.0,
+              184.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 184.6,
+          "endSeconds": 185.6,
+          "title": "Raise the right knee",
+          "cue": "Draw the right foot up into a bent-knee balance.",
+          "chineseTitle": "提右膝",
+          "chineseCue": "把右脚收起，屈膝上提。",
+          "focusJoints": [
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 185.5667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-13-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              185.0,
+              185.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 185.6,
+          "endSeconds": 186.6,
+          "title": "Bring the forearms up",
+          "cue": "Keep the knee gathered while the forearms rise in front of the chest.",
+          "chineseTitle": "提起双前臂",
+          "chineseCue": "膝盖保持收拢，双前臂向胸前提起。",
+          "focusJoints": [
+            15,
+            16
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 186.5667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-13-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              186.0,
+              186.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 186.6,
+          "endSeconds": 187.6,
+          "title": "Extend the right heel",
+          "cue": "Extend the right heel while opening the arms; use a comfortable height.",
+          "chineseTitle": "伸右脚分臂",
+          "chineseCue": "右脚跟向外伸出，双臂同时展开；高度以舒服为准。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 187.5667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-13-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              187.0,
+              187.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 187.6,
+          "endSeconds": 189.2,
+          "title": "Settle the open shape",
+          "cue": "Follow the open arm shape with the leg extended at a comfortable height.",
+          "chineseTitle": "停稳伸展姿态",
+          "chineseCue": "双臂保持展开，伸出的腿停在自己舒服的高度。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "settle",
+          "targetSourceSeconds": 189.1667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-13-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              188.0,
+              188.5,
+              189.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 189.2,
+          "endSeconds": 190.8,
+          "title": "Fold the right knee back",
+          "cue": "Bend the raised knee again as the arms move forward.",
+          "chineseTitle": "收回右膝",
+          "chineseCue": "抬着的腿再次屈膝收回，双臂同时转向前方。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 190.7667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-13-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              189.5,
+              190.0,
+              190.5
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "formNumber": 14,
+      "title": "Twin Fists Strike the Ears",
+      "chineseTitle": "双峰贯耳",
+      "startSeconds": 190.8,
+      "endSeconds": 196.0,
+      "steps": [
+        {
+          "startSeconds": 190.8,
+          "endSeconds": 191.8,
+          "title": "Gather both hands",
+          "cue": "Keep the knee raised while drawing both hands slightly inward.",
+          "chineseTitle": "双手回收",
+          "chineseCue": "膝盖仍抬着，双手稍稍向内收拢。",
+          "focusJoints": [
+            15,
+            16
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 191.7667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-14-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              190.8,
+              191.3,
+              191.8
+            ]
+          }
+        },
+        {
+          "startSeconds": 191.8,
+          "endSeconds": 192.9,
+          "title": "Lower the right heel",
+          "cue": "Lower the raised leg forward while the hands descend.",
+          "chineseTitle": "右脚向前落跟",
+          "chineseCue": "抬起的腿向前放下，双手同时下落。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 192.8667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-14-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              191.8,
+              192.3,
+              192.8
+            ]
+          }
+        },
+        {
+          "startSeconds": 192.9,
+          "endSeconds": 193.8,
+          "title": "Plant the foot and open",
+          "cue": "Plant the stepping foot and open both arms as the body settles forward.",
+          "chineseTitle": "落脚展开双臂",
+          "chineseCue": "迈出的脚落稳，身体向前落，双臂同时展开。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 193.7667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-14-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              193.3,
+              193.8
+            ]
+          }
+        },
+        {
+          "startSeconds": 193.8,
+          "endSeconds": 194.8,
+          "title": "Arc both forearms forward",
+          "cue": "Bring both bent arms upward and inward together.",
+          "chineseTitle": "双臂向前合拢",
+          "chineseCue": "双臂同时屈肘，向上、向前合拢。",
+          "focusJoints": [
+            15,
+            16
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 194.7667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-14-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              193.8,
+              194.3,
+              194.8
+            ]
+          }
+        },
+        {
+          "startSeconds": 194.8,
+          "endSeconds": 196,
+          "title": "Settle the paired-arm shape",
+          "cue": "Let the forward stance and paired arms finish together.",
+          "chineseTitle": "停稳双臂姿态",
+          "chineseCue": "前方站姿和双臂一起停稳。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "settle",
+          "targetSourceSeconds": 195.9667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-14-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              194.8,
+              195.3,
+              195.8
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "formNumber": 15,
+      "title": "Turn and Left Heel Kick",
+      "chineseTitle": "转身左蹬脚",
+      "startSeconds": 196.0,
+      "endSeconds": 204.7,
+      "steps": [
+        {
+          "startSeconds": 196,
+          "endSeconds": 197.5,
+          "title": "Begin the turn",
+          "cue": "Turn the feet and torso away as the arms arc upward.",
+          "chineseTitle": "转身提臂",
+          "chineseCue": "脚和身体一起转向另一面，双臂同时向上画弧。",
+          "focusJoints": [
+            15,
+            16,
+            11,
+            12,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 197.4667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-15-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              196.0,
+              196.5,
+              197.0,
+              197.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 197.5,
+          "endSeconds": 198.7,
+          "title": "Finish turning and lower",
+          "cue": "Continue the turn while lowering the hands toward the waist.",
+          "chineseTitle": "转稳并落手",
+          "chineseCue": "继续转身，双手同时落向腰部附近。",
+          "focusJoints": [
+            15,
+            16,
+            11,
+            12,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 198.6667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-15-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              197.5,
+              198.0,
+              198.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 198.7,
+          "endSeconds": 199.7,
+          "title": "Raise the left knee",
+          "cue": "Gather the left leg into a bent-knee balance.",
+          "chineseTitle": "提左膝",
+          "chineseCue": "收拢左腿，屈膝上提。",
+          "focusJoints": [
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 199.6667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-15-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              199.0,
+              199.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 199.7,
+          "endSeconds": 201,
+          "title": "Raise the forearms",
+          "cue": "Keep the knee gathered as both forearms rise in front.",
+          "chineseTitle": "提起双前臂",
+          "chineseCue": "膝盖保持收拢，双前臂在身前上提。",
+          "focusJoints": [
+            15,
+            16
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 200.9667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-15-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              200.0,
+              200.5,
+              201.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 201,
+          "endSeconds": 202,
+          "title": "Extend the left heel",
+          "cue": "Open the arms as the left heel extends; use a comfortable height.",
+          "chineseTitle": "伸左脚分臂",
+          "chineseCue": "左脚跟向外伸出，双臂同时展开；高度以舒服为准。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 201.9667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-15-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              201.0,
+              201.5,
+              202.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 202,
+          "endSeconds": 203.5,
+          "title": "Settle the left-leg extension",
+          "cue": "Follow the open shape without needing the instructor's kick height.",
+          "chineseTitle": "停稳左腿伸展",
+          "chineseCue": "停稳展开姿态，不必追求示范中的踢腿高度。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "settle",
+          "targetSourceSeconds": 203.4667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-15-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              202.0,
+              202.5,
+              203.0,
+              203.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 203.5,
+          "endSeconds": 204.7,
+          "title": "Fold the left knee back",
+          "cue": "Bend the raised left leg while keeping the arms open.",
+          "chineseTitle": "收回左膝",
+          "chineseCue": "抬起的左腿屈膝收回，双臂仍展开。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 204.6667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-15-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              203.5,
+              204.0,
+              204.5
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "formNumber": 16,
+      "title": "Left Snake Creeps Down and Golden Rooster",
+      "chineseTitle": "左下势独立",
+      "startSeconds": 204.7,
+      "endSeconds": 214.7,
+      "steps": [
+        {
+          "startSeconds": 204.7,
+          "endSeconds": 205.7,
+          "title": "Gather the arms",
+          "cue": "Bring the arms toward one side while keeping the knee gathered.",
+          "chineseTitle": "转臂收拢",
+          "chineseCue": "抬膝保持收拢，双臂向一侧转过来。",
+          "focusJoints": [
+            15,
+            16
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 205.6667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-16-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              204.7,
+              205.2,
+              205.7
+            ]
+          }
+        },
+        {
+          "startSeconds": 205.7,
+          "endSeconds": 206.8,
+          "title": "Reach the left foot sideways",
+          "cue": "Lower and reach the left foot out to the side.",
+          "chineseTitle": "左脚向侧伸出",
+          "chineseCue": "左脚向侧方放下、伸开。",
+          "focusJoints": [
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 206.7667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-16-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              205.7,
+              206.2,
+              206.7
+            ]
+          }
+        },
+        {
+          "startSeconds": 206.8,
+          "endSeconds": 208,
+          "title": "Lower into the wide stance",
+          "cue": "Bend the supporting leg as one hand sweeps downward; choose your own depth.",
+          "chineseTitle": "屈腿下沉",
+          "chineseCue": "支撑腿弯曲，一只手同时向下扫；下沉深度以自己能做为准。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 207.9667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-16-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              207.2,
+              207.7
+            ]
+          }
+        },
+        {
+          "startSeconds": 208,
+          "endSeconds": 209.1,
+          "title": "Move across the wide stance",
+          "cue": "Move the torso toward the extended-leg side as the low arm travels forward.",
+          "chineseTitle": "重心横移",
+          "chineseCue": "身体向伸腿的一侧移动，低处的手臂同时向前走。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 209.0667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-16-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              208.2,
+              208.7
+            ]
+          }
+        },
+        {
+          "startSeconds": 209.1,
+          "endSeconds": 210.7,
+          "title": "Rise into the forward stance",
+          "cue": "Rise gradually as the leading arm reaches forward.",
+          "chineseTitle": "起身向前",
+          "chineseCue": "身体逐渐升起，前方手臂随之向前伸。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 210.6667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-16-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              209.2,
+              209.7,
+              210.2,
+              210.7
+            ]
+          }
+        },
+        {
+          "startSeconds": 210.7,
+          "endSeconds": 212.3,
+          "title": "Gather the rear foot",
+          "cue": "Draw the rear foot inward while both hands sweep down.",
+          "chineseTitle": "收拢后脚",
+          "chineseCue": "后脚向身体收拢，双手同时向下画弧。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 212.2667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-16-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              210.7,
+              211.2,
+              211.7,
+              212.2
+            ]
+          }
+        },
+        {
+          "startSeconds": 212.3,
+          "endSeconds": 213.4,
+          "title": "Raise the right knee and arm",
+          "cue": "Lift the right knee while one forearm rises in front.",
+          "chineseTitle": "提右膝提臂",
+          "chineseCue": "右膝上提，同时一侧前臂在身前升起。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 213.3667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-16-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              212.7,
+              213.2
+            ]
+          }
+        },
+        {
+          "startSeconds": 213.4,
+          "endSeconds": 214.7,
+          "title": "Settle the one-leg shape",
+          "cue": "Pause in the gathered-knee shape at a comfortable height.",
+          "chineseTitle": "停稳独立姿态",
+          "chineseCue": "在自己舒服的抬膝高度停稳。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "settle",
+          "targetSourceSeconds": 214.6667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-16-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              213.7,
+              214.2
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "formNumber": 17,
+      "title": "Right Snake Creeps Down and Golden Rooster",
+      "chineseTitle": "右下势独立",
+      "startSeconds": 214.7,
+      "endSeconds": 227.0,
+      "steps": [
+        {
+          "startSeconds": 214.7,
+          "endSeconds": 215.7,
+          "title": "Lower the raised foot",
+          "cue": "Lower the raised foot as the torso turns toward the camera.",
+          "chineseTitle": "落脚转身",
+          "chineseCue": "放下抬起的脚，身体同时向正面转。",
+          "focusJoints": [
+            25,
+            26,
+            27,
+            28,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 215.6667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-17-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              214.7,
+              215.2,
+              215.7
+            ]
+          }
+        },
+        {
+          "startSeconds": 215.7,
+          "endSeconds": 216.9,
+          "title": "Turn under the raised arm",
+          "cue": "Continue turning while the upper arm follows an overhead arc.",
+          "chineseTitle": "随上方手臂转向",
+          "chineseCue": "上方手臂画弧，身体继续转向。",
+          "focusJoints": [
+            15,
+            16,
+            11,
+            12,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 216.8667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-17-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              215.7,
+              216.2,
+              216.7
+            ]
+          }
+        },
+        {
+          "startSeconds": 216.9,
+          "endSeconds": 217.8,
+          "title": "Reach the right foot sideways",
+          "cue": "Send the right foot sideways as the arms gather to the new side.",
+          "chineseTitle": "右脚侧伸",
+          "chineseCue": "右脚向侧方伸出，双臂同时向新的一侧收拢。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 217.7667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-17-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              217.2,
+              217.7
+            ]
+          }
+        },
+        {
+          "startSeconds": 217.8,
+          "endSeconds": 219,
+          "title": "Lower into the other wide stance",
+          "cue": "Bend the supporting leg and let the lower hand descend; use your own depth.",
+          "chineseTitle": "向另一侧下沉",
+          "chineseCue": "支撑腿弯曲，低处的手臂下降；下沉深度以自己能做为准。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 218.9667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-17-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              218.2,
+              218.7
+            ]
+          }
+        },
+        {
+          "startSeconds": 219,
+          "endSeconds": 220.2,
+          "title": "Sweep the low arm across",
+          "cue": "Follow the low arm across the extended leg as the torso turns.",
+          "chineseTitle": "低处手臂横扫",
+          "chineseCue": "随着身体转动，低处手臂沿伸腿方向横扫。",
+          "focusJoints": [
+            15,
+            16,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 220.1667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-17-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              219.2,
+              219.7,
+              220.2
+            ]
+          }
+        },
+        {
+          "startSeconds": 220.2,
+          "endSeconds": 221.6,
+          "title": "Move across and begin rising",
+          "cue": "Move toward the extended-leg side and begin to rise.",
+          "chineseTitle": "横移开始起身",
+          "chineseCue": "身体向伸腿一侧横移，并开始升起。",
+          "focusJoints": [
+            25,
+            26,
+            27,
+            28,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 221.5667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-17-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              220.2,
+              220.7,
+              221.2
+            ]
+          }
+        },
+        {
+          "startSeconds": 221.6,
+          "endSeconds": 223.1,
+          "title": "Reach into the forward stance",
+          "cue": "Continue rising while the leading arm extends ahead.",
+          "chineseTitle": "前伸并站起",
+          "chineseCue": "继续起身，前方手臂同时伸出。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 223.0667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-17-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              221.7,
+              222.2,
+              222.7
+            ]
+          }
+        },
+        {
+          "startSeconds": 223.1,
+          "endSeconds": 224.2,
+          "title": "Gather the rear foot",
+          "cue": "Bring the rear foot inward as both hands lower.",
+          "chineseTitle": "收拢后脚",
+          "chineseCue": "后脚向身体收拢，双手同时下落。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 224.1667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-17-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              223.2,
+              223.7,
+              224.2
+            ]
+          }
+        },
+        {
+          "startSeconds": 224.2,
+          "endSeconds": 225.3,
+          "title": "Raise the left knee and arm",
+          "cue": "Lift the left knee while one forearm rises in front.",
+          "chineseTitle": "提左膝提臂",
+          "chineseCue": "左膝上提，一侧前臂同时在身前升起。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 225.2667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-17-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              224.2,
+              224.7,
+              225.2
+            ]
+          }
+        },
+        {
+          "startSeconds": 225.3,
+          "endSeconds": 227,
+          "title": "Settle the second one-leg shape",
+          "cue": "Pause with the knee gathered at a comfortable height.",
+          "chineseTitle": "停稳另一侧独立",
+          "chineseCue": "抬膝保持收拢，在舒服的高度停稳。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "settle",
+          "targetSourceSeconds": 226.9667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-17-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              225.7,
+              226.2,
+              226.7
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "formNumber": 18,
+      "title": "Work at Shuttles",
+      "chineseTitle": "左右穿梭",
+      "startSeconds": 227.0,
+      "endSeconds": 241.5,
+      "steps": [
+        {
+          "startSeconds": 227,
+          "endSeconds": 228.3,
+          "title": "Place the raised foot forward",
+          "cue": "Lower the raised foot into the next step as the hands separate.",
+          "chineseTitle": "抬脚向前落下",
+          "chineseCue": "抬起的脚向前落下，双手同时分开。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 228.2667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-18-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              227.0,
+              227.5,
+              228.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 228.3,
+          "endSeconds": 229.6,
+          "title": "Settle and gather the rear foot",
+          "cue": "Settle into the step and draw the rear foot inward.",
+          "chineseTitle": "落稳并收后脚",
+          "chineseCue": "先随着这一步落稳，后脚继续向身体收拢。",
+          "focusJoints": [
+            25,
+            26,
+            27,
+            28,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 229.5667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-18-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              228.5,
+              229.0,
+              229.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 229.6,
+          "endSeconds": 230.7,
+          "title": "Turn and gather the arms",
+          "cue": "Turn toward the first diagonal while the hands circle inward.",
+          "chineseTitle": "转向收臂",
+          "chineseCue": "转向第一个斜前方，双手同时向内画弧。",
+          "focusJoints": [
+            15,
+            16,
+            11,
+            12,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 230.6667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-18-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              230.0,
+              230.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 230.7,
+          "endSeconds": 231.8,
+          "title": "Step onto the first diagonal",
+          "cue": "Place the next foot diagonally as the upper arm begins to lift.",
+          "chineseTitle": "迈向第一个斜方",
+          "chineseCue": "向第一个斜前方落脚，上方手臂同时开始抬起。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 231.7667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-18-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              231.0,
+              231.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 231.8,
+          "endSeconds": 233,
+          "title": "Lift one arm and reach",
+          "cue": "Settle forward as one arm curves overhead and the other reaches ahead.",
+          "chineseTitle": "上托前伸",
+          "chineseCue": "身体向前落，一臂向头上画弧，另一臂同时向前伸。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 232.9667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-18-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              232.0,
+              232.5,
+              233.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 233,
+          "endSeconds": 234.3,
+          "title": "Settle the first diagonal shape",
+          "cue": "Let the overhead arm and forward arm finish together.",
+          "chineseTitle": "停稳第一侧",
+          "chineseCue": "上方手臂和前方手臂一起停稳。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "settle",
+          "targetSourceSeconds": 234.2667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-18-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              233.0,
+              233.5,
+              234.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 234.3,
+          "endSeconds": 235.6,
+          "title": "Turn toward the other side",
+          "cue": "Turn the feet and torso as both arms circle back in front.",
+          "chineseTitle": "转向另一侧",
+          "chineseCue": "脚和身体一起转向，双臂同时画弧回到身前。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 235.5667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-18-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              234.5,
+              235.0,
+              235.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 235.6,
+          "endSeconds": 237.2,
+          "title": "Gather the next stepping foot",
+          "cue": "Draw the next stepping foot inward while the hands lower and gather.",
+          "chineseTitle": "收脚收臂",
+          "chineseCue": "准备迈出的脚向身体收拢，双手同时下落、收拢。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 237.1667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-18-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              236.0,
+              236.5,
+              237.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 237.2,
+          "endSeconds": 238.6,
+          "title": "Step onto the second diagonal",
+          "cue": "Reach the heel out toward the next diagonal while the arms begin to open.",
+          "chineseTitle": "迈向第二个斜方",
+          "chineseCue": "脚跟向另一个斜前方伸出，双臂同时开始展开。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 238.5667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-18-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              237.5,
+              238.0,
+              238.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 238.6,
+          "endSeconds": 239.8,
+          "title": "Lift the other overhead arm",
+          "cue": "Settle into the new step while the other arm arcs above the head.",
+          "chineseTitle": "换侧上托",
+          "chineseCue": "身体落入新的一步，另一侧手臂同时向头上画弧。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 239.7667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-18-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              239.0,
+              239.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 239.8,
+          "endSeconds": 241.5,
+          "title": "Finish the forward reach",
+          "cue": "Extend the forward arm and settle the second diagonal stance.",
+          "chineseTitle": "完成第二侧前伸",
+          "chineseCue": "前方手臂伸出，第二个斜向站姿一起落稳。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "settle",
+          "targetSourceSeconds": 241.4667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-18-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              240.0,
+              240.5,
+              241.0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "formNumber": 19,
+      "title": "Needle at the Sea Bottom",
+      "chineseTitle": "海底针",
+      "startSeconds": 241.5,
+      "endSeconds": 247.0,
+      "steps": [
+        {
+          "startSeconds": 241.5,
+          "endSeconds": 242.8,
+          "title": "Gather the rear foot",
+          "cue": "Bring the rear foot inward as the arms begin to lower.",
+          "chineseTitle": "收后脚落臂",
+          "chineseCue": "后脚向身体收拢，双臂同时开始下落。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 242.7667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-19-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              241.5,
+              242.0,
+              242.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 242.8,
+          "endSeconds": 244,
+          "title": "Shift back and turn",
+          "cue": "Move back over the rear leg while turning the torso and gathering the arms.",
+          "chineseTitle": "后移转身",
+          "chineseCue": "身体向后腿一侧移动，躯干转动，双臂收拢。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 243.9667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-19-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              243.0,
+              243.5,
+              244.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 244,
+          "endSeconds": 245,
+          "title": "Gather the front knee",
+          "cue": "Draw the front foot up while one hand comes near the shoulder.",
+          "chineseTitle": "收前膝",
+          "chineseCue": "前脚收起，一只手同时收至肩部附近。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 244.9667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-19-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              244.0,
+              244.5,
+              245.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 245,
+          "endSeconds": 246,
+          "title": "Place the foot and reach down",
+          "cue": "Place the foot lightly forward as the torso inclines and the hand descends.",
+          "chineseTitle": "轻落脚向下伸",
+          "chineseCue": "脚向前轻轻放下，身体同时前倾，手向下伸。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 245.9667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-19-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              245.0,
+              245.5,
+              246.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 246,
+          "endSeconds": 247,
+          "title": "Settle the low reach",
+          "cue": "Finish the downward reach at a comfortable depth.",
+          "chineseTitle": "停稳低处伸展",
+          "chineseCue": "在自己舒服的深度完成向下伸展。",
+          "focusJoints": [
+            15,
+            16,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "settle",
+          "targetSourceSeconds": 246.9667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-19-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              246.0,
+              246.5
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "formNumber": 20,
+      "title": "Fan Through the Back",
+      "chineseTitle": "闪通背",
+      "startSeconds": 247.0,
+      "endSeconds": 251.0,
+      "steps": [
+        {
+          "startSeconds": 247,
+          "endSeconds": 247.9,
+          "title": "Rise and lift the arms",
+          "cue": "Begin rising from the low reach as both arms lift in front.",
+          "chineseTitle": "起身提臂",
+          "chineseCue": "从低处开始起身，双臂同时在身前提起。",
+          "focusJoints": [
+            15,
+            16,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 247.8667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-20-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              247.0,
+              247.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 247.9,
+          "endSeconds": 248.8,
+          "title": "Step forward and separate",
+          "cue": "Reach the front heel forward while one arm rises and the other opens ahead.",
+          "chineseTitle": "上步分臂",
+          "chineseCue": "前脚跟向前伸出，一臂向上、另一臂向前同时展开。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 248.7667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-20-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              248.0,
+              248.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 248.8,
+          "endSeconds": 251,
+          "title": "Settle the high-and-forward shape",
+          "cue": "Settle into the step with one arm above and the other reaching forward.",
+          "chineseTitle": "停稳上下展开",
+          "chineseCue": "随着脚步落稳，一臂在上，另一臂向前。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "settle",
+          "targetSourceSeconds": 250.9667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-20-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              249.0,
+              249.5,
+              250.0,
+              250.5
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "formNumber": 21,
+      "title": "Turn, Deflect, Parry, and Punch",
+      "chineseTitle": "转身搬拦捶",
+      "startSeconds": 251.0,
+      "endSeconds": 263.0,
+      "steps": [
+        {
+          "startSeconds": 251,
+          "endSeconds": 252.6,
+          "title": "Turn to the opposite direction",
+          "cue": "Pivot the feet and torso as the arms open and lower.",
+          "chineseTitle": "转向相反方向",
+          "chineseCue": "脚和身体一起转向，双臂同时展开并下落。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 252.5667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-21-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              251.0,
+              251.5,
+              252.0,
+              252.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 252.6,
+          "endSeconds": 253.8,
+          "title": "Gather the stepping knee",
+          "cue": "Bring the next stepping foot up while one forearm circles across the body.",
+          "chineseTitle": "收膝绕前臂",
+          "chineseCue": "准备迈出的脚收起，一侧前臂同时绕过身前。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 253.7667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-21-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              253.0,
+              253.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 253.8,
+          "endSeconds": 255.3,
+          "title": "Reach the heel forward",
+          "cue": "Reach the heel forward while the bent forearm turns upward.",
+          "chineseTitle": "向前伸脚跟",
+          "chineseCue": "脚跟向前伸出，屈着的前臂同时向上转。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 255.2667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-21-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              254.0,
+              254.5,
+              255.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 255.3,
+          "endSeconds": 256.6,
+          "title": "Plant the foot and sweep ahead",
+          "cue": "Set the foot down and move forward as the forearm travels ahead.",
+          "chineseTitle": "落步向前绕臂",
+          "chineseCue": "脚落下，身体随之前移，前臂同时向前走。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 256.5667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-21-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              255.5,
+              256.0,
+              256.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 256.6,
+          "endSeconds": 257.6,
+          "title": "Gather the rear foot and open",
+          "cue": "Bring the rear foot inward while both arms open apart.",
+          "chineseTitle": "收后脚展开双臂",
+          "chineseCue": "后脚向身体收拢，双臂同时向两侧展开。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 257.5667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-21-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              257.0,
+              257.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 257.6,
+          "endSeconds": 258.5,
+          "title": "Raise the next knee",
+          "cue": "Bring the next knee up as the arms continue to exchange positions.",
+          "chineseTitle": "提起下一侧膝盖",
+          "chineseCue": "下一侧膝盖上提，双臂同时继续交换前后位置。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 258.4667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-21-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              258.0,
+              258.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 258.5,
+          "endSeconds": 259.4,
+          "title": "Reach the next heel forward",
+          "cue": "Extend the gathered foot forward while the front hand reaches ahead.",
+          "chineseTitle": "向前伸出脚跟",
+          "chineseCue": "收起的脚向前伸出，前方手臂同时向前走。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 259.3667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-21-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              258.5,
+              259.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 259.4,
+          "endSeconds": 260.5,
+          "title": "Settle behind the forward hand",
+          "cue": "Plant the foot and settle forward with the open hand in front.",
+          "chineseTitle": "落步前伸手",
+          "chineseCue": "脚落稳，身体向前落，前方手臂伸出。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 260.4667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-21-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              259.5,
+              260.0,
+              260.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 260.5,
+          "endSeconds": 261.6,
+          "title": "Extend the punching arm",
+          "cue": "Bring the other forearm forward as the body moves into the stance.",
+          "chineseTitle": "另一臂向前出",
+          "chineseCue": "另一侧前臂向前伸出，身体同时进入前方站姿。",
+          "focusJoints": [
+            15,
+            16,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 261.5667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-21-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              260.5,
+              261.0,
+              261.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 261.6,
+          "endSeconds": 263,
+          "title": "Settle the forward extension",
+          "cue": "Let the extended arm and stance finish together.",
+          "chineseTitle": "停稳前伸姿态",
+          "chineseCue": "伸出的手臂与站姿一起停稳。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "settle",
+          "targetSourceSeconds": 262.9667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-21-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              262.0,
+              262.5
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "formNumber": 22,
+      "title": "Apparent Close-Up",
+      "chineseTitle": "如封似闭",
+      "startSeconds": 263.0,
+      "endSeconds": 269.3,
+      "steps": [
+        {
+          "startSeconds": 263,
+          "endSeconds": 264.2,
+          "title": "Bring the hands together ahead",
+          "cue": "Bring the lower hand toward the extended forearm in front.",
+          "chineseTitle": "双手在前靠拢",
+          "chineseCue": "下方的手向前方伸出的前臂靠拢。",
+          "focusJoints": [
+            15,
+            16
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 264.1667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-22-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              263.0,
+              263.5,
+              264.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 264.2,
+          "endSeconds": 265.4,
+          "title": "Shift back and bend the elbows",
+          "cue": "Move the torso back while both elbows bend.",
+          "chineseTitle": "后移屈肘",
+          "chineseCue": "身体向后移动，双肘同时弯曲。",
+          "focusJoints": [
+            15,
+            16,
+            11,
+            12,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 265.3667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-22-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              264.5,
+              265.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 265.4,
+          "endSeconds": 266.5,
+          "title": "Lower the gathered hands",
+          "cue": "Continue drawing the hands down toward the waist.",
+          "chineseTitle": "双手收向腰部",
+          "chineseCue": "双手继续向下收至腰部附近。",
+          "focusJoints": [
+            15,
+            16
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 266.4667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-22-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              265.5,
+              266.0,
+              266.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 266.5,
+          "endSeconds": 267.6,
+          "title": "Move forward and raise the hands",
+          "cue": "Move forward again as both hands rise in front of the chest.",
+          "chineseTitle": "前移提手",
+          "chineseCue": "身体再次向前移动，双手同时提至胸前。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 267.5667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-22-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              266.5,
+              267.0,
+              267.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 267.6,
+          "endSeconds": 269.3,
+          "title": "Extend both arms forward",
+          "cue": "Extend both arms and settle into the forward stance.",
+          "chineseTitle": "双臂向前伸出",
+          "chineseCue": "双臂向前伸出，前方站姿同时落稳。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 269.2667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-22-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              268.0,
+              268.5,
+              269.0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "formNumber": 23,
+      "title": "Cross Hands",
+      "chineseTitle": "十字手",
+      "startSeconds": 269.3,
+      "endSeconds": 277.5,
+      "steps": [
+        {
+          "startSeconds": 269.3,
+          "endSeconds": 270.6,
+          "title": "Turn toward the camera",
+          "cue": "Turn the feet and torso toward the camera as one arm arcs across the front.",
+          "chineseTitle": "转向正面",
+          "chineseCue": "脚和身体转向正面，一臂同时在身前画弧。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 270.5667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-23-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              269.3,
+              269.8,
+              270.3
+            ]
+          }
+        },
+        {
+          "startSeconds": 270.6,
+          "endSeconds": 271.8,
+          "title": "Open both arms wide",
+          "cue": "Open the arms to either side while settling into the wide stance.",
+          "chineseTitle": "双臂向侧展开",
+          "chineseCue": "双臂向两侧展开，身体同时落入较宽的站姿。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 271.7667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-23-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              270.8,
+              271.3,
+              271.8
+            ]
+          }
+        },
+        {
+          "startSeconds": 271.8,
+          "endSeconds": 273,
+          "title": "Lower both arms",
+          "cue": "Let both arms sweep outward and down together.",
+          "chineseTitle": "双臂向下画弧",
+          "chineseCue": "双臂一起向外、向下画弧。",
+          "focusJoints": [
+            15,
+            16
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 272.9667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-23-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              271.8,
+              272.3,
+              272.8
+            ]
+          }
+        },
+        {
+          "startSeconds": 273,
+          "endSeconds": 274.2,
+          "title": "Cross the forearms low",
+          "cue": "Bring the forearms inward and across as the torso begins to rise.",
+          "chineseTitle": "低处交叉前臂",
+          "chineseCue": "双前臂向内交叉，身体同时开始升起。",
+          "focusJoints": [
+            15,
+            16,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 274.1667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-23-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              273.3,
+              273.8
+            ]
+          }
+        },
+        {
+          "startSeconds": 274.2,
+          "endSeconds": 275.3,
+          "title": "Gather the foot and lift the cross",
+          "cue": "Bring the wide foot inward while the crossed forearms rise toward the chest.",
+          "chineseTitle": "收脚提交叉双臂",
+          "chineseCue": "外侧脚向内收，交叉的双前臂同时提向胸前。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 275.2667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-23-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              274.3,
+              274.8,
+              275.3
+            ]
+          }
+        },
+        {
+          "startSeconds": 275.3,
+          "endSeconds": 277.5,
+          "title": "Settle the crossed-arm stance",
+          "cue": "Settle both feet and hold the crossed forearms in front.",
+          "chineseTitle": "停稳交叉姿态",
+          "chineseCue": "双脚落稳，交叉的双前臂停在身前。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "settle",
+          "targetSourceSeconds": 277.4667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-23-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              275.3,
+              275.8,
+              276.3,
+              276.8,
+              277.3
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "formNumber": 24,
+      "title": "Closing",
+      "chineseTitle": "收势",
+      "startSeconds": 277.5,
+      "endSeconds": 286.8,
+      "steps": [
+        {
+          "startSeconds": 277.5,
+          "endSeconds": 278.8,
+          "title": "Uncross the forearms",
+          "cue": "Uncross both forearms and separate the hands in front.",
+          "chineseTitle": "分开交叉双臂",
+          "chineseCue": "把交叉的双前臂解开，双手在身前分开。",
+          "focusJoints": [
+            15,
+            16
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 278.7667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-24-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              277.5,
+              278.0,
+              278.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 278.8,
+          "endSeconds": 280.1,
+          "title": "Reach both hands forward",
+          "cue": "Let both hands reach gently forward together.",
+          "chineseTitle": "双手向前展开",
+          "chineseCue": "双手一起轻轻向前展开。",
+          "focusJoints": [
+            15,
+            16
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 280.0667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-24-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              279.0,
+              279.5,
+              280.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 280.1,
+          "endSeconds": 282.1,
+          "title": "Lower the hands and rise",
+          "cue": "Lower both hands while the knees straighten gradually.",
+          "chineseTitle": "落手起身",
+          "chineseCue": "双手下落，双膝同时逐渐伸展。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28,
+            11,
+            12,
+            23,
+            24
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 282.0667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-24-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              280.5,
+              281.0,
+              281.5,
+              282.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 282.1,
+          "endSeconds": 283.2,
+          "title": "Settle the arms at the sides",
+          "cue": "Let both arms finish lowering beside the body.",
+          "chineseTitle": "双臂落至身侧",
+          "chineseCue": "双臂继续落下，停在身体两侧。",
+          "focusJoints": [
+            15,
+            16
+          ],
+          "kind": "settle",
+          "targetSourceSeconds": 283.1667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-24-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              282.5,
+              283.0
+            ]
+          }
+        },
+        {
+          "startSeconds": 283.2,
+          "endSeconds": 284.5,
+          "title": "Bring the left foot in",
+          "cue": "Bring the left foot inward to close the stance.",
+          "chineseTitle": "收拢左脚",
+          "chineseCue": "把左脚向内收拢，站姿合起。",
+          "focusJoints": [
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "movement",
+          "targetSourceSeconds": 284.4667,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-24-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              283.5,
+              284.0,
+              284.5
+            ]
+          }
+        },
+        {
+          "startSeconds": 284.5,
+          "endSeconds": 286.8,
+          "title": "Finish standing",
+          "cue": "Stand with the feet gathered and the arms resting at the sides.",
+          "chineseTitle": "完成站立",
+          "chineseCue": "双脚并拢，双臂自然落在身侧，停稳。",
+          "focusJoints": [
+            15,
+            16,
+            25,
+            26,
+            27,
+            28
+          ],
+          "kind": "settle",
+          "targetSourceSeconds": 285.5,
+          "evidence": {
+            "contactSheet": "artifacts/teaching-step-review-b/form-24-half-seconds.jpg",
+            "reviewedSampleSeconds": [
+              284.5,
+              285.0,
+              285.5,
+              286.0,
+              286.5
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

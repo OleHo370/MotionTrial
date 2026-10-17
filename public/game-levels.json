@@ -1,0 +1,328 @@
+{
+  "schemaVersion": "four-point-levels-v1",
+  "sourceSha256": "5af76997dad0972943418a3d931870e9cce531abd78f8a4597b75f6a00498ef5",
+  "modelSha256": "59929e1d1ee95287735ddd833b19cf4ac46d29bc7afddbbf6753c459690d574a",
+  "rulesVersion": "four-point-slide-v1.0",
+  "guideVersion": "observed-endpoint-medoid-v1.0",
+  "focusVersion": "dual-semantic-focus-v1.0",
+  "availableStars": 66,
+  "visualOnlyFormIds": [
+    "dual-20",
+    "dual-22"
+  ],
+  "forms": [
+    {
+      "id": "dual-01",
+      "formNumber": 1,
+      "totalSteps": 7,
+      "eligibleStepIds": [
+        "dual-01-01",
+        "dual-01-02",
+        "dual-01-03",
+        "dual-01-04",
+        "dual-01-05",
+        "dual-01-06",
+        "dual-01-07"
+      ],
+      "visualOnlyCount": 0,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-02",
+      "formNumber": 2,
+      "totalSteps": 12,
+      "eligibleStepIds": [
+        "dual-02-01",
+        "dual-02-02",
+        "dual-02-03",
+        "dual-02-04",
+        "dual-02-05",
+        "dual-02-06",
+        "dual-02-09",
+        "dual-02-10",
+        "dual-02-11"
+      ],
+      "visualOnlyCount": 3,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-03",
+      "formNumber": 3,
+      "totalSteps": 5,
+      "eligibleStepIds": [
+        "dual-03-01"
+      ],
+      "visualOnlyCount": 4,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-04",
+      "formNumber": 4,
+      "totalSteps": 13,
+      "eligibleStepIds": [
+        "dual-04-02",
+        "dual-04-03",
+        "dual-04-06",
+        "dual-04-07",
+        "dual-04-10",
+        "dual-04-11"
+      ],
+      "visualOnlyCount": 7,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-05",
+      "formNumber": 5,
+      "totalSteps": 5,
+      "eligibleStepIds": [
+        "dual-05-01",
+        "dual-05-03"
+      ],
+      "visualOnlyCount": 3,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-06",
+      "formNumber": 6,
+      "totalSteps": 9,
+      "eligibleStepIds": [
+        "dual-06-01",
+        "dual-06-03",
+        "dual-06-05"
+      ],
+      "visualOnlyCount": 6,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-07",
+      "formNumber": 7,
+      "totalSteps": 9,
+      "eligibleStepIds": [
+        "dual-07-01",
+        "dual-07-02"
+      ],
+      "visualOnlyCount": 7,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-08",
+      "formNumber": 8,
+      "totalSteps": 9,
+      "eligibleStepIds": [
+        "dual-08-02",
+        "dual-08-03",
+        "dual-08-04",
+        "dual-08-05",
+        "dual-08-06"
+      ],
+      "visualOnlyCount": 4,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-09",
+      "formNumber": 9,
+      "totalSteps": 5,
+      "eligibleStepIds": [
+        "dual-09-02",
+        "dual-09-04",
+        "dual-09-05"
+      ],
+      "visualOnlyCount": 2,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-10",
+      "formNumber": 10,
+      "totalSteps": 9,
+      "eligibleStepIds": [
+        "dual-10-01",
+        "dual-10-02",
+        "dual-10-05",
+        "dual-10-06",
+        "dual-10-07",
+        "dual-10-08",
+        "dual-10-09"
+      ],
+      "visualOnlyCount": 2,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-11",
+      "formNumber": 11,
+      "totalSteps": 4,
+      "eligibleStepIds": [
+        "dual-11-01",
+        "dual-11-02",
+        "dual-11-03"
+      ],
+      "visualOnlyCount": 1,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-12",
+      "formNumber": 12,
+      "totalSteps": 5,
+      "eligibleStepIds": [
+        "dual-12-01",
+        "dual-12-02"
+      ],
+      "visualOnlyCount": 3,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-13",
+      "formNumber": 13,
+      "totalSteps": 6,
+      "eligibleStepIds": [
+        "dual-13-01",
+        "dual-13-04",
+        "dual-13-05",
+        "dual-13-06"
+      ],
+      "visualOnlyCount": 2,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-14",
+      "formNumber": 14,
+      "totalSteps": 6,
+      "eligibleStepIds": [
+        "dual-14-01",
+        "dual-14-02"
+      ],
+      "visualOnlyCount": 4,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-15",
+      "formNumber": 15,
+      "totalSteps": 5,
+      "eligibleStepIds": [
+        "dual-15-02",
+        "dual-15-03",
+        "dual-15-04",
+        "dual-15-05"
+      ],
+      "visualOnlyCount": 1,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-16",
+      "formNumber": 16,
+      "totalSteps": 9,
+      "eligibleStepIds": [
+        "dual-16-01",
+        "dual-16-02",
+        "dual-16-03",
+        "dual-16-04",
+        "dual-16-05",
+        "dual-16-09"
+      ],
+      "visualOnlyCount": 3,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-17",
+      "formNumber": 17,
+      "totalSteps": 9,
+      "eligibleStepIds": [
+        "dual-17-01",
+        "dual-17-02",
+        "dual-17-03",
+        "dual-17-04",
+        "dual-17-05",
+        "dual-17-06",
+        "dual-17-07",
+        "dual-17-08",
+        "dual-17-09"
+      ],
+      "visualOnlyCount": 0,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-18",
+      "formNumber": 18,
+      "totalSteps": 9,
+      "eligibleStepIds": [
+        "dual-18-01",
+        "dual-18-02",
+        "dual-18-03",
+        "dual-18-04",
+        "dual-18-05",
+        "dual-18-06",
+        "dual-18-07",
+        "dual-18-09"
+      ],
+      "visualOnlyCount": 1,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-19",
+      "formNumber": 19,
+      "totalSteps": 5,
+      "eligibleStepIds": [
+        "dual-19-05"
+      ],
+      "visualOnlyCount": 4,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-20",
+      "formNumber": 20,
+      "totalSteps": 5,
+      "eligibleStepIds": [],
+      "visualOnlyCount": 5,
+      "availableStars": 0
+    },
+    {
+      "id": "dual-21",
+      "formNumber": 21,
+      "totalSteps": 8,
+      "eligibleStepIds": [
+        "dual-21-03",
+        "dual-21-04",
+        "dual-21-06"
+      ],
+      "visualOnlyCount": 5,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-22",
+      "formNumber": 22,
+      "totalSteps": 5,
+      "eligibleStepIds": [],
+      "visualOnlyCount": 5,
+      "availableStars": 0
+    },
+    {
+      "id": "dual-23",
+      "formNumber": 23,
+      "totalSteps": 7,
+      "eligibleStepIds": [
+        "dual-23-01",
+        "dual-23-03",
+        "dual-23-04",
+        "dual-23-05",
+        "dual-23-06",
+        "dual-23-07"
+      ],
+      "visualOnlyCount": 1,
+      "availableStars": 3
+    },
+    {
+      "id": "dual-24",
+      "formNumber": 24,
+      "totalSteps": 6,
+      "eligibleStepIds": [
+        "dual-24-01",
+        "dual-24-02",
+        "dual-24-03",
+        "dual-24-04",
+        "dual-24-05",
+        "dual-24-06"
+      ],
+      "visualOnlyCount": 0,
+      "availableStars": 3
+    }
+  ]
+}
