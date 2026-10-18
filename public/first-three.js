@@ -15,6 +15,7 @@ import {compactPracticeFeedback} from './practice-compact-feedback.js';
 import {descriptivePracticeFeedback,practiceAiWordingIssues} from './practice-descriptive-feedback.js';
 import {createPracticeAiFeedback} from './practice-ai-feedback.js';
 import {createPracticeSessionHistory,createPracticeSummaryClient,localPracticeSessionSummary} from './practice-session-summary.js';
+import {createLesson3DPreview} from './first-three-study-3d.js';
 import {getLiveTargetHighlights} from './practice-target-highlight.js';
 import {createDisplaySmoother} from './practice-display-smoothing.js';
 import {prepareTeacherDisplayGuides,getTeacherDisplayPoints} from './teacher-point-display.js';
@@ -116,6 +117,28 @@ const hardwareFeedback=attachArduinoFeedback({getContext:()=>({
 })});
 const put=(id,text)=>{if($(id).textContent!==text)$(id).textContent=text;};
 const displayReason=result=>result?.messages?.join(' ')||result?.reason;
+const lesson3D=createLesson3DPreview({container:$('teacher-3d-view'),getContext:()=>({
+  step:step(),source:recording(),data:state.data,currentTime:video.currentTime,
+  loading:state.loading,seeking:video.seeking,readyState:video.readyState,sourceId:state.sourceId,
+  expectedSourceSha256:state.manifest?.source.sha256,mirror:true,
+}),onState(status){
+  put('teacher-3d-step',`Step ${state.index+1} / ${total()} · ${step()?.title||'Teacher'}`);
+  put('teacher-3d-status',status.error?`3D unavailable: ${status.error}`
+    :status.loading?'Loading the matching skeleton…'
+    :status.reason?'Waiting for a recorded teacher pose…'
+    :status.drawnPoints?'Synchronized with the tutorial. Drag to rotate.'
+    :'No confident 3D points in this teacher frame.');
+}});
+async function toggleTeacher3D(show=!lesson3D.getState().visible){
+  if(show&&!state.ready)return;
+  $('teacher-3d-panel').hidden=!show;
+  document.querySelector('.practice-grid').classList.toggle('has-teacher-3d',show);
+  $('toggle-teacher-3d').setAttribute('aria-expanded',String(show));
+  $('toggle-teacher-3d').textContent=show?'Hide 3D':'3D skeleton';
+  fitVisibilityTeacher();fitPortraitCamera();
+  if(show)await lesson3D.show();
+  else{lesson3D.hide();$('toggle-teacher-3d').focus();}
+}
 function clearEvidence(){cancelSummaryFlow();cancelFeedbackFlow();feedbackWordingSource='local';hardwareFeedback.neutral();state.placement=createStartPositionSession(guidance(),controlOptions());state.positioning=null;state.fixedFrame=null;state.movement=null;state.feedback=null;state.endTargets=null;state.targetStatus=null;state.screenLayout=null;state.teacherFreezePending=false;state.teacherBoundaryAtMs=null;state.teacherIntro=false;state.attemptStartedAtMs=null;state.attemptInterrupted=null;state.attemptCameraGeneration=null;state.reviewAction=null;for(const i of INDICES)state.trails.set(i,[]);seedScreenTargets();}
 function cameraFeedAvailable(){const v=$('camera-video');return !!v.srcObject&&v.videoWidth>0&&v.videoHeight>0;}
 function screenGuides(frame){return projectFourPointGuides(guidance(),null,frame.aspect,frame);}
@@ -139,6 +162,7 @@ function seedScreenTargets(aspect=$('camera-video').videoWidth/$('camera-video')
 }
 function phase(name,duration=0){if(name!=='feedback')cancelFeedbackFlow();state.phase=name;state.remainingMs=duration;state.deadline=duration&&!state.paused?performance.now()+duration:null;hardwareFeedback.update();render();}
 function controls(){
+  $('toggle-teacher-3d').disabled=!state.ready;
   for(const id of ['practice-full-body','practice-arms-only'])$(id).disabled=!state.ready||state.loading||state.awaitingCamera||state.phase==='preparing';
   $('start-practice').disabled=!state.ready||state.awaitingCamera||state.loading;
   $('start-practice').hidden=!!state.camera?.getState().running&&state.active;
@@ -653,7 +677,7 @@ function tick(){
     else if(state.phase==='feedback'&&currentFeedbackCycle(feedbackCycle)&&feedbackCycle.readingDeadlineMs!==null
       &&now>=feedbackCycle.readingDeadlineMs&&!feedbackSpeech.isBusy())completeFeedback();
   }
-  hardwareFeedback.update();drawTeacher();drawGuides();render();requestAnimationFrame(tick);
+  lesson3D.update();hardwareFeedback.update();drawTeacher();drawGuides();render();requestAnimationFrame(tick);
 }
 async function readJson(url){const response=await fetch(url);if(!response.ok)throw new Error(`Local reference unavailable: ${url}`);return response.json();}
 function validateData(data,source){
@@ -759,6 +783,9 @@ $('start-practice').addEventListener('click',async()=>{
   state.active=true;state.paused=false;state.preview=false;state.visualOnly=false;state.awaitingCamera=true;video.pause();++state.operation;clearEvidence();phase('camera');$('start-camera').click();
 });
 $('practice-toggle').addEventListener('click',pause);$('end-practice').addEventListener('click',stop);
+$('toggle-teacher-3d').addEventListener('click',()=>void toggleTeacher3D());
+$('close-teacher-3d').addEventListener('click',()=>void toggleTeacher3D(false));
+$('reset-teacher-3d').addEventListener('click',()=>lesson3D.resetView());
 $('practice-full-body').addEventListener('click',()=>selectPracticeMode('full-body'));
 $('practice-arms-only').addEventListener('click',()=>selectPracticeMode('arms-only'));
 $('replay').addEventListener('click',async()=>{if(state.camera.getState().running){state.active=true;state.paused=false;if(state.phase==='feedback')retryFeedback();else if(state.watched)void returnToStart();else void watchDemonstration('lesson');}else if(await choose(state.index)){state.active=true;void watchDemonstration('preview');}});
@@ -791,13 +818,16 @@ $('visibility-settings').addEventListener('click',()=>{
   $('visibility-settings').setAttribute('aria-expanded',String(open));$('visibility-settings').textContent=open?'Close settings':'Settings';
   if(open)$('practice-settings').open=true;
 });
-document.addEventListener('keydown',event=>{if(event.key==='Escape'&&document.documentElement.classList.contains('settings-open'))$('visibility-settings').click();});
+document.addEventListener('keydown',event=>{if(event.key!=='Escape')return;
+  if(document.documentElement.classList.contains('settings-open'))$('visibility-settings').click();
+  else if(lesson3D.getState().visible)void toggleTeacher3D(false);
+});
 if(visibilityTest){
   new ResizeObserver(fitVisibilityTeacher).observe($('teacher-pixels').parentElement);
   new ResizeObserver(fitPortraitCamera).observe($('camera-pixels').parentElement);
 }
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&state.ready)stop();});
-window.addEventListener('pagehide',()=>{stop();state.camera?.destroy();feedbackSpeech.destroy();hardwareFeedback.destroy();});
+window.addEventListener('pagehide',()=>{stop();state.camera?.destroy();feedbackSpeech.destroy();hardwareFeedback.destroy();lesson3D.destroy();});
 for(const event of ['waiting','stalled'])video.addEventListener(event,()=>{
   if(state.active&&!state.paused&&state.phase==='demonstrating'&&state.movement&&video.readyState<3)
     state.attemptInterrupted='The demonstration was interrupted. Try this clip again with uninterrupted playback.';
@@ -811,6 +841,7 @@ Object.defineProperty(window,'trackingDisplayDiagnostics',{get:()=>({
   cameraVersion:state.camera?.getState().displaySmoothing||null,
 })});
 Object.defineProperty(window,'spokenFeedbackDiagnostics',{get:()=>feedbackSpeech.getState()});
+Object.defineProperty(window,'lesson3DDiagnostics',{get:()=>lesson3D.getState()});
 Object.defineProperty(window,'automaticFeedbackDiagnostics',{get:feedbackFlowDiagnostics});
 Object.defineProperty(window,'sessionSummaryDiagnostics',{get:()=>({attempts:sessionHistory.getAttempts(),summary:lessonSummary?structuredClone(lessonSummary):null,
   pendingAi:!!summaryCycle?.pendingAi,speechStarted:!!summaryCycle?.speechStarted,speechDone:!!summaryCycle?.speechDone,...aiSummary.getState()})});

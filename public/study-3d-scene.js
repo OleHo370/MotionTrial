@@ -47,7 +47,7 @@ function pointConfidence(image, world) {
   return Math.max(0, Math.min(1, image.visibility, image.presence, world.visibility, world.presence));
 }
 
-export function transformSample(sample, source) {
+export function transformSample(sample, source, options = {}) {
   const state = {
     frameIndex: sample?.frameIndex ?? null, sourceTimeSeconds: sample?.sourceTimeSeconds ?? null,
     status: sample?.status ?? 'unavailable', reason: null, drawnPoints: 0, drawnBones: 0,
@@ -66,7 +66,8 @@ export function transformSample(sample, source) {
     y: (world[23].y + world[24].y) / 2,
     z: (world[23].z + world[24].z) / 2,
   };
-  const yaw = COORDINATE_TRANSFORMS[source].yawRadians;
+  const transforms = options.coordinateTransforms || COORDINATE_TRANSFORMS;
+  const yaw = (transforms[source] || COORDINATE_TRANSFORMS[source]).yawRadians;
   const cos = Math.cos(yaw), sin = Math.sin(yaw);
   for (let index = 0; index < 33; index += 1) {
     if (!(state.confidences[index] >= VISIBILITY_THRESHOLD)) continue;
@@ -75,7 +76,10 @@ export function transformSample(sample, source) {
     const x = point.x - hip.x;
     const y = -point.y + hip.y + HIP_DISPLAY_HEIGHT;
     const z = -point.z + hip.z;
-    state.points[index] = [cos * x + sin * z, y, -sin * x + cos * z];
+    const displayX = cos * x + sin * z;
+    // Optional display reflection matches a mirrored tutorial. Anatomical IDs
+    // and source observations stay unchanged; this is not inferred movement.
+    state.points[index] = [(source === 'front' && options.mirrorFront ? -1 : 1) * displayX, y, -sin * x + cos * z];
     state.validIndices.push(index);
   }
   state.drawnPoints = state.validIndices.length;
@@ -111,12 +115,14 @@ function fallback(container, error) {
   };
 }
 
-export function createStudyScene(container, onInspect = () => {}) {
+export function createStudyScene(container, onInspect = () => {}, options = {}) {
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
   } catch (error) { return fallback(container, error); }
 
+  const coordinateTransforms = { ...COORDINATE_TRANSFORMS, ...options.coordinateTransforms };
+  const displayOptions = { coordinateTransforms, mirrorFront: Boolean(options.mirrorFront) };
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.setClearColor(0xeef2f3, 1);
@@ -201,7 +207,7 @@ export function createStudyScene(container, onInspect = () => {}) {
       group.add(line);
       return { index, line, queue: [] };
     });
-    return { source, group, joints, bones, trails, state: transformSample(null, source), previousFrame: null, previousTime: null };
+    return { source, group, joints, bones, trails, state: transformSample(null, source, displayOptions), previousFrame: null, previousTime: null };
   };
   views.front = makeView('front');
   views.back = makeView('back');
@@ -251,7 +257,7 @@ export function createStudyScene(container, onInspect = () => {}) {
   }
 
   function drawView(view, sample) {
-    view.state = transformSample(sample, view.source);
+    view.state = transformSample(sample, view.source, displayOptions);
     const state = view.state;
     view.joints.forEach((mesh, index) => {
       const point = state.points[index];
@@ -368,8 +374,10 @@ export function createStudyScene(container, onInspect = () => {}) {
     getDiagnostics() {
       return {
         ready: !renderingError, error: renderingError, mode, visibilityThreshold: VISIBILITY_THRESHOLD,
-        coordinatePolicy: 'x,-y,-z; fixed initial-stance yaw; hips centered; no inferred travel, fusion, rescaling, or interpolation',
-        coordinateTransforms: COORDINATE_TRANSFORMS, hipDisplayHeight: HIP_DISPLAY_HEIGHT,
+        coordinatePolicy: 'x,-y,-z; fixed initial-stance yaw; hips centered; no inferred travel, fusion, rescaling, or interpolation'
+          + (displayOptions.mirrorFront ? '; front x reflected for mirrored tutorial display; anatomical IDs unchanged' : ''),
+        coordinateTransforms, mirrorFront: displayOptions.mirrorFront,
+        displayMirrors: { front: displayOptions.mirrorFront, back: false }, hipDisplayHeight: HIP_DISPLAY_HEIGHT,
         cameraPosition: camera.position.toArray(), target: controls.target.toArray(),
         autoRotate: controls.autoRotate, showTrails: trailsEnabled, showGhosts: false,
         views: Object.fromEntries(Object.entries(views).map(([source, view]) => [source, {

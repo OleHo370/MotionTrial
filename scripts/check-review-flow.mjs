@@ -112,6 +112,7 @@ function controllerHarness({functions=null,overrides={},stateOverrides={},speech
     aiFeedback:createPracticeAiFeedback({fetchImpl:null}),feedbackSequence:0,feedbackWordingSource:'local',
     aiSummary:createPracticeSummaryClient({fetchImpl:null}),localPracticeSessionSummary,
     sessionHistory:createPracticeSessionHistory({sessionId:'constructed-controller-session'}),
+    lesson3D:{update(){},destroy(){},getState:()=>({visible:false}),show:async()=>{},hide(){},resetView(){}},
     hardwareFeedback:{neutral(){events.push({kind:'hardware-neutral',at:clock.now});},
       update(){events.push({kind:'hardware-update',at:clock.now});},destroy(){}},
     ATTEMPT_REVIEW_RULES:{completionGraceMs:1000,feedbackMs:3000,maximumAgeMs:450},
