@@ -150,7 +150,7 @@ function teacherTiming(path,guide,playbackRate){
  * used throughout; display mirroring has no role in the comparison.
  */
 export function createAttemptReview(reference,pathReference,
-  {bodyFrame,aspect,startAtMs=0,durationMs,playbackRate=1,controlIndices}={}){
+  {bodyFrame,aspect,startAtMs=0,durationMs,playbackRate=1,controlIndices,completionMode='clip'}={}){
   const frame=copyFrame(bodyFrame),speed=Number.isFinite(playbackRate)&&playbackRate>0?playbackRate:1;
   const sourceDuration=Number.isFinite(durationMs)&&durationMs>0?durationMs:null;
   // Only the explicitly requested two-palm exercise may omit lower-body
@@ -186,6 +186,7 @@ export function createAttemptReview(reference,pathReference,
       ||'The recorded teacher does not provide reliable reference observations for this clip.':null,
     bodyFrame:frame,aspect,frameUsable,startAtMs:Number.isFinite(startAtMs)?startAtMs:0,
     sourceDurationMs:sourceDuration,playbackRate:speed,expectedDurationMs:sourceDuration===null?null:sourceDuration/speed,
+    completionMode:completionMode==='self-paced'?'self-paced':'clip',
     referenceEvidenceKind:reference?.assessmentEvidenceKind??'recorded-teacher-observations',
     controls,lastSampleTMs:null,lastObservedAtMs:null,lastElapsedMs:null,lastNowMs:null,
     acceptedSamples:0,rejectedSamples:0,finalized:false,result:null};
@@ -194,6 +195,7 @@ export function createAttemptReview(reference,pathReference,
 function collecting(session){
   return {status:'collecting',passed:false,percent:null,referenceUsable:session.referenceUsable,
     rulesVersion:REVIEW_RULES.version,acceptedSamples:session.acceptedSamples,
+    ...(session.completionMode==='self-paced'?{completionMode:session.completionMode}:{}),
     limbs:session.controls.map(c=>({index:c.index,label:c.label,moving:c.moving,
       sampleCount:c.sampleCount,targetReached:false}))};
 }
@@ -382,16 +384,22 @@ function conciseMessages(issues){
   return messages;
 }
 
-/** Call only once the whole clip and finishing allowance have played. */
-export function finalizeAttemptReview(session,{nowMs,elapsedMs}={}){
+/** Clip mode requires the full teacher timeline. Self-paced mode requires the
+ * controller's supported, fresh all-triangles gate instead; reaching a target
+ * still does not imply correct movement or reliable tracking in this review.
+ */
+export function finalizeAttemptReview(session,{nowMs,elapsedMs,endpointsComplete=false}={}){
   if(session.finalized)return session.result;
   const elapsed=Number.isFinite(elapsedMs)?elapsedMs:nowMs-session.startAtMs;
   let issues=[],limbs=[];
-  const complete=Number.isFinite(elapsed)&&session.expectedDurationMs!==null&&elapsed>=session.expectedDurationMs-20;
+  const selfPaced=session.completionMode==='self-paced';
+  const complete=Number.isFinite(elapsed)&&(selfPaced?elapsed>0&&endpointsComplete===true
+    :session.expectedDurationMs!==null&&elapsed>=session.expectedDurationMs-20);
   if(!session.referenceUsable)issues.push(issue('reference_unknown',null,session.unknownReason));
   else if(!session.frameUsable||!Number.isFinite(nowMs))issues.push(issue('tracking_unknown',null,
     'The camera framing changed. Set up in the starting squares again.'));
-  else if(!complete)issues.push(issue('attempt_incomplete',null,'Play the full clip before reviewing this attempt.'));
+  else if(!complete)issues.push(issue('attempt_incomplete',null,selfPaced
+    ?'Reach all ending triangles before reviewing this attempt.':'Play the full clip before reviewing this attempt.'));
   else{
     limbs=session.controls.map(control=>reviewControl(control,elapsed,elapsed,nowMs));
     issues=limbs.flatMap(limb=>limb.issues);
@@ -407,6 +415,7 @@ export function finalizeAttemptReview(session,{nowMs,elapsedMs}={}){
   session.result={status,passed:status==='match',referenceUsable:session.referenceUsable,percent:null,
     rulesVersion:REVIEW_RULES.version,messages,reason:messages[0],message:messages[0],issues,limbs,
     elapsedMs:Number.isFinite(elapsed)?elapsed:null,expectedDurationMs:session.expectedDurationMs,
+    ...(selfPaced?{completionMode:session.completionMode,endpointsComplete:endpointsComplete===true}:{}),
     acceptedSamples:session.acceptedSamples,rejectedSamples:session.rejectedSamples,
     referenceEvidenceKind:session.referenceEvidenceKind,
     provenance:'Local versioned rules applied to actual per-side learner MediaPipe observations. Teacher observations and explicitly authored teaching rubrics retain separate provenance. Tempo event times use supported adjacent observations only; missing intervals, endpoint evidence, and tracking coverage are never filled.'};

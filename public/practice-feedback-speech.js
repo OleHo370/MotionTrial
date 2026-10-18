@@ -5,6 +5,7 @@ const clean=text=>typeof text==='string'?text.replace(/\s+/g,' ').trim():'';
 const sentence=text=>/[.!?]$/.test(text)?text:`${text}.`;
 
 function reviewText(result){
+  if(result?.feedbackStyle==='compact')return (result.messages??[]).map(clean).filter(Boolean).join(' ');
   const status=result?.status;
   const outcome=status==='match'?'Close enough':status==='mismatch'?'Try again':'Tracking unclear';
   const next=status==='match'?'The next clip will begin.':'Return to the starting squares and try again.';

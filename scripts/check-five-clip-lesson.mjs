@@ -76,7 +76,7 @@ function harness(index=0){
   for(const name of ['step','reference','guidance','pathReference','total','practiceStart'])
     vm.runInContext(`globalThis.${name}=${initializers.get(name)}`,context);
   for(const name of ['practiceMode','activeControlIndices','controlOptions','controlCount','choose',
-    'recordAndAdvance','completeFeedback','stop','finish','renderProgress','seedScreenTargets','holdTeacherAtBoundary'])
+    'recordAndAdvance','completeFeedback','retryFeedback','stop','finish','renderProgress','seedScreenTargets','holdTeacherAtBoundary'])
     vm.runInContext(functions.get(name),context);
   assert.ok(nextHandler,'Actual Next handler exists');
   vm.runInContext(`globalThis.manualNext=${slice(nextHandler)}`,context);
@@ -120,15 +120,18 @@ async function controllerChecks(){
   await check('Clip-5 mismatch or tracking uncertainty still retries without completing the five-clip lesson',async()=>{
     for(const status of ['mismatch','unknown']){
       const h=harness(4);h.state.feedback={status};h.state.reviewAction='retry';await h.call('completeFeedback');
+      assert.equal(h.state.phase,'feedback','Next cannot accept a mismatched or unknown attempt');
+      await h.call('retryFeedback');
       assert.equal(h.state.phase,'positioning');assert.equal(h.state.index,4);assert.equal(h.state.results.size,0);
       assert.equal(h.calls.cameraStops,0);assert.equal(h.calls.choose.length,0);
     }
   });
-  await check('The final retained attempt freezes exactly at 15.5 seconds and keeps the original one-second finishing allowance',async()=>{
+  await check('The final retained attempt freezes exactly at 15.5 seconds and permits unlimited finishing time',async()=>{
     const h=harness(4);h.state.phase='demonstrating';h.video.currentTime=15.54;h.video.paused=false;
     await h.call('holdTeacherAtBoundary');
     assert.equal(h.video.currentTime,15.5);assert.equal(h.video.paused,true);
-    assert.equal(h.state.phase,'grace');assert.equal(h.state.remainingMs,1000);
+    assert.equal(h.state.phase,'grace');assert.equal(h.state.remainingMs,0);
+    assert.equal(h.state.deadline,null,'An unfinished movement has no countdown to feedback');
     assert.equal(h.state.index,4);assert.equal(h.state.results.size,0);assert.equal(h.calls.choose.length,0);
   });
   await check('The first five target layouts retain their former full-lesson geometry at five camera aspects',async()=>{
@@ -139,8 +142,9 @@ async function controllerChecks(){
       assert.deepEqual(json(h.state.screenLayout),json(expected),`clip ${index+1}, aspect ${aspect}`);
     }
   });
-  await check('The production timeline still measures each retained clip playback with unchanged review/grace timings',async()=>{
-    assert.deepEqual(json(vm.runInNewContext(`(${initializers.get('RULES')})`)),{feedbackMs:3000,graceMs:1000,maximumAgeMs:450});
+  await check('The production timeline still measures each retained clip playback without imposing review/grace deadlines',async()=>{
+    const rules=json(vm.runInNewContext(`(${initializers.get('RULES')})`));
+    assert.equal(rules.feedbackMs,0);assert.equal(rules.graceMs,0);assert.equal(rules.maximumAgeMs,450);
     for(let index=0;index<5;index++){
       const h=harness(index),step=originalFirstFive.steps[index];h.state.phase='demonstrating';
       h.video.currentTime=(step.practiceStartSeconds+step.teacherFreezeSeconds)/2;

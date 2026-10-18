@@ -2,6 +2,14 @@
 
 Updated: 2026-10-17.
 
+## Latest: self-paced targets and compact feedback — 2026-10-17
+
+All five lesson steps now allow unlimited time to reach their ending triangles. The teacher holds its finish pose after playback, and elapsed time alone cannot open a review. Completion requires all four current targets together, with three distinct fresh observations and at least the existing 60 ms endpoint support; stale, missing or previously reached targets cannot complete an attempt. The reviewer retains its movement/quality/tempo rules with explicit self-paced completion. Each limb's actual motion timing is assessed separately, so an earlier hand finish is not stretched while another limb is still moving.
+
+Feedback uses a small nonmodal card with concise per-side issues, such as `Left hand: too fast.` Speech reads those same brief issues. Feedback stays until an explicit choice: **Try again** resets this step, and a matching review offers **Next step** (or **Finish lesson** on step 5). Retry/Next can cancel active speech immediately. There is no feedback countdown or automatic advance. Original clip assets, source observations, guide placement, camera pipeline, hardware rules and fixed assessment routes remain unchanged.
+
+Verification: 124 unit tests and TypeScript checking pass; 8 self-paced reviewer, 15 endpoint/controller/browser, 32 practice-flow, 12 five-clip, 10 speech and 14 triangle-only hardware groups pass. Checks include unfinished waits of 100 seconds, early/late target completion, per-hand fast/slow feedback, current simultaneous target support, delayed teacher-boundary seeks, compact UI and explicit retry/next. Browser learner inputs are labeled software fixtures with physical camera/USB access blocked. Evidence: `artifacts/self-paced-flow-review/`. Factory SDK integration is documented in `docs/factory-feedback-integration.md`; no SDK dependency, API key or AI service connection was added. Current feedback is generated locally from the measured issue codes.
+
 ## Latest: keep only the first five lesson clips — 2026-10-17
 
 The first-three practice lesson now offers five clips and completes after clip 5, with no sixth step or step-6 arms-only option in navigation. Former `?step=6` links open the last retained clip. The original first five clip bytes, teaching boundaries, source observations, target positions, review/progress rules and hardware warnings are unchanged. The complete original archive remains available for provenance; selected coverage is frames 15–464 (0.5–15.5 seconds), with the original frame-465 finish target retained. The page's preview and download now link to a 15-second first-five demonstration and a ZIP containing exactly the five original clip files.
