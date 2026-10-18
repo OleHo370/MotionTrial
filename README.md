@@ -134,11 +134,13 @@ public/mediapipe/          Local pose WASM runtime
 public/models/             Pinned MediaPipe model
 scripts/                   Factory service, local server, asset preparation and checks
 hardware/                  Optional Arduino feedback firmware and setup
-docs/                      Architecture diagram, integration guides and route map
+docs/                      Current guides, diagram, development history and archive
 tests/                     Unit, integration and browser checks
 ```
 
-Source videos, model assets, attribution records and licenses are versioned with the app. Generated diagnostics, local recordings, credentials, dependencies, build output and imported source-package backups are excluded from Git. The [documentation index](docs/README.md) organizes current guides and retained development history.
+The repository root keeps the project README, coding-agent guidance and application configuration. Supporting documents are organized under `docs/`: current guides at the top level, implementation history in `docs/development/`, and earlier planning, practice notes and prompts in `docs/archive/`.
+
+Source videos, model assets, attribution records and licenses are versioned with the app. Generated diagnostics, local recordings, credentials, dependencies, build output and imported source-package backups are excluded from Git. The [documentation index](docs/README.md) is the entry point for supporting material.
 
 ## Verification
 

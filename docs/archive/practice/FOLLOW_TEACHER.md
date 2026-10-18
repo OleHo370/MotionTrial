@@ -1,3 +1,6 @@
+> Archived development notes. For the current app, see the [project README](../../../README.md) and [documentation index](../../README.md).
+> Source paths and commands below are relative to the repository root.
+
 # Four Point Flow and automatic follow-along
 
 ## Current game: 24 levels and three target stars

@@ -1,3 +1,6 @@
+> Archived development notes. For the current app, see the [project README](../../../README.md) and [documentation index](../../README.md).
+> Source paths and commands below are relative to the repository root.
+
 # Engineering plan
 
 ## Default architecture
@@ -61,4 +64,4 @@ M3: Add quality timeline seeking, evidence explanations, overlay toggle, persist
 
 M4: Handle permission/model/recorder/storage failures; refine responsive design/accessibility; run end-to-end and real-camera checks; verify local production build/start; prepare README, demo runbook, limitations and validation evidence.
 
-After each milestone, update STATUS.md with checks actually run, observed outcomes, remaining issues and the next action. Fix discovered failures before expanding scope. Deployment, authentication and hardware are P1; do not let them displace the verified P0 path.
+After each milestone, update docs/development/STATUS.md with checks actually run, observed outcomes, remaining issues and the next action. Fix discovered failures before expanding scope. Deployment, authentication and hardware are P1; do not let them displace the verified P0 path.

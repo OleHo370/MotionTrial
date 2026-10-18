@@ -1,3 +1,6 @@
+> Archived development notes. For the current app, see the [project README](../../../README.md) and [documentation index](../../README.md).
+> Source paths and commands below are relative to the repository root.
+
 # 24 式同框跟练实现 Prompt
 
 在现有 MotionTrial 项目中直接实现以下需求，并完成真实视频、真实 MediaPipe 与浏览器验证：

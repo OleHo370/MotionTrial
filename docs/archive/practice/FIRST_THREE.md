@@ -1,3 +1,6 @@
+> Archived development notes. For the current app, see the [project README](../../../README.md) and [documentation index](../../README.md).
+> Source paths and commands below are relative to the repository root.
+
 # First three movements from 24.mp4
 
 The current player now continues through six small movements. See [Opening continuation](OPENING_CONTINUATION.md) for the current sequence and verification. The original three-step source data and evidence described below are preserved.

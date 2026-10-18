@@ -1,3 +1,6 @@
+> Archived development notes. For the current app, see the [project README](../../../README.md) and [documentation index](../../README.md).
+> Source paths and commands below are relative to the repository root.
+
 # Current 24b video library and camera check — 2026-10-16
 
 1. Open `http://127.0.0.1:3000/practice?mode=forms&routine=24b`. Confirm **Training video** shows the new indoor recording and there are 24 movements. Wait for **Reference analyzed locally**, then use **Preview reference** to inspect its real skeleton.
@@ -51,7 +54,7 @@ Preflight: wait for reference analysis, allow the physical camera, arrange enoug
 
 ### Practice physical-camera checklist — all pending
 
-These are not covered by the automated prerecorded/synthetic camera checks. Record actual browser, camera, lighting, result and any threshold adjustment in STATUS.md. Keep the movement comfortable and stop if needed.
+These are not covered by the automated prerecorded/synthetic camera checks. Record actual browser, camera, lighting, result and any threshold adjustment in docs/development/STATUS.md. Keep the movement comfortable and stop if needed.
 
 - Full body visible: confirm the actual person can complete all four stages and the overlay stays aligned. Confirm left foot/side labels, starting poses, natural transitions and adequate countdowns.
 - Still first pose, the wrong foot, only one arm moving, reversed sequence and a clearly different movement: confirm a full-movement match is not reported for any stage.
@@ -69,7 +72,7 @@ The remainder is the original recording/review runbook and is still applicable t
 
 ## Before the clock starts
 
-Use the presentation laptop's desktop Chrome and its own authorized camera. Complete the manual checks below first; record results in STATUS.md. Do not claim physical-camera validation from a synthetic/virtual input test.
+Use the presentation laptop's desktop Chrome and its own authorized camera. Complete the manual checks below first; record results in docs/development/STATUS.md. Do not claim physical-camera validation from a synthetic/virtual input test.
 
 1. In PowerShell open `D:\MotionTrial\MotionTrial_Codex_Handoff\MotionTrial_Codex_Handoff`, run `npm ci`, then `npm run setup:assets`. Build with `npm run build`, then leave `npm start` running.
 2. Open [MotionTrial](http://127.0.0.1:3000). Confirm the queue is using the intended private data directory and has no unauthorized recordings. Check the exact source provenance of every example you plan to show.
@@ -97,7 +100,7 @@ If recording or upload fails, show the truthful failure and recovery action. The
 
 ## Physical-camera acceptance checklist
 
-All rows are **pending human execution** until an actual result is recorded in STATUS.md. Use pseudonymous codes and only authorized demonstration footage. Record browser version, OS, video/session ID, outcome and any discrepancy. The participant can pause or stop at any time.
+All rows are **pending human execution** until an actual result is recorded in docs/development/STATUS.md. Use pseudonymous codes and only authorized demonstration footage. Record browser version, OS, video/session ID, outcome and any discrepancy. The participant can pause or stop at any time.
 
 | Case | Action on presentation laptop | Required observation |
 | --- | --- | --- |
@@ -118,7 +121,7 @@ All rows are **pending human execution** until an actual result is recorded in S
 
 ## Verification evidence and reset
 
-`npm test` has 42 passing unit/integration checks (22 assessment, 20 imitation) and the production build/typecheck pass. Browser tests require a running local app, installed Chrome and seeded assessment examples: `npm run demo:seed`, then `npm run test:e2e`. Consult STATUS.md for the actual latest browser results; tests use synthetic/prerecorded virtual camera input, not a person. Selected camera/model/recorder/network failures are injected. A simulated visibility signal does not replace the real hidden-tab check above.
+`npm test` has 42 passing unit/integration checks (22 assessment, 20 imitation) and the production build/typecheck pass. Browser tests require a running local app, installed Chrome and seeded assessment examples: `npm run demo:seed`, then `npm run test:e2e`. Consult docs/development/STATUS.md for the actual latest browser results; tests use synthetic/prerecorded virtual camera input, not a person. Selected camera/model/recorder/network failures are injected. A simulated visibility signal does not replace the real hidden-tab check above.
 
 Saved demo data persists. Delete a session using **Delete session & video → Delete permanently**. For all database-referenced sessions, with the server running use `npm run data:reset -- --confirm`. For a complete reset including any abrupt-crash orphan files, stop the server, optionally back up, then remove exactly the private data directory in File Explorer. Default: `D:\MotionTrial\MotionTrial_Codex_Handoff\MotionTrial_Codex_Handoff\data`; if `MOTIONTRIAL_DATA_DIR` was set, use that exact directory instead. Do not delete the project directory. Keep one server process per data directory.
 

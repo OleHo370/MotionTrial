@@ -1,6 +1,9 @@
+> Archived development notes. For the current app, see the [project README](../../../README.md) and [documentation index](../../README.md).
+> Source paths and commands below are relative to the repository root.
+
 # Opening practice: position first, then follow
 
-The current lesson additionally requires **ordered intermediate route squares**, made from actual teacher observations, before the finishing hold can pass. See `MOVEMENT_PATHS.md` for this extension. The starting-position workflow below remains in use; historical endpoint-only checks and reports do not cover the newer path requirement.
+The current lesson additionally requires **ordered intermediate route squares**, made from actual teacher observations, before the finishing hold can pass. See `docs/archive/practice/MOVEMENT_PATHS.md` for this extension. The starting-position workflow below remains in use; historical endpoint-only checks and reports do not cover the newer path requirement.
 
 **Temporary visibility test:** the page currently shows enlarged equal left/right video panels with the guidance text hidden. The square/triangle/circle interaction below still runs unchanged. Open Settings for the existing controls; Escape closes that panel. Append `&view=standard` to a step URL (or `?view=standard` without other parameters) to restore the complete teaching interface. Viewport resizing, including a portrait browser window, preserves image proportions and overlay alignment.
 

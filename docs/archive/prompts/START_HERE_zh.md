@@ -1,3 +1,6 @@
+> Archived development notes. For the current app, see the [project README](../../../README.md) and [documentation index](../../README.md).
+> Source paths and commands below are relative to the repository root.
+
 # MotionTrial：下一步与 Codex 交接说明
 
 这是一份开发交接包，不是已实现的应用。默认沿用刚才讨论的 MotionTrial。首版交付一个完整本地 MVP：录制动作 → 保存真实视频及追踪结果 → 标记疑似采集问题 → 人工回看 → 保存复核决定。
@@ -8,7 +11,7 @@
 2. **确认赛道问题。** 开幕后把流程给 Regeneron 导师看，核对 starter kit 的具体题目。当前没有读到 kit 全文，赛道契合度仍需现场确认。
 3. **准备演示电脑。** 使用有摄像头的电脑和桌面 Chrome；确认摄像头可用，带充电器。正式产品代码按比赛规定的开工时间开始。
 4. **打开正确的项目目录。** 新项目：解压后，直接用 Codex 打开 `MotionTrial_Codex_Handoff` 文件夹，把这个包含八份文档的文件夹作为项目根目录。已有仓库：把交接文档放入 `docs/motiontrial-handoff/` 并告诉 Codex 路径；保留原结构、原技术栈与原 AGENTS.md，由 Codex 合并必要指导，不覆盖用户文件。不要假设另一个 Codex 会话自动看见这段聊天。
-5. **发送 PROMPTS.md 中的 MASTER PROMPT。** 它会让 Codex 依次做小闭环、真实视觉推理、研究端复核、视觉打磨和验证。不要同时把全部分阶段 prompts 再发一遍；分阶段 prompts 只在你想逐段推动或纠偏时使用。
+5. **发送 docs/archive/prompts/PROMPTS.md 中的 MASTER PROMPT。** 它会让 Codex 依次做小闭环、真实视觉推理、研究端复核、视觉打磨和验证。不要同时把全部分阶段 prompts 再发一遍；分阶段 prompts 只在你想逐段推动或纠偏时使用。
 6. **亲自完成三种摄像头验收。** 正常动作、遮挡/出框、小幅度但取景完整。再刷新页面、回看视频、保存复核决定。自动化模拟视频不能替代真摄像头检查。
 
 ## 你只需要盯四个检查点
@@ -36,6 +39,6 @@
 
 ## 文件顺序
 
-先读 PRODUCT_SPEC.md；实现细节看 IMPLEMENTATION_PLAN.md；完成标准看 ACCEPTANCE.md；直接复制用 PROMPTS.md；开发进度由 Codex 更新 STATUS.md；研究与赛道依据见 RESEARCH_NOTES.md。
+先读 docs/archive/planning/PRODUCT_SPEC.md；实现细节看 docs/archive/planning/IMPLEMENTATION_PLAN.md；完成标准看 docs/archive/planning/ACCEPTANCE.md；直接复制用 docs/archive/prompts/PROMPTS.md；开发进度由 Codex 更新 docs/development/STATUS.md；研究与赛道依据见 docs/archive/planning/RESEARCH_NOTES.md。
 
 这些文件记录了产品假设和工程默认值，并不表示导师已经确认选题、软件已经测试通过或产品具有临床效力。

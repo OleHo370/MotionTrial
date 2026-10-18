@@ -1,3 +1,6 @@
+> Archived development notes. For the current app, see the [project README](../../../README.md) and [documentation index](../../README.md).
+> Source paths and commands below are relative to the repository root.
+
 # MotionTrial product specification
 
 Version: planning v0.1, 2026-10-16. Status: not implemented. Starter-kit fit and the real coordinator pain point remain unvalidated assumptions.

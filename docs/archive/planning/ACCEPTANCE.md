@@ -1,6 +1,9 @@
+> Archived development notes. For the current app, see the [project README](../../../README.md) and [documentation index](../../README.md).
+> Source paths and commands below are relative to the repository root.
+
 # Acceptance and validation
 
-This document is an implementation target. None of these checks has passed merely because this handoff exists. Record actual results in STATUS.md.
+This document is an implementation target. None of these checks has passed merely because this handoff exists. Record actual results in docs/development/STATUS.md.
 
 ## Core behavior
 

@@ -1,3 +1,6 @@
+> Archived development notes. For the current app, see the [project README](../../../README.md) and [documentation index](../../README.md).
+> Source paths and commands below are relative to the repository root.
+
 # 逐步跟练实现 Prompt
 
 用户反馈整式太难跟上，尤其第二式包含多轮手脚组合。将现有24式原片整理成教学式微步骤，不按等长时间随意切。

@@ -1,3 +1,6 @@
+> Archived development notes. For the current app, see the [project README](../../../README.md) and [documentation index](../../README.md).
+> Source paths and commands below are relative to the repository root.
+
 # Sources and claim boundaries
 
 Checked during the planning conversation on 2026-10-16. The sponsor starter-kit contents were not successfully retrieved. Do not claim this packet implements an official kit problem or has sponsor approval.

@@ -1,8 +1,11 @@
+> Archived development notes. For the current app, see the [project README](../../../README.md) and [documentation index](../../README.md).
+> Source paths and commands below are relative to the repository root.
+
 # Opening practice: six small movements
 
-The current page also adds actual recorded **ordered movement paths**, with numbered intermediate squares that must be visited before the final triangles. Current interaction and verification: `MOVEMENT_PATHS.md`.
+The current page also adds actual recorded **ordered movement paths**, with numbered intermediate squares that must be visited before the final triangles. Current interaction and verification: `docs/archive/practice/MOVEMENT_PATHS.md`.
 
-The current teaching interaction now pauses at each movement's start and waits for all four learner circles to occupy their starting squares for 1.5 seconds before playback. Finish markers are triangles. See `START_POSITION_GUIDANCE.md`; the automatic-countdown interaction and verification below describe the earlier six-step implementation.
+The current teaching interaction now pauses at each movement's start and waits for all four learner circles to occupy their starting squares for 1.5 seconds before playback. Finish markers are triangles. See `docs/archive/practice/START_POSITION_GUIDANCE.md`; the automatic-countdown interaction and verification below describe the earlier six-step implementation.
 
 Continue at [step4](http://127.0.0.1:8766/first-three.html?step=4), or start [all six](http://127.0.0.1:8766/first-three.html). The same player now continues beyond the original three movements, without additional main controls. Starting at4 does not mark the earlier movements completed.
 
