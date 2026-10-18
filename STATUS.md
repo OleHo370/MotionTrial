@@ -2,6 +2,10 @@
 
 Updated: 2026-10-17.
 
+## Latest: smaller arms-only start and finish markers — 2026-10-17
+
+The step-6 arms-only squares and triangles now match the original full-body markers in displayed size, including the different camera crop. Target centers retain their proportional head-to-waist placement. Only marker drawing dimensions changed; movement arrows, raw tracking, readiness/comparison thresholds and the clip progress/review flow remain unchanged. Full-body rendering retains its original size calculation. Syntax and the nine existing controller/browser checks pass with explicitly constructed palm inputs and physical camera/Arduino access blocked.
+
 ## Latest: optional arms-only practice for step 6 — 2026-10-17
 
 `http://127.0.0.1:8766/first-three.html?step=6` now offers **Full body** (default) and **Arms only**. The latter assesses and displays the two observed palm centers without requiring offscreen feet or torso landmarks. Its square camera viewport assumes crown height at the visible top and waist height at the bottom. The recorded starting waist and reviewed crown calibration establish one proportional scale for start squares, movement guides, finish triangles and comparison. It creates no learner head/waist observations and does not alter original camera samples or teacher source assets. Guide corridor edges at the waist may naturally cross the visible bottom; target centers remain reachable and are never shifted or clamped to manufacture a match.

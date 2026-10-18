@@ -107,6 +107,7 @@ function seedScreenTargets(aspect=$('camera-video').videoWidth/$('camera-video')
   if(!state.active||state.loading||!guidance()||!state.placement||state.fixedFrame||!cameraFeedAvailable()||!Number.isFinite(aspect)||aspect<=0)return;
   if(state.placement.bodyFrame&&state.placement.aspect===aspect)return;
   const layout=(practiceMode()==='arms-only'?createUpperBodyLayout:createFullHeightLayout)(guidance(),state.guidanceRefs,aspect,state.pathRefs);if(!layout)return;
+  if(practiceMode()==='arms-only')layout.fullBodyMarkerScale=createFullHeightLayout(guidance(),state.guidanceRefs,aspect,state.pathRefs)?.frame.scale;
   state.placement=createStartPositionSession(guidance(),controlOptions());state.positioning=null;
   state.placement.bodyFrame=layout.frame;state.placement.aspect=aspect;state.screenLayout=layout;
 }
@@ -245,6 +246,20 @@ function drawTeacher(force=false){
     ctx.restore();state.drawnJoints.push(p.index);
   }
 }
+function markerSizeFrame(frame,canvas){
+  if(practiceMode()!=='arms-only')return frame;
+  const fullScale=state.screenLayout?.fullBodyMarkerScale;
+  const stage=$('camera-pixels'),card=stage.parentElement;
+  if(!Number.isFinite(fullScale)||!stage.clientWidth||!stage.clientHeight)return frame;
+  // Match the original markers in displayed pixels, including each mode's
+  // cover crop. Only drawing size changes; matching retains the arms frame.
+  const fullWidth=visibilityTest?Math.min(card.clientWidth,card.clientHeight*TARGET_LAYOUT.aspect)
+    :Math.min(card.clientWidth,window.innerHeight*.455);
+  const fullHeight=fullWidth/TARGET_LAYOUT.aspect;
+  const fullGain=Math.max(fullWidth/canvas.width,fullHeight/canvas.height);
+  const armsGain=Math.max(stage.clientWidth/canvas.width,stage.clientHeight/canvas.height);
+  return {...frame,scale:fullScale*fullGain/armsGain};
+}
 function drawGuides(){
   const canvas=$('camera-guide-overlay'),cameraVideo=$('camera-video'),ctx=canvas.getContext('2d');
   canvas.width=cameraVideo.videoWidth||640;canvas.height=cameraVideo.videoHeight||360;
@@ -257,7 +272,8 @@ function drawGuides(){
   const moving=!state.paused&&['demonstrating','grace'].includes(state.phase),positioning=!moving;
   const selected=activeControlIndices(),starts=geometry.starts.filter(target=>selected.includes(target.index));
   const inFrame=p=>p&&p.x>=0&&p.x<=1&&p.y>=0&&p.y<=1;
-  const labels={33:'LH',34:'RH',35:'LF',36:'RF',13:'LE',14:'RE',25:'LK',26:'RK'},half=START_POSITION_RULES.radius*fixed.scale*canvas.height;
+  const markers=markerSizeFrame(fixed,canvas);
+  const labels={33:'LH',34:'RH',35:'LF',36:'RF',13:'LE',14:'RE',25:'LK',26:'RK'},half=START_POSITION_RULES.radius*markers.scale*canvas.height;
   function label(p,text,color,offset){const footOffset=text==='LF'?12:text==='RF'?-12:0;ctx.save();ctx.translate(Math.max(16,Math.min(canvas.width-16,p.x*canvas.width+footOffset)),Math.max(9,Math.min(canvas.height-9,p.y*canvas.height+offset)));if($('mirror-preview').checked)ctx.scale(-1,1);ctx.font='bold 12px Segoe UI';ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineWidth=3;ctx.strokeStyle='#102d28';ctx.strokeText(text,0,0);ctx.fillStyle=color;ctx.fillText(text,0,0);ctx.restore();}
   for(const target of starts){
     if(!target.valid||!inFrame(target.point))continue;
@@ -288,7 +304,7 @@ function drawGuides(){
     fixed,{nowMs:performance.now()}).map(target=>[target.index,target]));
   for(const g of guides){
     if(!g.valid||!inFrame(g.end))continue;
-    const reached=liveTargets.get(g.index)?.reached===true,x=g.end.x*canvas.width,y=g.end.y*canvas.height,size=finishTriangleSize(fixed,canvas.height,guidance(),g.index);
+    const reached=liveTargets.get(g.index)?.reached===true,x=g.end.x*canvas.width,y=g.end.y*canvas.height,size=finishTriangleSize(markers,canvas.height,guidance(),g.index);
     ctx.globalAlpha=reached?1:.9;ctx.strokeStyle=g.color;ctx.lineWidth=reached?5:3;
     ctx.beginPath();ctx.moveTo(x,y-size);ctx.lineTo(x+size*.9,y+size*.65);ctx.lineTo(x-size*.9,y+size*.65);ctx.closePath();ctx.fillStyle=reached?g.color:'#152d31b8';ctx.fill();ctx.stroke();
     label(g.end,labels[g.index],g.color,size+10);
