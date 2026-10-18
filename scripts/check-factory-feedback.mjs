@@ -11,6 +11,7 @@ import {createDualViewServer} from './serve-dual-view.mjs';
 import {controllerHarness} from './check-review-flow.mjs';
 import {createFactoryPracticeFeedbackService,normalizeFeedbackRequest,validateFactoryFeedbackOutput,factoryIssueSentences} from './factory-practice-feedback.mjs';
 import {createPracticeAiFeedback} from '../public/practice-ai-feedback.js';
+import {descriptivePracticeFeedback} from '../public/practice-descriptive-feedback.js';
 import {chromium} from 'playwright';
 
 const root=new URL('../',import.meta.url),out=new URL('artifacts/factory-feedback-review/',root);
@@ -140,7 +141,23 @@ async function serviceChecks(){
         limb:issue.limb.startsWith('Left')?issue.limb.replace('Left','Right'):issue.limb.replace('Right','Left')};
       assert.equal(validateFactoryFeedbackOutput(output([{issueId:issue.issueId,text:factoryIssueSentences(opposite)[0]}]),measured),null);
     }
-    for(const code of ['tracking_unknown','reference_unknown','attempt_incomplete','invented'])assert.deepEqual(factoryIssueSentences({index:33,limb:'Left hand',code}),[]);
+    for(const index of [15,16,27,28,33,34,35,36])for(const code of ['tracking_unknown','timing_unknown']){
+      const uncertain=normalizeFeedbackRequest(payload({status:'unknown',issues:[{index,code}]})),issue=uncertain.issues[0];
+      const choices=factoryIssueSentences(issue);assert.equal(choices.length,2,`${index}:${code}`);
+      for(const text of choices){
+        assert.match(text,new RegExp(issue.limb,'i'));assert.ok((text.match(/\./g)??[]).length>=2,text);
+        assert.doesNotMatch(text,/too fast|too slow|moved faster|moved slower|correctly completed/);
+        assert.deepEqual(validateFactoryFeedbackOutput(output([{issueId:issue.issueId,text}]),uncertain),[text]);
+      }
+      assert.equal(validateFactoryFeedbackOutput(output([{issueId:issue.issueId,text:issueSentence(index,'too_fast')}]),uncertain),null,
+        'Uncertainty cannot be rewritten as a measured speed error');
+    }
+    for(const code of ['tracking_unknown','reference_unknown','attempt_incomplete']){
+      const uncertain=normalizeFeedbackRequest(payload({status:'unknown',issues:[{index:null,code}]})),issue=uncertain.issues[0];
+      const choices=factoryIssueSentences(issue);assert.equal(choices.length,2,code);
+      for(const text of choices)assert.deepEqual(validateFactoryFeedbackOutput(output([{issueId:issue.issueId,text}]),uncertain),[text]);
+    }
+    for(const code of ['reference_unknown','attempt_incomplete','invented'])assert.deepEqual(factoryIssueSentences({index:33,limb:'Left hand',code}),[]);
     const issues=[33,34,35,36].flatMap(index=>['too_fast','off_guide','endpoint_unreached'].map(code=>({index,code})));
     const measured=normalizeFeedbackRequest(payload({issues}));
     const combined=validateFactoryFeedbackOutput(output(measured.issues.map(issue=>({issueId:issue.issueId,text:factoryIssueSentences(issue)[1]}))),measured);
@@ -166,17 +183,36 @@ async function serviceChecks(){
       assert.equal((await fixture.request(undefined,{body:payload({landmarks:[]})})).status,400);
       assert.equal(fixture.state.sessions.length,0);
       const status=await fixture.request('/api/practice-feedback/status',{method:'GET',raw:''});
-      assert.deepEqual(status.json,{configured:true,provider:'factory',mode:'measured-issues-only',summaries:true,warmup:true});
+      assert.deepEqual(status.json,{configured:true,provider:'factory',mode:'grounded-issues-and-uncertainty',summaries:true,warmup:true});
     });
-    await check('Match, unknown, no issues and any uncertain evidence keep local feedback without an AI call',async()=>{
-      for(const body of [payload({status:'match'}),payload({status:'unknown'}),payload({issues:[]}),
-        payload({issues:[{index:33,code:'tracking_unknown'},{index:34,code:'too_fast'}]}),
-        payload({issues:[{index:null,code:'reference_unknown'}]})]){
+    await check('Reviews with no grounded issue retain their local wording without an AI call',async()=>{
+      for(const body of [payload({status:'match',issues:[]}),payload({status:'unknown',issues:[]}),payload({issues:[]})]){
         const response=await fixture.request(undefined,{body});
         assert.equal(response.status,200);assert.equal(response.json.source,'local');
         assert.equal(response.json.status,body.status);assert.deepEqual(response.json.messages,body.messages);
       }
       assert.equal(fixture.state.sessions.length,0);
+    });
+    await check('Factory describes unclear right-foot tracking, mixed evidence and unmatched timing without changing the outcome',async()=>{
+      const f=await serverFixture(createFactoryPracticeFeedbackService);f.state.autoOutput=true;
+      try{
+      for(const body of [payload({status:'unknown',issues:[{index:36,code:'tracking_unknown'}]}),
+        payload({status:'unknown',issues:[{index:33,code:'too_fast'},{index:36,code:'tracking_unknown'}]}),
+        payload({status:'unknown',issues:[{index:null,code:'reference_unknown'}]}),
+        payload({status:'match',issues:[{index:34,code:'timing_unknown'}]})]){
+        const before=f.state.sessions.length,response=await f.request(undefined,{body});
+        assert.equal(response.status,200);assert.equal(response.json.source,'factory');
+        assert.equal(response.json.status,body.status);assert.equal(response.json.attemptId,body.attemptId);assert.equal(response.json.stepId,body.stepId);
+        assert.equal(f.state.sessions.length,before+1);
+        const normalized=normalizeFeedbackRequest(body),expected=validateFactoryFeedbackOutput(output(normalized.issues.map(issue=>
+          ({issueId:issue.issueId,text:factoryIssueSentences(issue)[1]}))),normalized);
+        assert.deepEqual(response.json.messages,expected);assert.ok(expected.every(message=>message.length>60));
+        const footMessage=expected.find(message=>/right foot/i.test(message));
+        if(footMessage)assert.doesNotMatch(footMessage,/too fast|too slow|moved faster|moved slower|completed correctly/);
+        if(body.status==='match')assert.doesNotMatch(expected.join(' '),/too fast|too slow|moved faster|moved slower/);
+        assert.ok(!Object.hasOwn(response.json,'passed'));
+      }
+      }finally{await f.close();}
     });
     await check('Factory rewrites only verified issues with all tools disabled and never changes the local outcome',async()=>{
       const body=payload({messages:['CONSTRUCTED_LOCAL_TEXT_NOT_A_PROMPT'],
@@ -195,7 +231,7 @@ async function serviceChecks(){
       assert.ok(session.closed);assert.doesNotMatch(fixture.state.prompts[0].prompt,/CONSTRUCTED_LOCAL_TEXT|CONSTRUCTED_ISSUE_PROSE/);
       const prompt=JSON.parse(fixture.state.prompts[0].prompt);
       assert.deepEqual(Object.keys(prompt).sort(),['issues','status','stepId','task','wordLimit']);
-      assert.equal(prompt.task,'rewrite-measured-issues');assert.equal(prompt.wordLimit,200);
+      assert.equal(prompt.task,'rewrite-grounded-feedback');assert.equal(prompt.wordLimit,200);
       assert.ok(!Object.hasOwn(response.json,'passed'));
     });
     await check('Invented, contradictory, missing, duplicate and extra structured output always retains exact local messages',async()=>{
@@ -405,7 +441,7 @@ async function controllerChecks(){
   await check('Actual controller shows local feedback and a neutral lead-in immediately, then speaks final AI wording without changing pass/score/progression',async()=>{
     const {h,sent,ai,review}=fixture();try{
       await h.call('beginReview',review,'retry');assert.equal(h.state.phase,'feedback');
-      assert.deepEqual([...h.state.feedback.messages],payload().messages);assert.equal(sent.length,1);
+      assert.deepEqual([...h.state.feedback.messages],descriptivePracticeFeedback(review).messages);assert.equal(sent.length,1);
       const before=structuredClone(h.state.feedback),speechCount=h.speech.calls.length;
       const messages=approvedMessages(1);
       sent[0].gate.resolve({ok:true,json:async()=>reply(sent[0].body,{messages})});await h.flush();
@@ -414,7 +450,7 @@ async function controllerChecks(){
         assert.deepEqual(h.state.feedback[key],before[key],key);
       assert.equal(h.state.phase,'feedback');assert.equal(h.state.index,0);assert.equal(h.state.results.size,0);
       assert.equal(h.state.reviewAction,'retry');assert.equal(speechCount,1);
-      assert.match(h.speech.calls[0].args[0].messages.join(' '),/reviewing your movement/);
+      assert.match(h.speech.calls[0].args[0].messages.join(' '),/preparing your feedback/);
       assert.equal(h.speech.calls.length,1,'AI wording waits for the lead-in to finish');
       await h.finishSpeech();assert.equal(h.speech.calls.length,2);
       assert.deepEqual([...h.speech.calls[1].args[0].messages],messages);
@@ -438,7 +474,7 @@ async function controllerChecks(){
       await h.call('beginReview',review,'retry');await h.call('beginReview',review,'retry');
       assert.ok(sent[1].options.signal.aborted);
       sent[1].gate.resolve({ok:true,json:async()=>reply(sent[1].body,{messages:['Left hand: moved too quickly.']})});await h.flush();
-      assert.deepEqual([...h.state.feedback.messages],payload().messages);
+      assert.deepEqual([...h.state.feedback.messages],descriptivePracticeFeedback(review).messages);
       assert.equal(h.env.feedbackWordingSource,'local');
       sent[2].gate.resolve({ok:true,json:async()=>reply(sent[2].body)});await h.flush();
       assert.equal(h.env.feedbackWordingSource,'factory');assert.equal(h.state.index,1);
@@ -448,7 +484,7 @@ async function controllerChecks(){
     const {h,sent,ai,review}=fixture();try{
       await h.call('beginReview',review,'retry');await h.call('pause');assert.ok(sent[0].options.signal.aborted);
       sent[0].gate.resolve({ok:true,json:async()=>reply(sent[0].body)});await h.flush();
-      assert.equal(h.env.feedbackWordingSource,'local');assert.deepEqual([...h.state.feedback.messages],payload().messages);
+      assert.equal(h.env.feedbackWordingSource,'local');assert.deepEqual([...h.state.feedback.messages],descriptivePracticeFeedback(review).messages);
       await h.call('pause');await h.call('beginReview',review,'retry');
       await h.emitCameraState({running:false,generation:2});assert.ok(sent[1].options.signal.aborted);
       sent[1].gate.resolve({ok:true,json:async()=>reply(sent[1].body)});await h.flush();

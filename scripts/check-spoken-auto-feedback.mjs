@@ -10,6 +10,7 @@ import {chromium} from 'playwright';
 import {controllerHarness,attempt,review,source} from './check-review-flow.mjs';
 import {createFeedbackSpeech} from '../public/practice-feedback-speech.js';
 import {createPracticeAiFeedback} from '../public/practice-ai-feedback.js';
+import {descriptivePracticeFeedback} from '../public/practice-descriptive-feedback.js';
 import {createDualViewServer} from './serve-dual-view.mjs';
 import {normalizePracticeSummaryRequest,practiceSummaryEvidence} from './factory-practice-summary.mjs';
 
@@ -20,6 +21,8 @@ const mismatch={status:'mismatch',passed:false,percent:null,issues:[{index:33,co
   messages:['Left hand: too fast.','Right hand: too slow.'],ruleVersion:'CONSTRUCTED review fixture'};
 const matched={status:'match',passed:true,percent:null,issues:[],messages:['Targets reached.']};
 const unknown={status:'unknown',passed:false,percent:null,issues:[{index:33,code:'tracking_unknown'}],messages:['Left hand: tracking unclear.']};
+const rightFootUnknown={status:'unknown',passed:false,percent:null,issues:[{index:36,code:'tracking_unknown'}],messages:['Right foot: tracking unclear.']};
+const descriptiveRightFootUnknown=['The camera could not clearly track your right foot throughout this attempt. Keep that foot visible from start to finish before trying again.'];
 const descriptiveMessages=[
   'Your left hand moved faster than the demonstration. On your next attempt, slow it down so it follows the same pace as the teacher until it reaches the ending triangle.',
   'Your right hand moved slower than the demonstration. On your next attempt, move it a little faster so it follows the same pace as the teacher until it reaches the ending triangle.',
@@ -106,7 +109,7 @@ async function controllerChecks(){
   await check('Observed errors display immediately; one bounded Factory rewrite is spoken once before same-clip retry',async()=>{
     const ai=aiFixture(),h=controllerHarness({speechOptions:{enabled:true},overrides:{aiFeedback:ai}});
     await h.call('beginReview',mismatch,'retry');assert.equal(h.state.phase,'feedback');
-    assert.deepEqual([...h.state.feedback.messages],mismatch.messages);assert.equal(ai.calls.length,1);assert.equal(h.speech.calls.length,1);
+    assert.deepEqual([...h.state.feedback.messages],descriptivePracticeFeedback(mismatch).messages);assert.equal(ai.calls.length,1);assert.equal(h.speech.calls.length,1);
     assert.doesNotMatch(h.speech.calls[0].args[0].messages.join(' '),/too fast|too slow|targets reached|success|well done/i,
       'The immediate lead-in makes no unmeasured claim');
     const messages=descriptiveMessages;ai.reply(0,messages);await h.flush();
@@ -133,7 +136,7 @@ async function controllerChecks(){
     const endedAt=h.clock.now;await h.finishSpeech();assert.equal(h.clock.now,endedAt);
     assert.equal(h.state.phase,'positioning');assert.equal(h.state.index,0);assert.equal(h.state.results.size,0);
   });
-  await check('Factory timeout and rejected result fall back to exact local speech; late replies cannot repaint retry',async()=>{
+  await check('Factory timeout and rejected result fall back to complete local sentences; late replies cannot repaint retry',async()=>{
     for(const failure of ['timeout','null']){
       let release;
       const ai=failure==='timeout'?createPracticeAiFeedback({timeoutMs:25,fetchImpl:()=>new Promise(resolve=>{release=resolve;})}):aiFixture();
@@ -142,25 +145,69 @@ async function controllerChecks(){
       await h.call('beginReview',mismatch,'retry');
       if(failure==='timeout'){await new Promise(resolve=>setTimeout(resolve,40));await h.flush();}else {ai.fail(0);await h.flush();}
       assert.equal(h.speech.calls.length,1);await h.finishSpeech();assert.equal(h.speech.calls.length,2);
-      assert.deepEqual([...h.speech.calls.at(-1).args[0].messages],mismatch.messages);
+      assert.deepEqual([...h.speech.calls.at(-1).args[0].messages],descriptivePracticeFeedback(mismatch).messages);
       assert.equal(h.env.feedbackWordingSource,'local');await h.finishSpeech();assert.equal(h.state.phase,'positioning');
       if(failure==='timeout')release({ok:true,json:async()=>({source:'factory',messages:['Left hand: moved too quickly.']})});
       else ai.reply(0,['Left hand: moved too quickly.']);await h.flush();assert.equal(h.state.feedback,null);
       assert.equal(h.state.results.size,0);assert.equal(h.speech.calls.length,2);
     }
   });
-  await check('Unknown tracking skips Factory, speaks only uncertainty and automatically retries without a pass',async()=>{
+  await check('Unclear right-foot tracking requests AI uncertainty wording and automatically retries without a pass',async()=>{
     const ai=aiFixture(),h=controllerHarness({speechOptions:{enabled:true},overrides:{aiFeedback:ai}});
-    await h.call('beginReview',unknown,'retry');assert.equal(ai.calls.length,0);assert.equal(h.speech.calls.length,1);
-    assert.doesNotMatch(h.speech.calls[0].args[0].messages.join(' '),/too fast|too slow/);
+    await h.call('beginReview',rightFootUnknown,'retry');assert.equal(ai.calls.length,1);assert.equal(h.speech.calls.length,1);
+    assert.equal(ai.calls[0].payload.status,'unknown');assert.deepEqual([...ai.calls[0].payload.issues],rightFootUnknown.issues);
+    assert.deepEqual([...h.state.feedback.messages],descriptivePracticeFeedback(rightFootUnknown).messages);
+    const messages=['Your right foot could not be tracked reliably during this attempt. Keep it visible in the camera before trying the movement again.'];
+    ai.reply(0,messages);await h.flush();await h.finishSpeech();
+    assert.equal(h.env.feedbackWordingSource,'factory');assert.equal(h.state.feedback.status,'unknown');assert.equal(h.state.feedback.passed,false);
+    assert.deepEqual([...h.speech.calls.at(-1).args[0].messages],messages);
+    assert.doesNotMatch(messages.join(' '),/too fast|too slow|faster|slower|completed correctly/);
     await h.finishSpeech();assert.equal(h.state.phase,'positioning');assert.equal(h.state.index,0);assert.equal(h.state.results.size,0);
   });
-  await check('Muted, unsupported and failed speech use a three-second reading fallback for matches and errors',async()=>{
+  await check('Mixed observed movement errors and unclear tracking keep the unknown outcome and describe both exact limbs',async()=>{
+    const ai=aiFixture(),h=controllerHarness({speechOptions:{enabled:true},overrides:{aiFeedback:ai}});
+    const mixed={...rightFootUnknown,issues:[{index:33,code:'too_fast'},...rightFootUnknown.issues],messages:['Left hand: too fast.','Right foot: tracking unclear.']};
+    await h.call('beginReview',mixed,'retry');assert.equal(ai.calls.length,1);
+    assert.deepEqual([...ai.calls[0].payload.issues],mixed.issues);
+    const messages=[descriptiveMessages[0],'Your right foot could not be tracked reliably during this attempt. Keep it visible in the camera before trying the movement again.'];
+    ai.reply(0,messages);await h.flush();await h.finishSpeech();
+    assert.equal(h.state.feedback.status,'unknown');assert.equal(h.state.feedback.passed,false);
+    assert.deepEqual([...h.speech.calls.at(-1).args[0].messages],messages);
+    await h.finishSpeech();assert.equal(h.state.phase,'positioning');assert.equal(h.state.index,0);assert.equal(h.state.results.size,0);
+  });
+  await check('Unavailable AI still speaks complete right-foot uncertainty sentences without invented movement corrections',async()=>{
+    const ai=aiFixture(),h=controllerHarness({speechOptions:{enabled:true},overrides:{aiFeedback:ai}});
+    await h.call('beginReview',rightFootUnknown,'retry');ai.fail(0);await h.flush();await h.finishSpeech();
+    const words=h.speech.calls.at(-1).args[0].messages.join(' ');
+    assert.match(words,/right foot/i);assert.ok(words.length>60);assert.ok((words.match(/\./g)??[]).length>=2);
+    assert.doesNotMatch(words,/right foot:|too fast|too slow|faster|slower|completed correctly/);
+    assert.equal(h.env.feedbackWordingSource,'local');assert.equal(h.state.feedback.status,'unknown');
+    await h.finishSpeech();assert.equal(h.state.phase,'positioning');assert.equal(h.state.results.size,0);
+  });
+  await check('A matched moving limb with unassessed timing gets descriptive uncertainty wording while retaining its local match',async()=>{
+    const ai=aiFixture(),h=controllerHarness({speechOptions:{enabled:true},overrides:{aiFeedback:ai}});
+    const review={...matched,limbs:[{index:34,moving:true,timingAssessed:false,timingUncertainReason:'CONSTRUCTED timing evidence unavailable'}]};
+    await h.call('beginReview',review,'advance');assert.equal(ai.calls.length,1);
+    assert.equal(ai.calls[0].payload.status,'match');assert.deepEqual([...ai.calls[0].payload.issues],[{index:34,code:'timing_unknown'}]);
+    assert.deepEqual([...h.state.feedback.issues],[],'Presentation annotations do not alter evaluator issues');
+    const messages=['The timing of your right hand could not be compared reliably with the demonstration. Keep that hand visible throughout the next movement so its pace can be reviewed.'];
+    ai.reply(0,messages);await h.flush();await h.finishSpeech();
+    assert.equal(h.state.feedback.status,'match');assert.equal(h.state.feedback.passed,true);assert.deepEqual([...h.state.feedback.limbs],review.limbs);
+    assert.deepEqual([...h.speech.calls.at(-1).args[0].messages],messages);assert.equal(h.state.index,0);assert.equal(h.state.results.size,0);
+    assert.doesNotMatch(messages.join(' '),/too fast|too slow|moved faster|moved slower/);
+    await h.finishSpeech();assert.equal(h.state.phase,'watching');assert.equal(h.state.index,1);assert.equal(h.state.results.get('step-1').status,'matched');
+    assert.deepEqual(h.env.sessionHistory.getAttempts()[0].issues,[{index:34,code:'timing_unknown'}],
+      'The final summary retains a typed timing limitation despite the unchanged match outcome');
+  });
+  await check('Muted, unsupported and failed speech use the full reading fallback for matches and errors',async()=>{
     for(const status of [matched,unknown])for(const mode of ['muted','unsupported','error']){
       const h=controllerHarness({speechOptions:{enabled:mode!=='muted',supported:mode!=='unsupported'}});
       await h.call('beginReview',status,status.status==='match'?'advance':'retry');
-      if(mode==='error')await h.finishSpeech('error');
-      await h.advance(2999);await h.call('tick');assert.equal(h.state.phase,'feedback');assert.equal(h.state.index,0);
+      if(mode==='error'){
+        if(!h.env.feedbackCycle.speechStarted)await h.finishSpeech('error');
+        await h.finishSpeech('error');
+      }
+      await h.advance((await h.call('feedbackReadingMs'))-1);await h.call('tick');assert.equal(h.state.phase,'feedback');assert.equal(h.state.index,0);
       await h.advance(1);await h.call('tick');
       assert.equal(h.state.phase,status.status==='match'?'watching':'positioning');assert.equal(h.state.index,status.status==='match'?1:0);
       assert.equal(h.state.results.size,status.status==='match'?1:0);
@@ -171,7 +218,7 @@ async function controllerChecks(){
     const old=h.speech.utterances[0];h.env.$('spoken-feedback').checked=false;await h.call('speechSettingAction');
     assert.equal(h.speech.busy,false);await h.finishSpeech('completed',old);
     assert.equal(h.state.index,0,'Canceling the old utterance cannot count as finishing its message');
-    await h.advance(2999);await h.call('tick');assert.equal(h.state.index,0);
+    await h.advance((await h.call('feedbackReadingMs'))-1);await h.call('tick');assert.equal(h.state.index,0);
     await h.advance(1);await h.call('tick');assert.equal(h.state.index,1);assert.equal(h.state.results.size,1);
   });
   await check('Stop, navigation, replay, explicit retry, camera loss and generation change reject old speech callbacks',async()=>{
@@ -231,7 +278,7 @@ async function browserChecks(){
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const base=`http://127.0.0.1:${server.address().port}`;
   const browser=await chromium.launch({channel:'chrome',headless:true,args:['--mute-audio']});
   try{
-    const summaryRequests=[];let summaryResponseMessages=null;
+    const summaryRequests=[],feedbackRequests=[];let summaryResponseMessages=null;
     const page=await browser.newPage({viewport:{width:1440,height:900}});page.on('pageerror',error=>pageErrors.push(error.message));
     await page.addInitScript(()=>{
       window.qaCameraRequests=0;window.qaSpoken=[];window.qaSpeechCancels=0;
@@ -258,9 +305,9 @@ window.qaCompleteLessonLayoutFixture=()=>{state.results=new Map(state.manifest.s
         source:'factory',sessionId:body.sessionId,messages:summaryResponseMessages??approvedSummaryMessages(body)})});
     });
     await page.route('**/api/practice-feedback',async route=>{
-      const body=route.request().postDataJSON();await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({
+      const body=route.request().postDataJSON();feedbackRequests.push(body);await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({
         source:'factory',attemptId:body.attemptId,stepId:body.stepId,status:body.status,
-        messages:route.request().postDataJSON().issues.length===4?longMessages:descriptiveMessages})});
+        messages:body.status==='unknown'?descriptiveRightFootUnknown:body.issues.length===4?longMessages:descriptiveMessages})});
     });
     async function load(){await page.goto(`${base}/first-three.html?step=1`);
       await page.waitForFunction(()=>window.firstThreeDiagnostics?.ready&&!window.firstThreeDiagnostics.loading);
@@ -309,6 +356,23 @@ window.qaCompleteLessonLayoutFixture=()=>{state.results=new Map(state.manifest.s
       await page.evaluate(()=>window.qaSpoken.at(-1).onend());await page.waitForFunction(()=>window.firstThreeDiagnostics.index===1);
       assert.equal(await page.evaluate(()=>window.firstThreeDiagnostics.results[0].status),'matched');
       assert.equal(await page.evaluate(()=>window.qaCameraRequests),0);
+    });
+    await check('Browser unclear-right-foot review shows and speaks complete AI uncertainty sentences then retries the same clip',async()=>{
+      await load();const before=feedbackRequests.length;await page.evaluate(review=>window.qaEnterReview(review),rightFootUnknown);
+      await finishReviewLeadIn();const diagnostic=await page.evaluate(()=>window.firstThreeDiagnostics);
+      assert.equal(feedbackRequests.length,before+1);assert.equal(feedbackRequests.at(-1).status,'unknown');
+      assert.deepEqual(feedbackRequests.at(-1).issues,rightFootUnknown.issues);
+      assert.equal(diagnostic.feedback.status,'unknown');assert.equal(diagnostic.feedback.passed,false);assert.equal(diagnostic.index,0);
+      assert.equal(diagnostic.aiFeedback.source,'factory');assert.equal(await page.locator('#feedback-ai-source').isVisible(),true);
+      assert.equal(await page.locator('#overlay-title').textContent(),'Tracking unclear');
+      assert.equal(await page.locator('#overlay-reason').textContent(),descriptiveRightFootUnknown.join('\n'));
+      assert.equal(await page.evaluate(()=>window.qaSpoken.at(-1).text),descriptiveRightFootUnknown.join(' '));
+      assert.equal(await page.locator('#practice-overlay button').count(),0);assert.equal(await page.evaluate(()=>window.qaCameraRequests),0);
+      snapshots.unclearRightFoot=diagnostic;
+      await page.screenshot({path:fileURLToPath(new URL('unknown-right-foot-ai-desktop.png',out))});
+      await page.evaluate(()=>window.qaSpoken.at(-1).onend());await page.waitForFunction(()=>window.firstThreeDiagnostics.phase==='positioning');
+      const after=await page.evaluate(()=>window.firstThreeDiagnostics);assert.equal(after.index,0);assert.equal(after.results.length,0);
+      assert.equal(after.feedback,null);assert.equal(await page.locator('#practice-overlay').isVisible(),false);
     });
     await check('Long full-sentence feedback remains completely readable and spoken on desktop, portrait and landscape',async()=>{
       for(const size of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}]){

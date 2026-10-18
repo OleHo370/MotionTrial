@@ -12,6 +12,7 @@ import {finishTriangleSize} from './first-three-attempt.js';
 import {createAttemptReview,observeAttemptReview,finalizeAttemptReview,REVIEW_RULES} from './practice-attempt-review.js';
 import {createEndTargetSession,evaluateEndTargets} from './practice-end-targets.js';
 import {compactPracticeFeedback} from './practice-compact-feedback.js';
+import {descriptivePracticeFeedback,practiceAiWordingIssues} from './practice-descriptive-feedback.js';
 import {createPracticeAiFeedback} from './practice-ai-feedback.js';
 import {createPracticeSessionHistory,createPracticeSummaryClient,localPracticeSessionSummary} from './practice-session-summary.js';
 import {getLiveTargetHighlights} from './practice-target-highlight.js';
@@ -465,7 +466,7 @@ function speakFeedback(cycle){
   if(!currentFeedbackCycle(cycle)||cycle.speechStarted)return;
   cycle.pendingAi=false;cycle.speechStarted=true;cycle.readingDeadlineMs=null;
   sessionHistory.record({attemptId:feedbackAttemptId,stepId:cycle.stepId,status:state.feedback.status,
-    messages:state.feedback.messages,issues:state.feedback.issues??[]});
+    messages:state.feedback.messages,issues:practiceAiWordingIssues(state.feedback)});
   const speaking=feedbackSpeech.speakReview(state.feedback,{onComplete(reason){
     if(!currentFeedbackCycle(cycle)||cycle.speechDone)return;
     cycle.speechDone=true;
@@ -482,7 +483,7 @@ function maybeSpeakFeedback(cycle){
 function startFeedbackLeadIn(cycle){
   cycle.leadInDone=false;
   const speaking=feedbackSpeech.speakReview({feedbackStyle:'compact',messages:[
-    'You have reached the targets. I am reviewing your movement.'
+    'Your attempt is ready for review. I am preparing your feedback.'
   ]},{onComplete(){
     if(!currentFeedbackCycle(cycle)||cycle.leadInDone)return;
     cycle.leadInDone=true;maybeSpeakFeedback(cycle);render();
@@ -494,13 +495,11 @@ function startFeedbackPresentation({requestAi=true}={}){
   const local=state.feedback,cycle={id:++feedbackSequence,operation:state.operation,stepId:step().id,
     generation:state.camera.getState().generation,pendingAi:false,leadInDone:true,speechStarted:false,speechDone:false,readingDeadlineMs:null};
   feedbackCycle=cycle;
-  const codes=new Set(['too_fast','too_slow','late_start','off_guide','hold_drift','endpoint_unreached','movement_incomplete']);
-  const measured=requestAi&&local.status==='mismatch'&&local.issues?.length
-    &&local.issues.every(issue=>codes.has(issue.code)&&[15,16,27,28,33,34,35,36].includes(issue.index));
-  if(!measured){speakFeedback(cycle);return;}
+  const wordingIssues=practiceAiWordingIssues(local);
+  if(!requestAi||!wordingIssues.length){speakFeedback(cycle);return;}
   cycle.pendingAi=true;startFeedbackLeadIn(cycle);render();
   void Promise.resolve().then(()=>currentFeedbackCycle(cycle)?aiFeedback.request({attemptId:`review-${cycle.id}-${cycle.operation}`,stepId:cycle.stepId,status:local.status,
-    messages:local.messages,issues:local.issues.map(({index,code})=>({index,code}))}):null).then(result=>{
+    messages:compactPracticeFeedback(local).messages,issues:wordingIssues}):null).then(result=>{
     if(!currentFeedbackCycle(cycle)||state.feedback!==local)return;
     if(result?.source==='factory'){
       // Only wording changes. The local outcome, issues and automatic action stay intact.
@@ -511,7 +510,7 @@ function startFeedbackPresentation({requestAi=true}={}){
 }
 function beginReview(review,action){
   cancelFeedbackFlow();feedbackWordingSource='local';feedbackAttemptId=`attempt-${++feedbackAttemptSequence}`;
-  state.feedback=compactPracticeFeedback(review);state.reviewAction=action;video.pause();phase('feedback');
+  state.feedback=descriptivePracticeFeedback(review);state.reviewAction=action;video.pause();phase('feedback');
   startFeedbackPresentation();
 }
 function completeFeedback(){
@@ -741,7 +740,7 @@ state.camera=createFollowCamera({video:$('camera-video'),canvas:$('camera-overla
       state.attemptInterrupted='The camera stopped or changed during this attempt. Set up and try again.';
     }else if(state.phase==='feedback'&&(!status.running||(state.attemptCameraGeneration!==null&&generation!==state.attemptCameraGeneration))){
       cancelFeedbackFlow();feedbackWordingSource='local';
-      state.reviewAction='retry';state.feedback=compactPracticeFeedback({status:'unknown',passed:false,percent:null,messages:['The camera stopped or changed.']});
+      state.reviewAction='retry';state.feedback=descriptivePracticeFeedback({status:'unknown',passed:false,percent:null,messages:['The camera stopped or changed.']});
       state.attemptCameraGeneration=null;
       if(status.running&&!state.paused)startFeedbackPresentation({requestAi:false});
     }else if(state.phase==='feedback'&&status.running&&!wasRunning&&!state.paused&&!feedbackCycle){

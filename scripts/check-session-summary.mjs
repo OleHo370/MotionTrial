@@ -48,7 +48,7 @@ const deferred=()=>{let resolve;const promise=new Promise(done=>{resolve=done;})
 {
   const payload=fixture();
   payload.attempts.push(attempt('unknown-1',{status:'unknown',messages:['Tracking unclear.'],
-    issues:[{index:16,code:'too_slow'},{index:16,code:'tracking_unknown'}]}));
+    issues:[{index:16,code:'too_slow'},{index:28,code:'tracking_unknown'}]}));
   payload.attempts.push(attempt('retry-2',{issues:[{index:15,code:'too_fast'},{index:33,code:'too_fast'},
     {index:28,code:'off_guide'}]}));
   payload.attempts.push(attempt('match-1',{status:'match',messages:['Targets reached.'],issues:[]}));
@@ -57,8 +57,11 @@ const deferred=()=>{let resolve;const promise=new Promise(done=>{resolve=done;})
   assert.match(text,/5 of 5 movements with matching feedback/);assert.match(text,/4 attempts/);
   assert.match(text,/2 attempts that needed another try/);assert.match(text,/left hand moved too fast on 2 attempts/);
   assert.match(text,/right foot moved away from the beam on 1 attempt/);
-  assert.match(text,/Tracking was unclear on 1 attempt/);assert.doesNotMatch(text,/right hand moved too slowly|improved|corrected|perfect/);
-  checks.push('Local final wording includes retries, successful attempts and anatomical issue counts; alias trackers do not double-count and unclear tracking is not a movement mistake or a claimed improvement.');
+  assert.match(text,/right hand moved too slowly on 1 attempt/);
+  assert.match(text,/Tracking was unclear on 1 attempt/);
+  assert.match(text,/Those unclear observations were kept separate from measured movement mistakes/);
+  assert.doesNotMatch(text,/right foot moved too slowly|right foot moved too fast|improved|corrected|perfect/);
+  checks.push('Local final wording includes retries, successful attempts and anatomical issue counts; aliases do not double-count, and a measured hand error remains distinct from uncertain foot tracking in the same review.');
 }
 {
   const payload=fixture();payload.attempts.push(attempt('retry-slow',{issues:[{index:33,code:'too_slow'}]}));

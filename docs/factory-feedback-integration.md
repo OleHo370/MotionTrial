@@ -2,7 +2,7 @@
 
 The current five-step player finishes an attempt when all active ending targets
 are reached with fresh tracking. Its local evaluator supplies measured issues,
-and its compact formatter names the affected hand or foot. Factory is installed
+and its descriptive formatter names the affected hand or foot. Factory is installed
 and integrated as optional wording in `scripts/factory-practice-feedback.mjs`.
 Local feedback appears immediately and remains available if Factory fails.
 
@@ -10,14 +10,19 @@ Local feedback appears immediately and remains available if Factory fails.
 
 After the local review, the browser sends one background request to
 `POST /api/practice-feedback` on the existing loopback server in
-`scripts/serve-dual-view.mjs`. Only supported measured mismatch issues invoke AI.
-Matched and uncertain attempts keep the local wording. A valid applied response
+`scripts/serve-dual-view.mjs`. Supported measured issues and tracking/reference/
+completion/timing limitations can invoke AI, including an overall unclear review
+that contains a valid measured correction for a different limb. Successful
+reviews without wording issues keep a full-sentence local message. A valid applied response
 is labeled **AI wording** in the centered practice feedback.
-Send the attempt and step IDs and actual issue codes; the server derives the
-affected limb names. A long wait for another limb is not
+Send the attempt and step IDs and grounded issue codes; the server derives the
+affected limb names. A moving limb whose timing was explicitly not assessed adds
+a `timing_unknown` wording annotation, without adding an issue to the grader.
+The request retains a bounded compact evidence summary even though the displayed
+and spoken feedback uses full sentences. A long wait for another limb is not
 itself evidence that an already completed limb moved slowly.
 
-Ask Droid to rewrite only those issues into brief feedback. Local code continues
+Ask Droid to explain only those issues or limitations in full sentences. Local code continues
 to control triangle completion, pass/retry status, progression and hardware
 signals. Retain local text if the service is unavailable or its response is
 invalid. Cancel or discard an old request when the learner retries or changes
@@ -123,14 +128,14 @@ Factory now chooses complete, approved sentences for each measured issue. Each
 sentence names the affected hand or foot, explains the observed error and gives
 a specific correction, such as slowing that hand to follow the teacher's pace.
 The server still rejects wrong sides, contradictory findings, omitted issues and
-invented advice. Responses contain at most four anatomical paragraphs, 600
-characters per paragraph and 200 words in total. Request summaries keep their
+invented advice. Responses contain at most six anatomical/general paragraphs,
+600 characters per paragraph and 200 words in total. Request summaries keep their
 original smaller limits. Descriptive speech gets a word-count-based watchdog
 of 18–120 seconds so a valid longer message is not cut off at the old 18-second
-limit. Ordinary local feedback keeps that original speech limit.
+limit. Short local feedback keeps that original speech limit.
 
 The centered feedback has no Retry or Next buttons and uses the landing page's
-paper and ink style. For supported errors, it immediately speaks a short neutral
+paper and ink style. For supported errors or uncertainty, it immediately speaks a short neutral
 lead-in while requesting the wording in parallel. The selected local or AI
 message starts when both the lead-in and the bounded 12-second request finish;
 an early response does not interrupt the lead-in. Successful feedback advances after the
@@ -141,6 +146,16 @@ text gets a word-count reading pause bounded to 3–30 seconds. Pausing cancels
 the old completion callback; resuming
 reads the current text again without starting another Factory request. Starting
 squares and self-paced triangle completion still use the existing local rules.
+
+Unclear tracking is now eligible for Factory wording instead of bypassing AI.
+For example, an uncertain right foot can receive: "I could not reliably assess
+your right foot because its tracking was unclear. Keep it visible from start to
+finish and try again." This remains an unknown result and retries the same step.
+An unavailable timing measurement says that speed was not assessed; it never
+turns into an invented fast/slow diagnosis or attributes the limitation to the
+camera when the cause is unknown. Full-sentence local wording is also used when
+Factory is unavailable, rate-limited, canceled or timed out. Dense local feedback
+consolidates factual clauses and corrections within the same history budget.
 
 ## Responsive preparation and final session summary
 
@@ -176,6 +191,9 @@ it does not by itself prove that an earlier timing issue was resolved. Failures
 retain a grounded local summary. Requests over 200 attempts or 96 KiB stay local
 instead of silently omitting earlier attempts. Navigation, stop and a new lesson
 cancel obsolete summary requests and speech.
+The journal retains typed timing limitations, so switching to full sentences
+cannot hide them from the final summary. Measured issues in a mixed unclear
+review are summarized while its uncertain observations remain separate.
 
 ## Official references
 
@@ -187,10 +205,15 @@ cancel obsolete summary requests and speech.
 Deterministic checks: `node scripts/check-factory-feedback.mjs`.
 The separate `node scripts/check-factory-feedback-live.mjs` diagnostic consumes
 Factory usage for a labeled software example and never opens a webcam or USB.
+Add `--unclear` to verify one real unknown-right-foot response instead of the
+default two-hand mismatch example.
 `node scripts/check-factory-summary-live.mjs` makes three small paid model calls
 with labeled software history to compare cold/prepared response time and verify
 the final summary. Ordinary checks in `scripts/check-session-summary.mjs`,
 `scripts/check-responsive-feedback.mjs` and `scripts/check-factory-session-summary.mjs`
 use software fixtures and consume no Factory usage.
+`scripts/check-descriptive-feedback.mjs` and
+`scripts/check-uncertainty-feedback-service.mjs` cover full-sentence uncertainty
+fallbacks and Factory wording without changing the grader or using real devices.
 
 Checked against the installed SDK and official documentation on 2026-10-18.

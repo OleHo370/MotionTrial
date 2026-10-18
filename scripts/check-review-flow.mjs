@@ -12,6 +12,7 @@ import {createAttemptReview as realCreateAttemptReview,observeAttemptReview as r
   finalizeAttemptReview as realFinalizeAttemptReview} from '../public/practice-attempt-review.js';
 import {createEndTargetSession,evaluateEndTargets} from '../public/practice-end-targets.js';
 import {compactPracticeFeedback} from '../public/practice-compact-feedback.js';
+import {descriptivePracticeFeedback,practiceAiWordingIssues} from '../public/practice-descriptive-feedback.js';
 import {createPracticeAiFeedback} from '../public/practice-ai-feedback.js';
 import {createPracticeSessionHistory,createPracticeSummaryClient,localPracticeSessionSummary} from '../public/practice-session-summary.js';
 
@@ -105,7 +106,7 @@ function controllerHarness({functions=null,overrides={},stateOverrides={},speech
     fetch:async()=>({ok:false,json:async()=>({configured:false})}),
     performance:{now:()=>clock.now},setTimeout:setTimer,clearTimeout:id=>timers.delete(id),
     requestAnimationFrame:()=>1,cancelAnimationFrame(){},
-    $,video,INDICES:indices,POINT_COUNT:'four',feedbackSpeech,createEndTargetSession,evaluateEndTargets,compactPracticeFeedback,
+    $,video,INDICES:indices,POINT_COUNT:'four',feedbackSpeech,createEndTargetSession,evaluateEndTargets,compactPracticeFeedback,descriptivePracticeFeedback,practiceAiWordingIssues,
     // Optional AI wording is disabled by default in deterministic controller QA.
     // Integration checks explicitly inject a non-networking fetch fixture.
     aiFeedback:createPracticeAiFeedback({fetchImpl:null}),feedbackSequence:0,feedbackWordingSource:'local',
@@ -344,11 +345,11 @@ await check('Finishing speech early automatically advances to the next watch-onl
   assert.equal(h.state.results.get('step-1').status,'matched');
 });
 
-await check('Muted or unsupported speech automatically continues after a three-second reading interval',async()=>{
+await check('Muted or unsupported speech automatically continues after its complete reading interval',async()=>{
   for(const speechOptions of [{enabled:false,supported:true},{enabled:true,supported:false}]){
     const h=controllerHarness({speechOptions});await attempt(h);await review(h);
     assert.equal(h.speech.utterances.length,0);assert.equal(h.env.feedbackSpeech.isBusy(),false);
-    h.clock.now+=2999;await h.call('tick');assert.equal(h.state.index,0);
+    h.clock.now+=(await h.call('feedbackReadingMs'))-1;await h.call('tick');assert.equal(h.state.index,0);
     h.clock.now++;await h.call('tick');assert.equal(h.state.index,1);
     assert.equal(h.state.results.get('step-1').status,'matched');
   }
@@ -421,7 +422,7 @@ await check('Disabling spoken feedback cancels audio and uses a reading interval
   h.clock.now+=3500;await h.call('tick');assert.equal(h.state.phase,'feedback');
   h.env.$('spoken-feedback').checked=false;await h.call('speechSettingAction');assert.equal(h.env.feedbackSpeech.isBusy(),false);
   await h.call('tick');assert.equal(h.state.index,0);assert.equal(h.speech.calls.length,1);
-  h.clock.now+=3000;await h.call('tick');assert.equal(h.state.index,1);
+  h.clock.now+=await h.call('feedbackReadingMs');await h.call('tick');assert.equal(h.state.index,1);
 });
 
 await check('Observed mismatch and tracking uncertainty retry from squares without another watch-only round',async()=>{
@@ -430,7 +431,7 @@ await check('Observed mismatch and tracking uncertainty retry from squares witho
     await attempt(h);await review(h);
     assert.equal(h.state.feedback.status,status);
     const playCount=h.events.filter(e=>e.kind==='play').length;
-    h.clock.now+=3000;await h.call('tick');
+    h.clock.now+=await h.call('feedbackReadingMs');await h.call('tick');
     assert.equal(h.state.phase,'positioning');assert.equal(h.state.index,0);
     assert.equal(h.state.watched,true);assert.equal(h.state.results.size,0);
     assert.equal(h.video.currentTime,.5);assert.equal(h.video.paused,true);

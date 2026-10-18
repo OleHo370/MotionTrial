@@ -2,7 +2,7 @@
 // and never changes the local review's status, evidence or progression.
 const statuses=new Set(['match','mismatch','unknown']);
 const issueCodes=new Set(['too_fast','too_slow','late_start','off_guide','hold_drift',
-  'endpoint_unreached','movement_incomplete','tracking_unknown','reference_unknown','attempt_incomplete']);
+  'endpoint_unreached','movement_incomplete','tracking_unknown','reference_unknown','attempt_incomplete','timing_unknown']);
 const indices=new Set([15,16,27,28,33,34,35,36]);
 const safeText=value=>typeof value==='string'&&value.trim().length>0&&value.length<=180
   &&!/[\u0000-\u001f\u007f<>]/.test(value);
@@ -16,7 +16,8 @@ function requestSummary(payload){
     ||!Array.isArray(payload.issues)||payload.issues.length>16)return null;
   const issues=[];
   for(const issue of payload.issues){
-    if(!issueCodes.has(issue?.code)||!(issue.index===null||issue.index===undefined||indices.has(issue.index)))return null;
+    if(!issueCodes.has(issue?.code)||!(issue.index===null||issue.index===undefined||indices.has(issue.index))
+      ||issue.code==='timing_unknown'&&!indices.has(issue.index))return null;
     issues.push({index:issue.index??null,code:issue.code});
   }
   return {attemptId:payload.attemptId,stepId:payload.stepId,status:payload.status,messages:[...payload.messages],issues};
@@ -24,7 +25,7 @@ function requestSummary(payload){
 function validWording(result,payload){
   return result?.source==='factory'&&result.attemptId===payload.attemptId&&result.stepId===payload.stepId
     &&result.status===payload.status&&Array.isArray(result.messages)&&result.messages.length>0
-    &&result.messages.length<=4&&result.messages.every(safeResponseText)&&result.messages.join(' ').length<=2400
+    &&result.messages.length<=6&&result.messages.every(safeResponseText)&&result.messages.join(' ').length<=2400
     &&result.messages.join(' ').trim().split(/\s+/).length<=200;
 }
 export function createPracticeAiFeedback({fetchImpl=globalThis.fetch,timeoutMs=45000,onState=()=>{}}={}){

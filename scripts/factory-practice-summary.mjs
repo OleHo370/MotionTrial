@@ -3,7 +3,7 @@
 const names={15:'Left hand',16:'Right hand',27:'Left foot',28:'Right foot',33:'Left hand',34:'Right hand',35:'Left foot',36:'Right foot'};
 const stepIds=['first-three-01','first-three-02','first-three-03','first-six-04','first-six-05'];
 const measuredCodes=['too_fast','too_slow','late_start','off_guide','hold_drift','endpoint_unreached','movement_incomplete'];
-const unknownCodes=['reference_unknown','tracking_unknown','attempt_incomplete'];
+const unknownCodes=['reference_unknown','tracking_unknown','attempt_incomplete','timing_unknown'];
 const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
 const keys=(value,allowed)=>Object.keys(value).every(key=>allowed.includes(key));
 const text=(value,max)=>typeof value==='string'&&value.length>0&&value.length<=max&&!/[\u0000-\u001f\u007f<>]/.test(value);
@@ -27,7 +27,7 @@ export function normalizePracticeSummaryRequest(value){
     for(const issue of source.issues){
       if(!object(issue)||!keys(issue,['index','code'])||![...measuredCodes,...unknownCodes].includes(issue.code)
         ||!(issue.index==null||Number.isInteger(issue.index)&&Object.hasOwn(names,issue.index)))return null;
-      if(measuredCodes.includes(issue.code)&&issue.index==null)return null;
+      if((measuredCodes.includes(issue.code)||issue.code==='timing_unknown')&&issue.index==null)return null;
       const identity=`${names[issue.index]??'general'}:${issue.code}`;
       if(seenIssues.has(identity))return null;
       seenIssues.add(identity);issues.push({index:issue.index??null,code:issue.code,limb:names[issue.index]??null});
@@ -75,12 +75,13 @@ export function practiceSummaryEvidence(request){
   const manual=request.results.filter(result=>result.status==='manual').length;
   const unknown=request.attempts.filter(attempt=>attempt.status==='unknown').length;
   const uncertainTiming=request.attempts.filter(attempt=>attempt.status==='match'
-    &&attempt.messages.some(message=>/^(Left|Right) (hand|foot): timing unclear\.$/.test(message))).length;
+    &&(attempt.issues.some(issue=>issue.code==='timing_unknown')
+      ||attempt.messages.some(message=>/^(Left|Right) (hand|foot): timing unclear\.$/.test(message)))).length;
   const attemptedSteps=new Set(request.attempts.map(attempt=>attempt.stepId));
   const repeatAttempts=request.attempts.length-attemptedSteps.size;
   const previouslyCorrected=new Set(),laterReachedSteps=new Set();
   for(const attempt of request.attempts){
-    if(attempt.status==='mismatch'&&attempt.issues.some(issue=>issue.limb&&measuredCodes.includes(issue.code)))
+    if(['mismatch','unknown'].includes(attempt.status)&&attempt.issues.some(issue=>issue.limb&&measuredCodes.includes(issue.code)))
       previouslyCorrected.add(attempt.stepId);
     else if(attempt.status==='match'&&previouslyCorrected.has(attempt.stepId))
       laterReachedSteps.add(stepIds.indexOf(attempt.stepId)+1);
@@ -98,7 +99,7 @@ export function practiceSummaryEvidence(request){
   ]}];
   const grouped=new Map();
   for(const attempt of request.attempts){
-    if(attempt.status!=='mismatch')continue;
+    if(!['mismatch','unknown'].includes(attempt.status))continue;
     for(const issue of attempt.issues){
       if(!issue.limb||!measuredCodes.includes(issue.code))continue;
       if(!grouped.has(issue.limb))grouped.set(issue.limb,new Map());
@@ -122,7 +123,7 @@ export function practiceSummaryEvidence(request){
   }
   if(unknown||uncertainTiming){
     const sentences=[];
-    if(unknown)sentences.push(`${unknown} ${unknown===1?'attempt had':'attempts had'} unclear tracking or incomplete evidence, so that feedback did not confirm a movement error.`);
+    if(unknown)sentences.push(`${unknown} ${unknown===1?'attempt contained':'attempts contained'} unclear tracking or incomplete evidence. Those unclear observations were kept separate from measured movement mistakes.`);
     if(uncertainTiming)sentences.push(`${uncertainTiming} ${uncertainTiming===1?'completed attempt reached':'completed attempts reached'} the targets while timing was unclear.`);
     entries.push({entryId:'uncertainty',kind:'uncertainty',allowedText:[sentences.join(' ')]});
   }else if(!grouped.size){

@@ -89,6 +89,7 @@ await check('Summary validation accepts only bounded known lesson history and ve
     {...body,attempts:[{...body.attempts[0],landmarks:[]}]},
     {...body,attempts:[{...body.attempts[0],issues:[{index:33,code:'invented'}]}]},
     {...body,attempts:[{...body.attempts[0],issues:[{index:null,code:'too_fast'}]}]},
+    {...body,attempts:[{...body.attempts[0],issues:[{index:null,code:'timing_unknown'}]}]},
     {...body,attempts:[{...body.attempts[0],issues:[{index:33,code:'too_fast'},{index:15,code:'too_fast'}]}]},
     {...body,attempts:[{...body.attempts[0],messages:['<script>unsafe</script>']}]},
     {...body,attempts:[body.attempts[0]],results:[{stepId:steps[0],status:'matched'}]}])assert.equal(normalizePracticeSummaryRequest(changed),null);
@@ -119,6 +120,30 @@ await check('Later target completion is described only when a matching attempt f
   const differentStep=build([{...retry,stepId:steps[1]},matched]);assert.deepEqual(differentStep.laterReachedSteps,[]);
   const unknown=build([attempt('chronological-unknown',steps[0],{status:'unknown',issues:[{index:15,code:'tracking_unknown'}]}),matched]);
   assert.deepEqual(unknown.laterReachedSteps,[]);assert.doesNotMatch(after.entries.map(entry=>entry.allowedText[0]).join(' '),/timing improved|timing resolved|pace corrected/i);
+});
+await check('A mixed unclear attempt retains its measured hand correction and separates the unobserved right foot',()=>{
+  const mixed=attempt('mixed-unclear',steps[0],{status:'unknown',issues:[{index:33,code:'too_fast'},{index:36,code:'tracking_unknown'}],
+    messages:["Your left hand moved faster than the demonstration. Slow down to follow the teacher's pace.",
+      'The camera could not clearly track your right foot throughout this attempt. Keep that foot visible from start to finish before trying again.']});
+  const completed=attempt('mixed-later-match',steps[0],{status:'match',issues:[],messages:['You reached all ending targets. This movement is complete.']});
+  const request=normalizePracticeSummaryRequest({sessionId:'mixed-unclear-session',attempts:[mixed,completed],results:[{stepId:steps[0],status:'matched'}]});
+  const evidence=practiceSummaryEvidence(request),hand=evidence.entries.find(entry=>entry.entryId==='limb-left-hand');
+  assert.equal(evidence.unknown,1);assert.equal(evidence.matched,1);assert.deepEqual(evidence.laterReachedSteps,[1]);
+  assert.deepEqual(hand.facts.map(({code,count})=>({code,count})),[{code:'too_fast',count:1}]);
+  assert.ok(!evidence.entries.some(entry=>entry.entryId==='limb-right-foot'),'Unclear tracking does not create a measured foot correction');
+  const wording=validatePracticeSummaryOutput(structured(evidence),evidence).join(' ');
+  assert.match(wording,/left hand/i);assert.match(wording,/unclear/i);assert.match(wording,/measured movement mistakes/i);
+  assert.doesNotMatch(wording,/right foot.*(?:too fast|too slow)|timing improved|resolved|perfect/i);
+  assert.deepEqual(evidence.transcript[0].messages,mixed.messages);
+});
+await check('Typed timing uncertainty remains visible in a completed match summary even with full-sentence feedback',()=>{
+  const completed=attempt('timing-unknown-match',steps[0],{status:'match',issues:[{index:34,code:'timing_unknown'}],
+    messages:['The camera could not determine the timing of your right hand in this attempt, so its speed was not assessed.']});
+  const request=normalizePracticeSummaryRequest({sessionId:'typed-timing-session',attempts:[completed],results:[{stepId:steps[0],status:'matched'}]});
+  assert.ok(request);const evidence=practiceSummaryEvidence(request);assert.equal(evidence.matched,1);assert.equal(evidence.unknown,0);
+  assert.equal(evidence.uncertainTiming,1);assert.equal(evidence.entries.filter(entry=>entry.kind==='limb').length,0);
+  const wording=validatePracticeSummaryOutput(structured(evidence),evidence).join(' ');
+  assert.match(wording,/timing was unclear/i);assert.doesNotMatch(wording,/too fast|too slow|pace corrected|timing improved/i);
 });
 await check('Structured summary output covers every factual theme and rejects extra, clinical or unsupported claims',()=>{
   const evidence=practiceSummaryEvidence(normalizePracticeSummaryRequest(payload())),output=structured(evidence);

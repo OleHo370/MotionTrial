@@ -4,7 +4,7 @@ const stepIds=new Set(['first-three-01','first-three-02','first-three-03','first
 const statuses=new Set(['match','mismatch','unknown']);
 const resultStatuses=new Set(['matched','manual']);
 const issueCodes=new Set(['too_fast','too_slow','late_start','off_guide','hold_drift',
-  'endpoint_unreached','movement_incomplete','tracking_unknown','reference_unknown','attempt_incomplete']);
+  'endpoint_unreached','movement_incomplete','tracking_unknown','reference_unknown','attempt_incomplete','timing_unknown']);
 const limbNames={15:'left hand',16:'right hand',27:'left foot',28:'right foot',
   33:'left hand',34:'right hand',35:'left foot',36:'right foot'};
 const indices=new Set(Object.keys(limbNames).map(Number));
@@ -23,7 +23,8 @@ function normalizeAttempt(value){
     ||wordCount(value.messages)>200||!Array.isArray(value.issues)||value.issues.length>16)return null;
   const issues=[];
   for(const issue of value.issues){
-    if(!issueCodes.has(issue?.code)||!(issue.index===null||issue.index===undefined||indices.has(issue.index)))return null;
+    if(!issueCodes.has(issue?.code)||!(issue.index===null||issue.index===undefined||indices.has(issue.index))
+      ||issue.code==='timing_unknown'&&!indices.has(issue.index))return null;
     issues.push({index:issue.index??null,code:issue.code});
   }
   return {attemptId:value.attemptId,stepId:value.stepId,status:value.status,messages:[...value.messages],issues};
@@ -100,14 +101,16 @@ export function localPracticeSessionSummary(payload){
   const mismatch=attempts.filter(attempt=>attempt.status==='mismatch').length;
   const unknown=attempts.filter(attempt=>attempt.status==='unknown').length;
   const uncertainTiming=attempts.filter(attempt=>attempt.status==='match'
-    &&attempt.messages?.some(message=>/^(Left|Right) (hand|foot): timing unclear\.$/.test(message))).length;
+    &&(attempt.issues?.some(issue=>issue.code==='timing_unknown')
+      ||attempt.messages?.some(message=>/^(Left|Right) (hand|foot): timing unclear\.$/.test(message)))).length;
   const messages=[`You completed ${matched} of ${stepIds.size} movements with matching feedback.`];
   if(manual)messages[0]+=` ${manual===1?'One movement was':`${manual} movements were`} advanced manually, so ${manual===1?'that transition was':'those transitions were'} not verified as a match.`;
   if(attempts.length)messages[0]+=` You received feedback on ${attemptsText(attempts.length)}${mismatch?`, including ${attemptsText(mismatch)} that needed another try`:''}.`;
   const groups=new Map();
   for(const attempt of attempts){
-    // Unclear tracking is not evidence that a body part moved incorrectly.
-    if(attempt.status!=='mismatch')continue;
+    // An uncertain limb is not a movement mistake. A separate measured issue
+    // from another limb still remains evidence in the same unknown review.
+    if(!['mismatch','unknown'].includes(attempt.status))continue;
     const seen=new Set();
     for(const issue of attempt.issues??[]){
       const name=limbNames[issue.index],phrase=phrases[issue.code],key=`${name}:${issue.code}`;
@@ -125,7 +128,7 @@ export function localPracticeSessionSummary(payload){
   }
   if(unknown||uncertainTiming){
     const parts=[];
-    if(unknown)parts.push(`Tracking was unclear on ${attemptsText(unknown)}. Those reviews were kept separate from observed movement mistakes; keep your hands and feet visible for the next practice.`);
+    if(unknown)parts.push(`Tracking was unclear on ${attemptsText(unknown)}. Those unclear observations were kept separate from measured movement mistakes; keep your hands and feet visible for the next practice.`);
     if(uncertainTiming)parts.push(`${uncertainTiming===1?'One completed attempt reached':`${uncertainTiming} completed attempts reached`} the targets while timing was unclear.`);
     messages.push(parts.join(' '));
   }

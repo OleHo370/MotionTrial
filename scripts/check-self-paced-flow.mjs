@@ -273,16 +273,27 @@ async function browserChecks(){
       assert.equal(await page.locator('#practice-overlay button').count(),0);
       assert.equal(await page.locator('#overlay-value').isVisible(),false);
       const message=await page.locator('#overlay-reason').textContent();
-      assert.ok(message.length<350);assert.doesNotMatch(message,/automatically|next clip follows|[0-9]+ s\b/i);
+      assert.ok(message.length<=2400);assert.ok(message.trim().split(/\s+/).length<=200);
+      assert.doesNotMatch(message,/automatically|next clip follows|[0-9]+ s\b/i);
+      assert.doesNotMatch(message,/^(?:Left|Right) (?:hand|foot):/m,'Visible feedback uses complete sentences rather than abbreviated limb labels.');
       snapshots.constructedFeedback=await page.evaluate(()=>({phase:window.firstThreeDiagnostics.phase,
         feedback:window.firstThreeDiagnostics.feedback,targetStatus:window.firstThreeDiagnostics.targetStatus,
         overlayWidth:document.getElementById('practice-overlay').querySelector('.overlay-card')?.getBoundingClientRect().width,
         cameraRequests:window.qaCameraRequests}));
-      await page.screenshot({path:fileURLToPath(new URL('compact-feedback.png',out))});
+      await page.screenshot({path:fileURLToPath(new URL('descriptive-feedback.png',out))});
     });
     await check('Spoken feedback ends with immediate current-clip retry and needs no feedback button',async()=>{
+      await page.waitForFunction(()=>!window.automaticFeedbackDiagnostics.pendingAi);
+      if(await page.evaluate(()=>!window.automaticFeedbackDiagnostics.leadInDone)){
+        assert.match(await page.evaluate(()=>window.qaSpoken.at(-1)?.text??''),/preparing your feedback/i);
+        await page.evaluate(()=>window.qaSpoken.at(-1).onend());
+      }
+      await page.waitForFunction(()=>window.automaticFeedbackDiagnostics.speechStarted);
       await page.waitForTimeout(3200);assert.equal(await page.evaluate(()=>window.firstThreeDiagnostics.phase),'feedback');
       assert.equal(await page.evaluate(()=>window.firstThreeDiagnostics.index),0);
+      assert.equal(await page.evaluate(()=>window.qaSpoken.at(-1).text),
+        await page.evaluate(()=>window.firstThreeDiagnostics.feedback.messages.join(' ')),
+        'All complete feedback sentences are spoken after the generic introduction.');
       await page.evaluate(()=>window.qaSpoken.at(-1).onend());
       await page.waitForFunction(()=>window.firstThreeDiagnostics.phase==='positioning');
       const d=await page.evaluate(()=>window.firstThreeDiagnostics);
@@ -302,6 +313,7 @@ catch(error){result='FAIL';failure=error.stack??String(error);console.error(fail
 await writeFile(new URL('verification.json',out),JSON.stringify({result,checkedAt:new Date().toISOString(),checks,
   controllerSha256:sha(source),completionGateSha256:sha(await readFile(new URL('public/practice-end-targets.js',root))),
   compactFeedbackSha256:sha(await readFile(new URL('public/practice-compact-feedback.js',root))),
+  descriptiveFeedbackSha256:sha(await readFile(new URL('public/practice-descriptive-feedback.js',root))),
   browserPerformed:!process.argv.includes('--no-browser'),snapshots,pageErrors,failure,
   provenance:'Actual production controller declarations and browser page. All learner observations are explicitly constructed software fixtures; the browser camera adapter is replaced, getUserMedia requests are blocked, and USB requests receive a disconnected fixture. No live learner, webcam, or physical-hardware acceptance is claimed.'},null,2)+'\n');
 console.log(`Self-paced lesson: ${checks.length} groups ${result.toLowerCase()} (constructed controls).`);

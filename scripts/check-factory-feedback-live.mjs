@@ -18,7 +18,11 @@ const server = createDualViewServer({ relay, feedback: createFactoryPracticeFeed
 server.listen(0, '127.0.0.1');
 await once(server, 'listening');
 const origin = `http://127.0.0.1:${server.address().port}`;
-const body = {
+const unclear=process.argv.includes('--unclear');
+const body = unclear ? {
+  attemptId:'live-software-unclear-foot',stepId:'first-three-01',status:'unknown',
+  messages:['Right foot: tracking unclear.'],issues:[{index:36,code:'tracking_unknown'}],
+} : {
   attemptId: 'live-software-example', stepId: 'first-three-01', status: 'mismatch',
   messages: ['Left hand: too fast.', 'Right hand: too slow.'],
   issues: [{ index: 33, code: 'too_fast' }, { index: 34, code: 'too_slow' }],
@@ -39,8 +43,14 @@ try {
   assert.equal(result.source, 'factory', 'Live SDK wording should pass validation.');
   assert.equal(result.status, body.status);
   assert.equal(result.attemptId, body.attemptId);
-  assert.match(result.messages[0], /^Your left hand .*\. .+\.$/);
-  assert.match(result.messages[1], /^Your right hand .*\. .+\.$/);
+  if(unclear){
+    assert.equal(result.messages.length,1);assert.match(result.messages[0],/right foot/i);
+    assert.match(result.messages[0],/unclear|clearly track/i);assert.ok(result.messages[0].length>80);
+    assert.doesNotMatch(result.messages[0],/too (?:fast|slow)|left foot|matched|successful/i);
+  }else{
+    assert.match(result.messages[0], /^Your left hand .*\. .+\.$/);
+    assert.match(result.messages[1], /^Your right hand .*\. .+\.$/);
+  }
   assert.ok(result.messages.every(message => !message.includes(process.env.FACTORY_API_KEY)));
   console.log('PASS: real Factory SDK response through the practice HTTP endpoint.');
 } finally {

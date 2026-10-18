@@ -6,6 +6,7 @@ import {mkdir,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {controllerHarness,source} from './check-review-flow.mjs';
 import {createPracticeSummaryClient} from '../public/practice-session-summary.js';
+import {descriptivePracticeFeedback} from '../public/practice-descriptive-feedback.js';
 
 const checks=[],out=new URL('../artifacts/responsive-feedback-review/',import.meta.url);
 const mismatch={status:'mismatch',passed:false,percent:null,
@@ -112,13 +113,15 @@ await check('Pause and resume retain selected full sentences without another AI 
 await check('Resuming a paused preparation uses local feedback and rejects the old AI reply',async()=>{
   const h=harness();await h.call('beginReview',mismatch,'retry');await h.call('pause');await h.call('pause');
   assert.equal(h.ai.calls.length,1);assert.equal(h.env.sessionHistory.getAttempts().length,1);
-  assert.deepEqual([...h.env.sessionHistory.getAttempts()[0].messages],mismatch.messages);
+  assert.deepEqual([...h.env.sessionHistory.getAttempts()[0].messages],descriptivePracticeFeedback(mismatch).messages);
   h.ai.reply(0);await h.flush();assert.equal(h.env.feedbackWordingSource,'local');
   assert.equal(h.env.sessionHistory.getAttempts().length,1);await h.finishSpeech();assert.equal(h.state.phase,'positioning');
 });
 await check('Final AI summary receives all five successes, earlier retries, unclear tracking and selected spoken sentences',async()=>{
   const h=harness();await h.call('beginReview',mismatch,'retry');h.ai.reply(0);await h.flush();
-  await h.finishSpeech();await h.finishSpeech();await h.call('beginReview',unknown,'retry');await h.finishSpeech();
+  await h.finishSpeech();await h.finishSpeech();await h.call('beginReview',unknown,'retry');
+  const uncertainMessages=descriptivePracticeFeedback(unknown).messages;
+  h.ai.reply(1,uncertainMessages);await h.flush();await h.finishSpeech();await h.finishSpeech();
   for(let index=0;index<5;index++){
     assert.equal(h.state.index,index);await h.call('beginReview',matched,'advance');await h.finishSpeech();
   }
@@ -127,6 +130,7 @@ await check('Final AI summary receives all five successes, earlier retries, uncl
   assert.equal(payload.attempts.length,7);assert.equal(payload.results.length,5);
   assert.deepEqual(payload.attempts[0].messages,descriptiveMessages);
   assert.deepEqual(payload.attempts[1].issues,unknown.issues);
+  assert.deepEqual(payload.attempts[1].messages,uncertainMessages,'The summary retains the complete selected uncertainty feedback');
   assert.deepEqual(payload.attempts.map(attempt=>attempt.status),['mismatch','unknown','match','match','match','match','match']);
   assert.ok(payload.results.every(result=>result.status==='matched'));
   assert.doesNotMatch(JSON.stringify(payload),/landmarks|cameraFrame|videoFrame|relax your hands|putting together a summary/i);
@@ -171,7 +175,7 @@ await check('Timeout, unavailable AI and muted final speech keep a complete loca
       :mode==='unavailable'?createPracticeSummaryClient({fetchImpl:null}):deferredAi({summary:true});
     const h=harness({speechOptions:{enabled:mode!=='muted'},stateOverrides:{index:4},overrides:{aiSummary:summary}});
     await h.call('beginReview',matched,'advance');
-    if(mode==='muted'){await h.advance(3000);await h.call('tick');}else await h.finishSpeech();
+    if(mode==='muted'){await h.advance(await h.call('feedbackReadingMs'));await h.call('tick');}else await h.finishSpeech();
     assert.equal(h.state.phase,'finished');
     if(mode==='timeout'){await new Promise(resolve=>setTimeout(resolve,40));await h.flush();}
     if(mode==='muted'){summary.fail(0);await h.flush();}else await h.finishSpeech();
