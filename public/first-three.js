@@ -13,6 +13,7 @@ import {createAttemptReview,observeAttemptReview,finalizeAttemptReview,REVIEW_RU
 import {createEndTargetSession,evaluateEndTargets} from './practice-end-targets.js';
 import {compactPracticeFeedback} from './practice-compact-feedback.js';
 import {createPracticeAiFeedback} from './practice-ai-feedback.js';
+import {createPracticeSessionHistory,createPracticeSummaryClient,localPracticeSessionSummary} from './practice-session-summary.js';
 import {getLiveTargetHighlights} from './practice-target-highlight.js';
 import {createDisplaySmoother} from './practice-display-smoothing.js';
 import {prepareTeacherDisplayGuides,getTeacherDisplayPoints} from './teacher-point-display.js';
@@ -56,9 +57,16 @@ const state={manifest:null,data:null,sources:new Map(),sourceId:null,loading:fal
   reviewAction:null,pausePhase:null,endTargets:null,targetStatus:null,stepSixMode:'full-body',trails:new Map(INDICES.map(i=>[i,[]])),lastDrawn:undefined,lastSample:null};
 const FEEDBACK_FLOW_RULES={aiWaitMs:12000,readingMs:3000,maximumReadingMs:30000};
 const aiFeedback=createPracticeAiFeedback({timeoutMs:FEEDBACK_FLOW_RULES.aiWaitMs});
+const sessionHistory=createPracticeSessionHistory({sessionId:crypto.randomUUID()});
+const aiSummary=createPracticeSummaryClient({timeoutMs:25000});
 let feedbackSequence=0;
 let feedbackWordingSource='local';
 let feedbackCycle=null;
+let feedbackAttemptSequence=0;
+let feedbackAttemptId=null;
+let summarySequence=0;
+let summaryCycle=null;
+let lessonSummary=null;
 const step=()=>state.manifest?.steps[state.index],reference=()=>state.refs[state.index];
 const guidance=()=>state.guidanceRefs[state.index];
 const pathReference=()=>state.pathRefs[state.index];
@@ -107,7 +115,7 @@ const hardwareFeedback=attachArduinoFeedback({getContext:()=>({
 })});
 const put=(id,text)=>{if($(id).textContent!==text)$(id).textContent=text;};
 const displayReason=result=>result?.messages?.join(' ')||result?.reason;
-function clearEvidence(){cancelFeedbackFlow();feedbackWordingSource='local';hardwareFeedback.neutral();state.placement=createStartPositionSession(guidance(),controlOptions());state.positioning=null;state.fixedFrame=null;state.movement=null;state.feedback=null;state.endTargets=null;state.targetStatus=null;state.screenLayout=null;state.teacherFreezePending=false;state.teacherBoundaryAtMs=null;state.teacherIntro=false;state.attemptStartedAtMs=null;state.attemptInterrupted=null;state.attemptCameraGeneration=null;state.reviewAction=null;for(const i of INDICES)state.trails.set(i,[]);seedScreenTargets();}
+function clearEvidence(){cancelSummaryFlow();cancelFeedbackFlow();feedbackWordingSource='local';hardwareFeedback.neutral();state.placement=createStartPositionSession(guidance(),controlOptions());state.positioning=null;state.fixedFrame=null;state.movement=null;state.feedback=null;state.endTargets=null;state.targetStatus=null;state.screenLayout=null;state.teacherFreezePending=false;state.teacherBoundaryAtMs=null;state.teacherIntro=false;state.attemptStartedAtMs=null;state.attemptInterrupted=null;state.attemptCameraGeneration=null;state.reviewAction=null;for(const i of INDICES)state.trails.set(i,[]);seedScreenTargets();}
 function cameraFeedAvailable(){const v=$('camera-video');return !!v.srcObject&&v.videoWidth>0&&v.videoHeight>0;}
 function screenGuides(frame){return projectFourPointGuides(guidance(),null,frame.aspect,frame);}
 function screenPaths(frame,session){return projectPracticeTubes(pathReference(),frame,session);}
@@ -158,10 +166,20 @@ function render(){
   $('feedback-state').dataset.state=result.status;put('feedback-message',displayReason(result));
   renderPosition();renderFlowStatus();renderProgress();
   put('teacher-tracking-note',`${activeControlIndices().length} tutorial points · includes approximate guides`);
-  const overlay=$('practice-overlay');overlay.hidden=!state.active||state.paused||state.phase!=='feedback';overlay.dataset.mode='feedback';
-  overlay.dataset.descriptive=String(state.feedback?.speechStyle==='descriptive');
-  const speaking=state.phase==='feedback'&&feedbackSpeech.isBusy();overlay.dataset.speaking=String(speaking);
-  if(!overlay.hidden){
+  const summarizing=state.phase==='finished'&&!!lessonSummary;
+  $('completion').hidden=summarizing||state.phase!=='finished';
+  const overlay=$('practice-overlay');overlay.hidden=!summarizing&&(!state.active||state.paused||state.phase!=='feedback');overlay.dataset.mode=summarizing?'summary':'feedback';
+  overlay.dataset.descriptive=String(summarizing||state.feedback?.speechStyle==='descriptive');
+  const speaking=(summarizing||state.phase==='feedback')&&feedbackSpeech.isBusy();overlay.dataset.speaking=String(speaking);
+  if($('overlay-label'))put('overlay-label',summarizing?'Session review':'Movement review');
+  if(summarizing){
+    put('overlay-title','Your practice summary');put('overlay-value','Complete');
+    put('overlay-reason',lessonSummary.messages.join('\n\n'));
+    if($('feedback-ai-source'))$('feedback-ai-source').hidden=lessonSummary.source!=='factory';
+    put('feedback-continuation',summaryCycle?.pendingAi?'Preparing your session summary…'
+      :summaryCycle?.speechDone?'Practice complete.':speaking?'Your session summary is being read.':'Take a moment to review your session.');
+  }
+  else if(!overlay.hidden){
     const passed=state.feedback?.status==='match';
     put('overlay-title',passed?'Motion complete':state.feedback?.status==='unknown'?'Tracking unclear':'Try again');
     put('overlay-value',passed?'Complete':'Try again');
@@ -365,6 +383,7 @@ function referenceAvailable(){
 }
 async function watchDemonstration(purpose='lesson'){
   if(!state.ready||!state.active||state.paused)return;
+  if(purpose==='lesson')warmFeedbackService();
   const token=++state.operation;video.pause();clearEvidence();state.watchPurpose=purpose;state.preview=purpose==='preview';
   state.visualOnly=false;phase('preparing');
   try{
@@ -423,6 +442,10 @@ function finishAttempt(){
   beginReview(review,review.status==='match'?'advance':'retry');
 }
 function cancelFeedbackFlow(){feedbackCycle=null;aiFeedback.cancel();feedbackSpeech.cancel();}
+function warmFeedbackService(){
+  // Prepare a fresh tool-disabled session during practice; this makes no model request.
+  void fetch('/api/practice-feedback/warmup',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).catch(()=>{});
+}
 function currentFeedbackCycle(cycle){
   const camera=state.camera?.getState();
   return !!cycle&&feedbackCycle===cycle&&state.operation===cycle.operation&&step()?.id===cycle.stepId
@@ -430,6 +453,7 @@ function currentFeedbackCycle(cycle){
 }
 function feedbackFlowDiagnostics(){return {automatic:true,aiWaitMs:FEEDBACK_FLOW_RULES.aiWaitMs,
   readingMs:FEEDBACK_FLOW_RULES.readingMs,pendingAi:!!feedbackCycle?.pendingAi,
+  leadInDone:feedbackCycle?.leadInDone??true,
   speechStarted:!!feedbackCycle?.speechStarted,speechDone:!!feedbackCycle?.speechDone,
   readingDeadlineMs:feedbackCycle?.readingDeadlineMs??null};}
 function feedbackReadingMs(){
@@ -440,6 +464,8 @@ function feedbackReadingMs(){
 function speakFeedback(cycle){
   if(!currentFeedbackCycle(cycle)||cycle.speechStarted)return;
   cycle.pendingAi=false;cycle.speechStarted=true;cycle.readingDeadlineMs=null;
+  sessionHistory.record({attemptId:feedbackAttemptId,stepId:cycle.stepId,status:state.feedback.status,
+    messages:state.feedback.messages,issues:state.feedback.issues??[]});
   const speaking=feedbackSpeech.speakReview(state.feedback,{onComplete(reason){
     if(!currentFeedbackCycle(cycle)||cycle.speechDone)return;
     cycle.speechDone=true;
@@ -450,16 +476,29 @@ function speakFeedback(cycle){
   if(!speaking&&!cycle.speechDone)cycle.readingDeadlineMs=performance.now()+feedbackReadingMs();
   render();
 }
+function maybeSpeakFeedback(cycle){
+  if(currentFeedbackCycle(cycle)&&!cycle.pendingAi&&cycle.leadInDone)speakFeedback(cycle);
+}
+function startFeedbackLeadIn(cycle){
+  cycle.leadInDone=false;
+  const speaking=feedbackSpeech.speakReview({feedbackStyle:'compact',messages:[
+    'You have reached the targets. I am reviewing your movement.'
+  ]},{onComplete(){
+    if(!currentFeedbackCycle(cycle)||cycle.leadInDone)return;
+    cycle.leadInDone=true;maybeSpeakFeedback(cycle);render();
+  }});
+  if(currentFeedbackCycle(cycle)&&!speaking&&!cycle.leadInDone){cycle.leadInDone=true;maybeSpeakFeedback(cycle);}
+}
 function startFeedbackPresentation({requestAi=true}={}){
   if(!state.feedback||!state.active||state.paused||!state.camera?.getState().running)return;
   const local=state.feedback,cycle={id:++feedbackSequence,operation:state.operation,stepId:step().id,
-    generation:state.camera.getState().generation,pendingAi:false,speechStarted:false,speechDone:false,readingDeadlineMs:null};
+    generation:state.camera.getState().generation,pendingAi:false,leadInDone:true,speechStarted:false,speechDone:false,readingDeadlineMs:null};
   feedbackCycle=cycle;
   const codes=new Set(['too_fast','too_slow','late_start','off_guide','hold_drift','endpoint_unreached','movement_incomplete']);
   const measured=requestAi&&local.status==='mismatch'&&local.issues?.length
     &&local.issues.every(issue=>codes.has(issue.code)&&[15,16,27,28,33,34,35,36].includes(issue.index));
   if(!measured){speakFeedback(cycle);return;}
-  cycle.pendingAi=true;render();
+  cycle.pendingAi=true;startFeedbackLeadIn(cycle);render();
   void Promise.resolve().then(()=>currentFeedbackCycle(cycle)?aiFeedback.request({attemptId:`review-${cycle.id}-${cycle.operation}`,stepId:cycle.stepId,status:local.status,
     messages:local.messages,issues:local.issues.map(({index,code})=>({index,code}))}):null).then(result=>{
     if(!currentFeedbackCycle(cycle)||state.feedback!==local)return;
@@ -467,11 +506,12 @@ function startFeedbackPresentation({requestAi=true}={}){
       // Only wording changes. The local outcome, issues and automatic action stay intact.
       state.feedback={...local,messages:result.messages,reason:result.messages[0],message:result.messages[0],speechStyle:'descriptive'};feedbackWordingSource='factory';
     }
-    speakFeedback(cycle);
-  }).catch(()=>{if(currentFeedbackCycle(cycle))speakFeedback(cycle);});
+    cycle.pendingAi=false;maybeSpeakFeedback(cycle);render();
+  }).catch(()=>{if(currentFeedbackCycle(cycle)){cycle.pendingAi=false;maybeSpeakFeedback(cycle);render();}});
 }
 function beginReview(review,action){
-  cancelFeedbackFlow();feedbackWordingSource='local';state.feedback=compactPracticeFeedback(review);state.reviewAction=action;video.pause();phase('feedback');
+  cancelFeedbackFlow();feedbackWordingSource='local';feedbackAttemptId=`attempt-${++feedbackAttemptSequence}`;
+  state.feedback=compactPracticeFeedback(review);state.reviewAction=action;video.pause();phase('feedback');
   startFeedbackPresentation();
 }
 function completeFeedback(){
@@ -490,6 +530,7 @@ function waitAtStart(reason=null){
 }
 async function returnToStart(reason=null){
   if(!state.ready||!state.active)return;
+  warmFeedbackService();
   const token=++state.operation;video.pause();clearEvidence();phase('preparing');drawGuides();
   try{
     if(!await seek(practiceStart(),token)||token!==state.operation||!state.active||state.paused)return;
@@ -527,6 +568,54 @@ function finish(){
   const results=[...state.results.values()],matched=results.filter(r=>r.status==='matched').length,manual=results.filter(r=>r.status==='manual').length;
   put('completion-description',`${matched} / ${total()} movements completed with matching feedback. ${manual} manually continued. These are ${POINT_COUNT}-point practice targets, not Tai Chi correctness. Start practice to try again.`);
   if(results.some(result=>result.practiceMode==='arms-only'))put('completion-description',`${matched} / ${total()} movements completed with matching feedback. ${manual} manually continued. Step 6 was practiced arms-only; its feedback covers both palms. Start practice to try again.`);
+  startLessonSummary();
+}
+function cancelSummaryFlow(){
+  if(summaryCycle){summaryCycle=null;aiSummary.cancel();feedbackSpeech.cancel();}
+  lessonSummary=null;
+}
+function currentSummaryCycle(cycle){
+  return !!cycle&&summaryCycle===cycle&&state.operation===cycle.operation&&state.phase==='finished'&&!state.active;
+}
+function maybeSpeakLessonSummary(cycle){
+  if(currentSummaryCycle(cycle)&&!cycle.pendingAi&&cycle.leadInDone)speakLessonSummary(cycle);
+}
+function speakLessonSummary(cycle){
+  if(!currentSummaryCycle(cycle)||cycle.speechStarted)return;
+  cycle.speechStarted=true;
+  const speaking=feedbackSpeech.speakReview({...lessonSummary,feedbackStyle:'compact',speechStyle:'descriptive'},{onComplete(reason){
+    if(!currentSummaryCycle(cycle)||cycle.speechDone)return;
+    if(reason==='completed')cycle.speechDone=true;
+    else cycle.readingDeadlineMs=performance.now()+summaryReadingMs();
+    render();
+  }});
+  if(currentSummaryCycle(cycle)&&!speaking&&!cycle.speechDone&&cycle.readingDeadlineMs===null)
+    cycle.readingDeadlineMs=performance.now()+summaryReadingMs();
+  render();
+}
+function summaryReadingMs(){
+  const words=(lessonSummary?.messages??[]).join(' ').split(/\s+/).filter(Boolean).length;
+  return Math.min(FEEDBACK_FLOW_RULES.maximumReadingMs,Math.max(FEEDBACK_FLOW_RULES.readingMs,words*300));
+}
+function startLessonSummary(){
+  const payload=sessionHistory.snapshot([...state.results.values()]);
+  lessonSummary=localPracticeSessionSummary(payload);
+  const cycle={id:++summarySequence,operation:state.operation,pendingAi:true,leadInDone:false,
+    speechStarted:false,speechDone:false,readingDeadlineMs:null};
+  summaryCycle=cycle;
+  const speaking=feedbackSpeech.speakReview({feedbackStyle:'compact',messages:[
+    'Your practice session is complete. I am reviewing your attempts and the feedback from this session.'
+  ]},{onComplete(){
+    if(!currentSummaryCycle(cycle)||cycle.leadInDone)return;
+    cycle.leadInDone=true;maybeSpeakLessonSummary(cycle);render();
+  }});
+  if(currentSummaryCycle(cycle)&&!speaking&&!cycle.leadInDone)cycle.leadInDone=true;
+  render();
+  void aiSummary.request(payload).then(result=>{
+    if(!currentSummaryCycle(cycle))return;
+    if(result?.source==='factory')lessonSummary=result;
+    cycle.pendingAi=false;maybeSpeakLessonSummary(cycle);render();
+  }).catch(()=>{if(currentSummaryCycle(cycle)){cycle.pendingAi=false;maybeSpeakLessonSummary(cycle);render();}});
 }
 function pause(){
   if(!state.active||['camera','preparing'].includes(state.phase))return;
@@ -545,6 +634,10 @@ function pause(){
 }
 function tick(){
   const now=performance.now();
+  if(currentSummaryCycle(summaryCycle)&&summaryCycle.readingDeadlineMs!==null
+    &&now>=summaryCycle.readingDeadlineMs&&!feedbackSpeech.isBusy()){
+    summaryCycle.speechDone=true;summaryCycle.readingDeadlineMs=null;
+  }
   if(state.observation&&now-state.observation.observedAtMs>RULES.maximumAgeMs){
     state.observation=null;
     if(state.active&&!state.paused&&['demonstrating','grace'].includes(state.phase)&&state.movement){
@@ -661,7 +754,7 @@ state.camera=createFollowCamera({video:$('camera-video'),canvas:$('camera-overla
   render();
 }});
 $('start-practice').addEventListener('click',async()=>{
-  if(!state.ready||state.loading)return;feedbackSpeech.unlock();if(state.phase==='finished'){state.results.clear();if(!await choose(0))return;}
+  if(!state.ready||state.loading)return;feedbackSpeech.unlock();if(state.phase==='finished'){sessionHistory.clear(crypto.randomUUID());state.results.clear();if(!await choose(0))return;}
   else if(state.phase==='stopped'||state.sourceId!==step().sourceId||video.readyState<2){if(!await choose(state.index))return;}
   if(state.camera.getState().running){state.active=true;state.paused=false;if(state.watched)void returnToStart();else void watchDemonstration('lesson');return;}
   state.active=true;state.paused=false;state.preview=false;state.visualOnly=false;state.awaitingCamera=true;video.pause();++state.operation;clearEvidence();phase('camera');$('start-camera').click();
@@ -677,8 +770,16 @@ $('mirror-preview').addEventListener('change',drawGuides);$('learner-skeleton').
 $('start-camera').addEventListener('click',()=>feedbackSpeech.unlock());
 $('spoken-feedback').addEventListener('change',()=>{
   const enabled=$('spoken-feedback').checked;feedbackSpeech.unlock();feedbackSpeech.setEnabled(enabled);
+  if(!enabled&&currentFeedbackCycle(feedbackCycle)&&!feedbackCycle.leadInDone){
+    feedbackCycle.leadInDone=true;maybeSpeakFeedback(feedbackCycle);render();
+  }
   if(!enabled&&currentFeedbackCycle(feedbackCycle)&&feedbackCycle.speechStarted&&!feedbackCycle.speechDone){
     feedbackCycle.speechDone=true;feedbackCycle.readingDeadlineMs=performance.now()+feedbackReadingMs();render();
+  }
+  if(!enabled&&currentSummaryCycle(summaryCycle)){
+    summaryCycle.leadInDone=true;maybeSpeakLessonSummary(summaryCycle);
+    if(summaryCycle.speechStarted&&!summaryCycle.speechDone)summaryCycle.readingDeadlineMs=performance.now()+summaryReadingMs();
+    render();
   }
 });
 video.addEventListener('seeking',()=>{teacherDisplaySmoother.reset();state.lastDrawn=undefined;drawTeacher(true);});
@@ -712,6 +813,8 @@ Object.defineProperty(window,'trackingDisplayDiagnostics',{get:()=>({
 })});
 Object.defineProperty(window,'spokenFeedbackDiagnostics',{get:()=>feedbackSpeech.getState()});
 Object.defineProperty(window,'automaticFeedbackDiagnostics',{get:feedbackFlowDiagnostics});
+Object.defineProperty(window,'sessionSummaryDiagnostics',{get:()=>({attempts:sessionHistory.getAttempts(),summary:lessonSummary?structuredClone(lessonSummary):null,
+  pendingAi:!!summaryCycle?.pendingAi,speechStarted:!!summaryCycle?.speechStarted,speechDone:!!summaryCycle?.speechDone,...aiSummary.getState()})});
 Object.defineProperty(window,'arduinoFeedbackDiagnostics',{get:()=>hardwareFeedback.getState()});
 Object.defineProperty(window,'startPositionDiagnostics',{get:()=>({
   continuity:state.manifest?.continuity?structuredClone(state.manifest.continuity):null,

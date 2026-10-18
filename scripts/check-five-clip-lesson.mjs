@@ -44,7 +44,7 @@ const checks=[],snapshots={},pageErrors=[];
 async function check(name,run){await run();checks.push(name);console.log(`PASS: ${name}`);}
 
 function harness(index=0){
-  const elements=new Map(),calls={choose:[],cameraStops:0};
+  const elements=new Map(),calls={choose:[],cameraStops:0,summaries:0};
   const $=id=>{
     if(!elements.has(id))elements.set(id,{hidden:false,disabled:false,textContent:'',src:'',alt:'',
       videoWidth:450,videoHeight:360,style:{},attributes:{},nextElementSibling:{textContent:''},
@@ -62,6 +62,7 @@ function harness(index=0){
     async loadRecording(){calls.choose.push(context.state.index);return true;},
     async seek(time){video.currentTime=time;return true;},
     waitAtStart(){context.state.phase='positioning';},watchDemonstration(){context.state.phase='watching';},
+    startLessonSummary(){calls.summaries++;},
     returnToStart(reason){context.state.phase='positioning';context.state.positionNotice=reason;},
   };
   vm.createContext(context);
@@ -103,7 +104,7 @@ async function controllerChecks(){
       if(index<4)assert.equal(h.state.index,index+1);
     }
     assert.equal(h.state.phase,'finished');assert.equal(h.state.index,4);assert.equal(h.state.active,false);
-    assert.equal(h.state.results.size,5);assert.equal(h.calls.cameraStops,1);
+    assert.equal(h.state.results.size,5);assert.equal(h.calls.cameraStops,1);assert.equal(h.calls.summaries,1);
     assert.deepEqual(h.calls.choose,[1,2,3,4]);
     assert.match(h.elements.get('completion-description').textContent,/5 \/ 5 movements/);
     assert.equal(h.elements.get('completion').hidden,false);
@@ -169,6 +170,9 @@ async function browserChecks(){
     });
     await page.route('**/api/arduino/**',route=>route.fulfill({status:503,contentType:'application/json',
       body:JSON.stringify({connected:false,state:'off',message:'QA disconnected hardware fixture; no USB activity.'})}));
+    for(const endpoint of ['practice-feedback','practice-feedback/warmup','practice-summary'])
+      await page.route(`**/api/${endpoint}`,route=>route.fulfill({status:503,contentType:'application/json',
+        body:JSON.stringify({source:'local',reason:'QA blocks real SDK requests.'})}));
     const loaded=async step=>{
       await page.goto(`${base}/first-three.html?step=${step}`);
       await page.waitForFunction(()=>window.firstThreeDiagnostics?.ready&&!window.firstThreeDiagnostics.loading);
@@ -241,7 +245,8 @@ async function browserChecks(){
       assert.equal(d.index,4);assert.equal(d.stepCount,5);assert.equal(d.active,false);
       assert.equal(d.results.length,1);assert.equal(d.results[0].status,'manual');
       assert.equal(await page.locator('#next').isDisabled(),true);
-      assert.equal(await page.locator('#completion').isVisible(),true);
+      assert.equal(await page.locator('#completion').isVisible(),false,'The centered summary replaces the old completion notice');
+      assert.equal(await page.locator('#practice-overlay[data-mode="summary"]').isVisible(),true);
       assert.equal(await page.locator('#completion button').count(),0);
       assert.equal(await page.locator('#practice-overlay button').count(),0);
       assert.match(await page.locator('#completion-description').textContent(),/0 \/ 5 movements.*1 manually continued/);

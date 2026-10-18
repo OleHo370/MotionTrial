@@ -13,8 +13,8 @@ After the local review, the browser sends one background request to
 `scripts/serve-dual-view.mjs`. Only supported measured mismatch issues invoke AI.
 Matched and uncertain attempts keep the local wording. A valid applied response
 is labeled **AI wording** in the centered practice feedback.
-Send the attempt and step IDs, actual issue codes and affected limb names, plus
-supported per-limb timing/position metrics. A long wait for another limb is not
+Send the attempt and step IDs and actual issue codes; the server derives the
+affected limb names. A long wait for another limb is not
 itself evidence that an already completed limb moved slowly.
 
 Ask Droid to rewrite only those issues into brief feedback. Local code continues
@@ -130,9 +130,10 @@ of 18–120 seconds so a valid longer message is not cut off at the old 18-secon
 limit. Ordinary local feedback keeps that original speech limit.
 
 The centered feedback has no Retry or Next buttons and uses the landing page's
-paper and ink style. For supported
-errors, the controller waits at most 12 seconds for final wording, then speaks
-the selected local or AI message once. Successful feedback advances after the
+paper and ink style. For supported errors, it immediately speaks a short neutral
+lead-in while requesting the wording in parallel. The selected local or AI
+message starts when both the lead-in and the bounded 12-second request finish;
+an early response does not interrupt the lead-in. Successful feedback advances after the
 utterance ends without an added delay; mismatch or unknown retries the current
 clip immediately after speech. If speech is off, unavailable, fails or times
 out, ordinary feedback keeps its three-second reading pause, while descriptive
@@ -140,6 +141,41 @@ text gets a word-count reading pause bounded to 3–30 seconds. Pausing cancels
 the old completion callback; resuming
 reads the current text again without starting another Factory request. Starting
 squares and self-paced triangle completion still use the existing local rules.
+
+## Responsive preparation and final session summary
+
+While the learner watches a clip or returns to its starting squares, the browser
+sends `POST /api/practice-feedback/warmup` with `{}`. This prepares a fresh,
+isolated Droid session and disables its data/action tools. Preparation does not
+call a model. The next feedback or summary consumes that session once; it is
+closed afterward, so a later attempt cannot inherit an earlier prompt history.
+Unused preparation expires after five minutes and server shutdown closes it.
+SDK loading and executable discovery are also cached. Preparation happens in
+the background and cannot affect tracking or completion.
+
+Every selected review is retained in the browser's session journal with a stable
+attempt ID, step ID, local result, actual issue codes and displayed/spoken
+messages. A pause/resume does not duplicate the review. Successful retries do
+not overwrite earlier corrections. No frames, landmarks or recordings enter
+this journal or its AI requests. Practice again clears it for a new session.
+
+After the final step, the camera stops and a short spoken introduction runs in
+parallel with `POST /api/practice-summary`. The request includes the complete
+attempt journal and the final matched/manual step results. The summary considers
+earlier retries, per-limb corrections and unclear tracking/timing, while keeping
+manual navigation separate from an observed match. It appears and speaks in the
+same centered paper-and-ink layout, then remains readable without restarting the
+lesson. The previous completion notice is hidden while this summary is shown.
+
+The summary request has a 25-second browser limit, a separate server budget of
+three summaries per minute and the same one-request concurrency limit. It may
+follow a final step immediately without hitting the step-feedback spacing rule.
+Responses are checked against sentences derived from the recorded evidence,
+bounded to six paragraphs and 350 words. A later match proves target completion;
+it does not by itself prove that an earlier timing issue was resolved. Failures
+retain a grounded local summary. Requests over 200 attempts or 96 KiB stay local
+instead of silently omitting earlier attempts. Navigation, stop and a new lesson
+cancel obsolete summary requests and speech.
 
 ## Official references
 
@@ -151,5 +187,10 @@ squares and self-paced triangle completion still use the existing local rules.
 Deterministic checks: `node scripts/check-factory-feedback.mjs`.
 The separate `node scripts/check-factory-feedback-live.mjs` diagnostic consumes
 Factory usage for a labeled software example and never opens a webcam or USB.
+`node scripts/check-factory-summary-live.mjs` makes three small paid model calls
+with labeled software history to compare cold/prepared response time and verify
+the final summary. Ordinary checks in `scripts/check-session-summary.mjs`,
+`scripts/check-responsive-feedback.mjs` and `scripts/check-factory-session-summary.mjs`
+use software fixtures and consume no Factory usage.
 
 Checked against the installed SDK and official documentation on 2026-10-18.

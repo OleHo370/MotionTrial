@@ -13,6 +13,7 @@ import {createAttemptReview as realCreateAttemptReview,observeAttemptReview as r
 import {createEndTargetSession,evaluateEndTargets} from '../public/practice-end-targets.js';
 import {compactPracticeFeedback} from '../public/practice-compact-feedback.js';
 import {createPracticeAiFeedback} from '../public/practice-ai-feedback.js';
+import {createPracticeSessionHistory,createPracticeSummaryClient,localPracticeSessionSummary} from '../public/practice-session-summary.js';
 
 const require=createRequire(import.meta.url),{parse}=require('next/dist/compiled/acorn');
 const controllerURL=new URL('../public/first-three.js',import.meta.url);
@@ -21,6 +22,9 @@ const tree=parse(source,{ecmaVersion:'latest',sourceType:'module'}),slice=node=>
 const definitions=new Map(tree.body.filter(node=>node.type==='FunctionDeclaration').map(node=>[node.id.name,slice(node)]));
 const declarations=new Map(tree.body.filter(node=>node.type==='VariableDeclaration').flatMap(statement=>
   statement.declarations.filter(node=>node.id.type==='Identifier').map(node=>[node.id.name,node.init&&slice(node.init)])));
+const scalarDeclarationNames=tree.body.filter(node=>node.type==='VariableDeclaration').flatMap(statement=>
+  statement.declarations.filter(node=>node.id.type==='Identifier'&&(node.init?.type==='Literal'
+    ||(node.init?.type==='UnaryExpression'&&node.init.argument?.type==='Literal'))).map(node=>node.id.name));
 const cameraAssignment=tree.body.find(node=>node.type==='ExpressionStatement'
   &&node.expression.type==='AssignmentExpression'&&slice(node.expression.left)==='state.camera');
 const cameraHandler=cameraAssignment?.expression.right.arguments?.[0]?.properties?.find(node=>node.key?.name==='onState')?.value;
@@ -54,11 +58,11 @@ async function check(name,run){
 function element(){return {hidden:false,disabled:false,textContent:'',value:'',checked:true,
   src:'',alt:'',style:{setProperty(){}},dataset:{},nextElementSibling:{textContent:''},
   parentElement:{dataset:{},style:{setProperty(){}}},
-  querySelectorAll:()=>[],setAttribute(){},replaceChildren(){}};}
+  querySelectorAll:()=>[],setAttribute(){},replaceChildren(){},click(){}};}
 
 // Extracting declarations through the installed JavaScript parser avoids a
 // copied state machine: edits to the production controller are exercised here.
-function controllerHarness({functions=null,overrides={},stateOverrides={},speechOptions={}}={}){
+function controllerHarness({functions=null,overrides={},stateOverrides={},speechOptions={},knownStepIds=false}={}){
   const elements=new Map(),events=[],clock={now:1000},cameraState={running:true,generation:1};
   const timers=new Map();let nextTimer=0;
   const setTimer=(fn,delay=0)=>{const id=++nextTimer;timers.set(id,{at:clock.now+delay,fn});return id;};
@@ -74,7 +78,8 @@ function controllerHarness({functions=null,overrides={},stateOverrides={},speech
   const refs=Array.from({length:5},()=>({referenceUsable:true,usable:true,guides:indices.map(index=>({index,valid:true,
     name:({33:'Left palm',34:'Right palm',35:'Left foot',36:'Right foot'})[index],
     start:{x:0,y:0},end:{x:0,y:0},targetGeometry:{mode:'hold'}}))}));
-  const steps=Array.from({length:5},(_,index)=>({id:`step-${index+1}`,title:`Movement ${index+1}`,
+  const fixtureStepIds=['first-three-01','first-three-02','first-three-03','first-six-04','first-six-05'];
+  const steps=Array.from({length:5},(_,index)=>({id:knownStepIds?fixtureStepIds[index]:`step-${index+1}`,title:`Movement ${index+1}`,
     sourceId:'master',startSeconds:.5+index,endSeconds:1.5+index,
     practiceStartSeconds:.5+index,teacherFreezeSeconds:1.5+index,screenshots:{start:'start.png',end:'end.png'}}));
   const review={result:{status:'match',passed:true,percent:null,messages:['Close enough'],reason:'Close enough'},created:[],observed:[],finalized:[]};
@@ -96,12 +101,16 @@ function controllerHarness({functions=null,overrides={},stateOverrides={},speech
     destroy(){this.cancel('destroy');},
   };
   const context={console,Map,Set,Date,Math,Number,Promise,structuredClone,AbortController,
+    crypto:{randomUUID:()=>`constructed-session-${clock.now}`},
+    fetch:async()=>({ok:false,json:async()=>({configured:false})}),
     performance:{now:()=>clock.now},setTimeout:setTimer,clearTimeout:id=>timers.delete(id),
     requestAnimationFrame:()=>1,cancelAnimationFrame(){},
     $,video,INDICES:indices,POINT_COUNT:'four',feedbackSpeech,createEndTargetSession,evaluateEndTargets,compactPracticeFeedback,
     // Optional AI wording is disabled by default in deterministic controller QA.
     // Integration checks explicitly inject a non-networking fetch fixture.
     aiFeedback:createPracticeAiFeedback({fetchImpl:null}),feedbackSequence:0,feedbackWordingSource:'local',
+    aiSummary:createPracticeSummaryClient({fetchImpl:null}),localPracticeSessionSummary,
+    sessionHistory:createPracticeSessionHistory({sessionId:'constructed-controller-session'}),
     hardwareFeedback:{neutral(){events.push({kind:'hardware-neutral',at:clock.now});},
       update(){events.push({kind:'hardware-update',at:clock.now});},destroy(){}},
     ATTEMPT_REVIEW_RULES:{completionGraceMs:1000,feedbackMs:3000,maximumAgeMs:450},
@@ -128,9 +137,22 @@ function controllerHarness({functions=null,overrides={},stateOverrides={},speech
     matcher:{requiresRoute:false,retainsStartedTargets:true,mode:'constructed-flow-control',
       createSession:()=>({}),evaluate:()=>({status:'match',percent:100,pathComplete:true,limbs:indices.map(index=>({index,valid:true,targetReached:true}))})}};
   Object.assign(context,overrides);
+  // Older orchestration fixtures use deliberately abstract step identifiers.
+  // Adapt those identifiers at the strict journal boundary only. New lesson
+  // summary checks use knownStepIds=true and exercise the journal unadapted.
+  if(!knownStepIds&&!Object.hasOwn(overrides,'sessionHistory')){
+    const history=context.sessionHistory,knownId=id=>fixtureStepIds[steps.findIndex(step=>step.id===id)]??id;
+    context.sessionHistory={...history,
+      record:value=>history.record({...value,stepId:knownId(value.stepId)}),
+      snapshot:results=>history.snapshot([...(results instanceof Map?results.values():results??[])].map(value=>({...value,stepId:knownId(value.stepId)})))
+    };
+  }
   vm.createContext(context);
   if(declarations.get('RULES'))vm.runInContext(`globalThis.RULES=${declarations.get('RULES')}`,context);
-  for(const name of ['FEEDBACK_FLOW_RULES','feedbackCycle'])if(declarations.has(name))
+  // Production lifecycle counters and nullable cycles are loaded from their
+  // actual declarations, including added final-summary cycles. Fixtures may
+  // override them explicitly without constructing a copied state machine.
+  for(const name of new Set(['FEEDBACK_FLOW_RULES',...scalarDeclarationNames]))if(declarations.has(name)&&!Object.hasOwn(overrides,name))
     vm.runInContext(`globalThis.${name}=${declarations.get(name)}`,context);
   if(declarations.get('displayReason'))vm.runInContext(`globalThis.displayReason=${declarations.get('displayReason')}`,context);
   vm.runInContext(`globalThis.state=${declarations.get('state')}`,context);
@@ -153,7 +175,7 @@ function controllerHarness({functions=null,overrides={},stateOverrides={},speech
   const actualFunctions=functions??[...definitions.keys()].filter(name=>!presentationAndIO.has(name));
   for(const name of actualFunctions){assert.ok(definitions.has(name),`Actual controller function ${name} exists`);vm.runInContext(definitions.get(name),context);}
   if(cameraHandler?.body)vm.runInContext(`function cameraOnState(${cameraHandler.params.map(slice).join(',')})${slice(cameraHandler.body)}`,context);
-  for(const [id,name]of [['replay','replayAction']])
+  for(const [id,name]of [['replay','replayAction'],['start-practice','startPracticeAction']])
     if(clickHandlers.has(id))
       vm.runInContext(`globalThis.${name}=${clickHandlers.get(id)}`,context);
   if(interruptedMediaHandler)vm.runInContext(`globalThis.mediaInterruptionAction=${slice(interruptedMediaHandler)}`,context);
@@ -209,7 +231,7 @@ await check('Production controller exposes watch, full-attempt, boundary and rev
 await check('The actual speech checkbox change captures user intent before synchronous unlock state publication',async()=>{
   assert.ok(speechChangeHandler,'Production spoken-feedback change handler exists');
   assert.ok(speechStateHandler,'Production speech constructor state callback exists');
-  const h=controllerHarness({functions:[],speechOptions:{enabled:true},overrides:{currentFeedbackCycle:()=>false}}),published=[],setValues=[];
+  const h=controllerHarness({functions:[],speechOptions:{enabled:true},overrides:{currentFeedbackCycle:()=>false,currentSummaryCycle:()=>false}}),published=[],setValues=[];
   vm.runInContext(`globalThis.publishActualSpeechState=function(${speechStateHandler.params.map(slice).join(',')})${slice(speechStateHandler.body)}`,h.env);
   vm.runInContext(`globalThis.changeActualSpeechSetting=${slice(speechChangeHandler)}`,h.env);
   const publish=()=>{

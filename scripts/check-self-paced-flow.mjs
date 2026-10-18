@@ -211,6 +211,9 @@ async function browserChecks(){
       body:JSON.stringify({connected:false,state:'off',message:'QA disconnected USB fixture. No physical hardware.'})}));
     await page.route('**/api/practice-feedback',route=>route.fulfill({status:503,contentType:'application/json',
       body:JSON.stringify({source:'local',reason:'QA blocks real SDK requests'})}));
+    for(const endpoint of ['practice-feedback/warmup','practice-summary'])
+      await page.route(`**/api/${endpoint}`,route=>route.fulfill({status:503,contentType:'application/json',
+        body:JSON.stringify({source:'local',reason:'QA blocks real SDK requests'})}));
     await page.goto(`${base}/first-three.html?step=1`);
     await page.waitForFunction(()=>window.firstThreeDiagnostics?.ready&&!window.firstThreeDiagnostics.loading);
     await page.evaluate(()=>{

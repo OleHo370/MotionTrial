@@ -166,7 +166,7 @@ async function serviceChecks(){
       assert.equal((await fixture.request(undefined,{body:payload({landmarks:[]})})).status,400);
       assert.equal(fixture.state.sessions.length,0);
       const status=await fixture.request('/api/practice-feedback/status',{method:'GET',raw:''});
-      assert.deepEqual(status.json,{configured:true,provider:'factory',mode:'measured-issues-only'});
+      assert.deepEqual(status.json,{configured:true,provider:'factory',mode:'measured-issues-only',summaries:true,warmup:true});
     });
     await check('Match, unknown, no issues and any uncertain evidence keep local feedback without an AI call',async()=>{
       for(const body of [payload({status:'match'}),payload({status:'unknown'}),payload({issues:[]}),
@@ -194,7 +194,8 @@ async function serviceChecks(){
       assert.deepEqual([...session.settings[0].disabledToolIds].sort(),['Execute','Read','Write']);
       assert.ok(session.closed);assert.doesNotMatch(fixture.state.prompts[0].prompt,/CONSTRUCTED_LOCAL_TEXT|CONSTRUCTED_ISSUE_PROSE/);
       const prompt=JSON.parse(fixture.state.prompts[0].prompt);
-      assert.deepEqual(Object.keys(prompt).sort(),['issues','status','stepId']);
+      assert.deepEqual(Object.keys(prompt).sort(),['issues','status','stepId','task','wordLimit']);
+      assert.equal(prompt.task,'rewrite-measured-issues');assert.equal(prompt.wordLimit,200);
       assert.ok(!Object.hasOwn(response.json,'passed'));
     });
     await check('Invented, contradictory, missing, duplicate and extra structured output always retains exact local messages',async()=>{
@@ -401,7 +402,7 @@ async function controllerChecks(){
       ruleVersion:'CONSTRUCTED actual-controller integration fixture'};
     return {h,sent,ai,review};
   }
-  await check('Actual controller shows local feedback immediately, then speaks final AI wording without changing pass/score/progression',async()=>{
+  await check('Actual controller shows local feedback and a neutral lead-in immediately, then speaks final AI wording without changing pass/score/progression',async()=>{
     const {h,sent,ai,review}=fixture();try{
       await h.call('beginReview',review,'retry');assert.equal(h.state.phase,'feedback');
       assert.deepEqual([...h.state.feedback.messages],payload().messages);assert.equal(sent.length,1);
@@ -412,8 +413,11 @@ async function controllerChecks(){
       for(const key of ['status','passed','percent','issues','limbs','ruleVersion'])
         assert.deepEqual(h.state.feedback[key],before[key],key);
       assert.equal(h.state.phase,'feedback');assert.equal(h.state.index,0);assert.equal(h.state.results.size,0);
-      assert.equal(h.state.reviewAction,'retry');assert.equal(speechCount,0);
-      assert.equal(h.speech.calls.length,1);assert.deepEqual([...h.speech.calls[0].args[0].messages],messages);
+      assert.equal(h.state.reviewAction,'retry');assert.equal(speechCount,1);
+      assert.match(h.speech.calls[0].args[0].messages.join(' '),/reviewing your movement/);
+      assert.equal(h.speech.calls.length,1,'AI wording waits for the lead-in to finish');
+      await h.finishSpeech();assert.equal(h.speech.calls.length,2);
+      assert.deepEqual([...h.speech.calls[1].args[0].messages],messages);
     }finally{ai.cancel();}
   });
   await check('Internal current-clip retry discards the pending request and an old result cannot repaint the retry',async()=>{
@@ -551,7 +555,7 @@ async function browserChecks(){
       await page.waitForFunction(()=>window.firstThreeDiagnostics.phase==='feedback');
       await page.waitForFunction(()=>!window.firstThreeDiagnostics.aiFeedback.pending);
       browserEvidence.snapshots.afterConstructedMotion=await page.evaluate(()=>window.firstThreeDiagnostics);
-      const sessionsBeforeConstructedReview=fixture.state.sessions.length;
+      const modelCallsBeforeConstructedReview=fixture.state.prompts.length;
       await page.evaluate(()=>window.qaEnterConstructedReview({status:'mismatch',passed:false,percent:null,
         messages:['Left hand: too fast.','Right hand: too slow.'],
         issues:[{index:33,code:'too_fast'},{index:34,code:'too_slow'}],
@@ -565,9 +569,13 @@ async function browserChecks(){
       assert.equal(await page.locator('#feedback-ai-source').textContent(),'AI wording');
       assert.equal(await page.locator('#practice-overlay button').count(),0);
       assert.equal(await page.locator('#feedback-retry, #feedback-next').count(),0);
-      assert.equal(fixture.state.sessions.length,sessionsBeforeConstructedReview+1,'Each new measured review makes one SDK request');
+      assert.equal(fixture.state.prompts.length,modelCallsBeforeConstructedReview+1,'Each new measured review makes one SDK model request; a prewarmed session may already exist');
       assert.ok(diagnostics.feedback.issues.length>0);
       assert.equal(await page.locator('#overlay-reason').textContent(),diagnostics.feedback.messages.join('\n'));
+      assert.equal(await page.evaluate(()=>window.automaticFeedbackDiagnostics.speechStarted),false,'Prepared AI waits for the active lead-in');
+      await page.evaluate(()=>window.qaSpoken.at(-1).onend());
+      await page.waitForFunction(()=>window.automaticFeedbackDiagnostics.speechStarted);
+      assert.equal(await page.evaluate(()=>window.qaSpoken.at(-1).text),diagnostics.feedback.messages.join(' '));
       browserEvidence.snapshots.aiWording=diagnostics;
       await page.screenshot({path:fileURLToPath(new URL('ai-wording-software-fixture.png',out))});
     });
