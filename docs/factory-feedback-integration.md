@@ -12,7 +12,7 @@ After the local review, the browser sends one background request to
 `POST /api/practice-feedback` on the existing loopback server in
 `scripts/serve-dual-view.mjs`. Only supported measured mismatch issues invoke AI.
 Matched and uncertain attempts keep the local wording. A valid applied response
-is labeled **AI wording** on the compact feedback card.
+is labeled **AI wording** in the centered practice feedback.
 Send the attempt and step IDs, actual issue codes and affected limb names, plus
 supported per-limb timing/position metrics. A long wait for another limb is not
 itself evidence that an already completed limb moved slowly.
@@ -118,6 +118,15 @@ The caller must validate the message count/length and ensure wording refers only
 to the supplied issues and limbs. Treat structured output as untrusted input;
 show it with `textContent`. Display the local feedback immediately, and retain
 it if Factory times out, fails, or introduces unsupported claims.
+
+The centered feedback uses the landing page's paper and ink style. For supported
+errors, the controller waits at most 12 seconds for final wording, then speaks
+the selected local or AI message once. Successful feedback advances after the
+utterance ends; mismatch or unknown retries the current clip. If speech is off,
+unavailable, fails or times out, a three-second reading pause keeps automatic
+continuation available. Pausing cancels the old completion callback; resuming
+reads the current text again without starting another Factory request. Starting
+squares and self-paced triangle completion still use the existing local rules.
 
 ## Official references
 

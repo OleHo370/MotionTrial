@@ -89,7 +89,7 @@ async function pureChecks(){
     assert.match(compact.messages.join(' '),/right (hand|palm).*too slow/i);
     assert.match(compact.messages.join(' '),/left foot/i);
     assert.ok(compact.messages.every(message=>message.length<100));
-    assert.equal(compact.feedbackStyle,'compact');assert.equal(compact.manualContinuation,true);
+    assert.equal(compact.feedbackStyle,'compact');assert.equal(compact.manualContinuation,false);
     assert.deepEqual(wrong.messages,['Verbose placeholder must be replaced.'],'Formatter keeps raw review evidence untouched');
     const unclear=compactPracticeFeedback({status:'unknown',passed:false,
       issues:[{index:36,code:'tracking_unknown',name:'Right foot'}],messages:['Tracking was unavailable.']});
@@ -116,7 +116,7 @@ async function controllerChecks(){
     await completeTargets(h);assert.equal(h.state.phase,'feedback');assert.equal(h.review.finalized.length,1);
   });
   await check('Concurrent endpoint support can complete before the teacher finishes and finalizes exactly once',async()=>{
-    const h=controllerHarness();await attempt(h);h.video.currentTime=.7;
+    const h=controllerHarness({speechOptions:{enabled:true}});await attempt(h);h.video.currentTime=.7;
     await completeTargets(h);assert.equal(h.state.phase,'feedback');assert.equal(h.review.finalized.length,1);
     assert.equal(h.video.paused,true);assert.equal(h.state.index,0);assert.equal(h.state.results.size,0);
     const options=h.review.finalized[0].options;
@@ -162,12 +162,12 @@ async function controllerChecks(){
     release(true);await h.flush();
     assert.equal(h.state.phase,'feedback');assert.equal(h.review.finalized.length,1);assert.equal(h.state.index,0);
   });
-  await check('The actual Next click cannot accept mismatched or unknown feedback',async()=>{
+  await check('The actual feedback continuation cannot accept mismatched or unknown feedback',async()=>{
     for(const status of ['mismatch','unknown']){
       const h=controllerHarness();h.review.result={status,passed:false,percent:null,
         issues:[{index:33,code:status==='mismatch'?'too_fast':'tracking_unknown'}],messages:['Constructed result']};
       await attempt(h);await completeTargets(h);await h.call('feedbackNextAction');
-      assert.equal(h.state.phase,'feedback');assert.equal(h.state.index,0);assert.equal(h.state.results.size,0);
+      assert.equal(h.state.phase,'positioning');assert.equal(h.state.index,0);assert.equal(h.state.results.size,0);
       await h.call('feedbackRetryAction');assert.equal(h.state.phase,'positioning');assert.equal(h.state.results.size,0);
     }
   });
@@ -197,6 +197,11 @@ async function browserChecks(){
     page.on('pageerror',error=>pageErrors.push(error.message));
     await page.addInitScript(()=>{
       window.qaCameraRequests=0;
+      class FakeUtterance{constructor(text){this.text=text;}}
+      Object.defineProperty(window,'SpeechSynthesisUtterance',{configurable:true,value:FakeUtterance});
+      Object.defineProperty(window,'speechSynthesis',{configurable:true,value:{
+        getVoices:()=>[{name:'CONSTRUCTED software QA English voice',lang:'en-US',localService:true}],
+        speak(){},cancel(){},addEventListener(){},removeEventListener(){}}});
       if(navigator.mediaDevices)navigator.mediaDevices.getUserMedia=async()=>{
         window.qaCameraRequests++;throw new DOMException('QA blocks physical webcam access','NotAllowedError');
       };
@@ -204,12 +209,14 @@ async function browserChecks(){
     await page.route('**/first-three-center-camera.js',route=>route.fulfill({status:200,contentType:'text/javascript',body:cameraFixture}));
     await page.route('**/api/arduino/**',route=>route.fulfill({status:503,contentType:'application/json',
       body:JSON.stringify({connected:false,state:'off',message:'QA disconnected USB fixture. No physical hardware.'})}));
+    await page.route('**/api/practice-feedback',route=>route.fulfill({status:503,contentType:'application/json',
+      body:JSON.stringify({source:'local',reason:'QA blocks real SDK requests'})}));
     await page.goto(`${base}/first-three.html?step=1`);
     await page.waitForFunction(()=>window.firstThreeDiagnostics?.ready&&!window.firstThreeDiagnostics.loading);
     await page.evaluate(()=>{
       const banner=document.createElement('div');banner.textContent='SOFTWARE QA FIXTURE · no physical camera or USB';
       banner.style.cssText='position:fixed;top:0;left:0;right:0;z-index:10000;text-align:center;background:#fff0bc;color:#302a13;font:12px sans-serif;padding:3px';
-      document.body.append(banner);document.getElementById('spoken-feedback').checked=false;
+      document.body.append(banner);document.getElementById('spoken-feedback').checked=true;
       document.getElementById('spoken-feedback').dispatchEvent(new Event('change'));
       window.qaEmitTargets=(key,excluded=[])=>{
         const d=window.startPositionDiagnostics,frame=d.fixedFrame||d.screenLayout?.frame;

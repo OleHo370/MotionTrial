@@ -2,6 +2,14 @@
 
 Updated: 2026-10-18.
 
+## Latest: centered feedback and automatic continuation after speech — 2026-10-18
+
+Feedback now sits in the center of the teacher/webcam stage, using the Qi Mirror landing page's local Instrument Serif and Manrope fonts, light paper wash, ink text and muted accent. The floating dialog/card, rounded border, shadow, dimming and backdrop blur are removed. Small text controls remain optional; no button is required to continue. After the spoken message ends, matched attempts advance to the next clip and mismatch or unknown returns to this clip's starting squares. The fifth matched clip completes the lesson. Triangle completion still gives the learner unlimited time before review, with the existing tracking, tempo, guide geometry, progress and hardware rules.
+
+Supported measured errors display their local message immediately, wait at most 12 seconds for Factory wording, and then speak the selected message once. Successful and uncertain reviews do not wait for Factory. With speech off or unavailable, or after a speech error/watchdog, a three-second reading pause provides automatic continuation. Completion callbacks and AI replies are tied to the current review/camera generation; pause, navigation, camera changes, stop and explicit retry cancel old work. Resuming feedback reads the retained message without a new Factory request. Muting an active message settles its canceled speech and starts the reading pause, so it cannot leave the review stuck or let an old callback advance it.
+
+Verification: 124 unit tests, TypeScript checking, 16 spoken automatic-flow, 32 review-flow, 27 Factory, 15 self-paced, 12 five-clip, 17 speech and 14 hardware-guidance checks pass. Browser screenshots confirm centered text and landing-page fonts at desktop, 390×844 and 844×390. Browser review outcomes, speech engines, camera adapters and SDK replies are explicitly labeled software fixtures; no physical camera, audio, Arduino or real Factory request was used for this change. Evidence: `artifacts/spoken-auto-feedback-review/`; new QA: `scripts/check-spoken-auto-feedback.mjs`. The running local server serves the new files without being restarted or disturbing the current camera/USB session; refresh the practice page to load them.
+
 ## Latest: Factory Droid SDK feedback — 2026-10-18
 
 The five-step player now requests optional Factory wording after the local review. Its compact local feedback appears and speaks immediately; valid AI wording updates only the text and is labeled **AI wording**. Triangle completion, measured issues, pass/retry, progress, target geometry, camera inference and Arduino signals remain local. Retry, navigation, pause, camera changes, newer attempts and timeouts cancel or discard late responses. Matched attempts and uncertain tracking retain their local wording without a model request.

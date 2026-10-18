@@ -60,6 +60,8 @@ function element(){return {hidden:false,disabled:false,textContent:'',value:'',c
 // copied state machine: edits to the production controller are exercised here.
 function controllerHarness({functions=null,overrides={},stateOverrides={},speechOptions={}}={}){
   const elements=new Map(),events=[],clock={now:1000},cameraState={running:true,generation:1};
+  const timers=new Map();let nextTimer=0;
+  const setTimer=(fn,delay=0)=>{const id=++nextTimer;timers.set(id,{at:clock.now+delay,fn});return id;};
   const $=id=>{if(!elements.has(id)){const created=element();if(['overlay-value','feedback-next'].includes(id))created.hidden=true;
     elements.set(id,created);}return elements.get(id);};
   const video={currentTime:.5,readyState:4,seeking:false,ended:false,paused:true,
@@ -93,8 +95,8 @@ function controllerHarness({functions=null,overrides={},stateOverrides={},speech
       pending:speech.supported&&speech.enabled&&speech.busy}),
     destroy(){this.cancel('destroy');},
   };
-  const context={console,Map,Set,Date,Math,Number,Promise,structuredClone,
-    performance:{now:()=>clock.now},setTimeout,clearTimeout,
+  const context={console,Map,Set,Date,Math,Number,Promise,structuredClone,AbortController,
+    performance:{now:()=>clock.now},setTimeout:setTimer,clearTimeout:id=>timers.delete(id),
     requestAnimationFrame:()=>1,cancelAnimationFrame(){},
     $,video,INDICES:indices,POINT_COUNT:'four',feedbackSpeech,createEndTargetSession,evaluateEndTargets,compactPracticeFeedback,
     // Optional AI wording is disabled by default in deterministic controller QA.
@@ -128,6 +130,8 @@ function controllerHarness({functions=null,overrides={},stateOverrides={},speech
   Object.assign(context,overrides);
   vm.createContext(context);
   if(declarations.get('RULES'))vm.runInContext(`globalThis.RULES=${declarations.get('RULES')}`,context);
+  for(const name of ['FEEDBACK_FLOW_RULES','feedbackCycle'])if(declarations.has(name))
+    vm.runInContext(`globalThis.${name}=${declarations.get(name)}`,context);
   if(declarations.get('displayReason'))vm.runInContext(`globalThis.displayReason=${declarations.get('displayReason')}`,context);
   vm.runInContext(`globalThis.state=${declarations.get('state')}`,context);
   Object.assign(context.state,{manifest:{steps},ready:true,active:true,phase:'positioning',loading:false,
@@ -153,8 +157,18 @@ function controllerHarness({functions=null,overrides={},stateOverrides={},speech
     if(clickHandlers.has(id)&&(id==='replay'||typeof context[id==='feedback-retry'?'retryFeedback':'completeFeedback']==='function'))
       vm.runInContext(`globalThis.${name}=${clickHandlers.get(id)}`,context);
   if(interruptedMediaHandler)vm.runInContext(`globalThis.mediaInterruptionAction=${slice(interruptedMediaHandler)}`,context);
+  if(speechChangeHandler)vm.runInContext(`globalThis.speechSettingAction=${slice(speechChangeHandler)}`,context);
   const flush=async()=>{for(let i=0;i<32;i++)await Promise.resolve();};
-  return {env:context,state:context.state,events,clock,cameraState,elements,video,frame,indices,review,speech,flush,
+  return {env:context,state:context.state,events,clock,cameraState,elements,video,frame,indices,review,speech,flush,timers,
+    async finishSpeech(reason='completed',utterance=speech.utterances.at(-1)){
+      speech.busy=false;utterance?.args[1]?.onComplete?.(reason);await flush();
+    },
+    async advance(ms){const end=clock.now+ms;let count=0;
+      while(true){const next=[...timers].sort((a,b)=>a[1].at-b[1].at||a[0]-b[0])[0];
+        if(!next||next[1].at>end)break;assert.ok(++count<100,'Constructed timers do not loop');
+        clock.now=next[1].at;timers.delete(next[0]);next[1].fn();await flush();}
+      clock.now=end;await flush();
+    },
     async call(name,...args){const result=context[name](...args);if(result?.then)await result;await flush();return result;},
     async emitCameraState(status){cameraState.running=!!status.running;context.cameraOnState(status);await flush();}};
 }
@@ -195,7 +209,7 @@ await check('Production controller exposes watch, full-attempt, boundary and rev
 await check('The actual speech checkbox change captures user intent before synchronous unlock state publication',async()=>{
   assert.ok(speechChangeHandler,'Production spoken-feedback change handler exists');
   assert.ok(speechStateHandler,'Production speech constructor state callback exists');
-  const h=controllerHarness({functions:[],speechOptions:{enabled:true}}),published=[],setValues=[];
+  const h=controllerHarness({functions:[],speechOptions:{enabled:true},overrides:{currentFeedbackCycle:()=>false}}),published=[],setValues=[];
   vm.runInContext(`globalThis.publishActualSpeechState=function(${speechStateHandler.params.map(slice).join(',')})${slice(speechStateHandler.body)}`,h.env);
   vm.runInContext(`globalThis.changeActualSpeechSetting=${slice(speechChangeHandler)}`,h.env);
   const publish=()=>{
@@ -225,7 +239,7 @@ await check('The first lesson demonstration records no learner evidence and ends
   assert.equal(h.video.currentTime,.5);assert.equal(h.video.paused,true);
 });
 
-await check('Supported simultaneous finish targets may end an attempt during the clip but require manual Next to advance',async()=>{
+await check('Supported simultaneous finish targets may end an attempt during the clip before feedback continuation',async()=>{
   const h=controllerHarness();await attempt(h);
   assert.equal(h.review.created.length,1);
   const options=h.review.created[0].options;
@@ -244,8 +258,8 @@ await check('Supported simultaneous finish targets may end an attempt during the
   await h.call('completeFeedback');assert.equal(h.state.index,1);
 });
 
-await check('An unfinished attempt waits indefinitely at the held teacher boundary, and its review waits for an explicit choice',async()=>{
-  const h=controllerHarness();await attempt(h);await boundary(h);
+await check('An unfinished attempt waits indefinitely at the held teacher boundary, then review waits for voice completion',async()=>{
+  const h=controllerHarness({speechOptions:{enabled:true}});await attempt(h);await boundary(h);
   assert.equal(h.video.paused,true);assert.equal(h.env.RULES.graceMs,0);assert.equal(h.state.deadline,null);
   h.clock.now+=100000;await h.call('tick');assert.equal(h.state.phase,'grace');
   assert.equal(h.review.finalized.length,0);assert.equal(h.state.results.size,0);
@@ -254,7 +268,7 @@ await check('An unfinished attempt waits indefinitely at the held teacher bounda
   assert.equal(h.env.RULES.feedbackMs,0);assert.equal(h.state.deadline,null);assert.equal(h.state.results.size,0);
   h.clock.now+=100000;await h.call('tick');assert.equal(h.state.phase,'feedback');
   assert.equal(h.state.index,0);assert.equal(h.state.results.size,0);
-  await h.call('completeFeedback');
+  await h.finishSpeech();
   assert.equal(h.state.index,1);assert.equal(h.state.results.get('step-1').status,'matched');
   assert.equal(h.state.phase,'watching','Each new movement is watched before positioning/attempting');
   assert.equal(h.review.created.length,1,'Watching the next clip cannot create a scored attempt');
@@ -269,7 +283,7 @@ await check('A finalized review requests spoken feedback once; redraws and timer
   assert.equal(h.review.finalized.length,1);assert.equal(h.state.phase,'feedback');
 });
 
-await check('Spoken feedback cannot auto advance, and explicit Next cancels speech and advances once',async()=>{
+await check('Spoken feedback holds while speaking, and optional Next cancels speech and advances once',async()=>{
   const h=controllerHarness({speechOptions:{enabled:true}});await attempt(h);await review(h);
   h.clock.now+=3000;await h.call('tick');
   assert.equal(h.state.phase,'feedback');assert.equal(h.state.remainingMs,0);
@@ -282,7 +296,7 @@ await check('Spoken feedback cannot auto advance, and explicit Next cancels spee
   assert.equal(h.speech.busy,false);
 });
 
-await check('The actual feedback renderer presents compact issues and explicit actions without a countdown',async()=>{
+await check('The actual feedback renderer presents compact center issues and optional actions without a countdown',async()=>{
   const h=controllerHarness({speechOptions:{enabled:true}});await attempt(h);await review(h);
   for(const name of ['controls','renderPosition','renderFlowStatus','renderProgress'])h.env[name]=()=>{};
   vm.runInContext(definitions.get('render'),h.env);
@@ -300,21 +314,18 @@ await check('The actual feedback renderer presents compact issues and explicit a
   await h.call('pause');assert.equal(h.elements.get('practice-overlay').hidden,true);
 });
 
-await check('Finishing speech early leaves review open until the learner chooses Next',async()=>{
+await check('Finishing speech early automatically advances to the next watch-only demonstration',async()=>{
   const h=controllerHarness({speechOptions:{enabled:true}});await attempt(h);await review(h);
-  h.speech.busy=false;h.clock.now+=2999;await h.call('tick');
-  assert.equal(h.state.phase,'feedback');assert.equal(h.state.index,0);
-  h.clock.now+=100000;await h.call('tick');assert.equal(h.state.index,0);
-  await h.call('completeFeedback');assert.equal(h.state.index,1);
+  await h.finishSpeech();assert.equal(h.state.index,1);assert.equal(h.state.phase,'watching');
+  assert.equal(h.state.results.get('step-1').status,'matched');
 });
 
-await check('Muted or unsupported speech keeps manual review open without audible announcements',async()=>{
+await check('Muted or unsupported speech automatically continues after a three-second reading interval',async()=>{
   for(const speechOptions of [{enabled:false,supported:true},{enabled:true,supported:false}]){
     const h=controllerHarness({speechOptions});await attempt(h);await review(h);
     assert.equal(h.speech.utterances.length,0);assert.equal(h.env.feedbackSpeech.isBusy(),false);
     h.clock.now+=2999;await h.call('tick');assert.equal(h.state.index,0);
-    h.clock.now+=100000;await h.call('tick');assert.equal(h.state.index,0);
-    await h.call('completeFeedback');assert.equal(h.state.index,1);
+    h.clock.now++;await h.call('tick');assert.equal(h.state.index,1);
     assert.equal(h.state.results.get('step-1').status,'matched');
   }
 });
@@ -345,26 +356,26 @@ await check('Stop, manual navigation and replay cancel active feedback audio and
   }
 });
 
-await check('Pausing feedback cancels speech and resumes manual review without repeating audio or advancing',async()=>{
+await check('Pausing feedback cancels speech and resumes with one fresh announcement before advancing',async()=>{
   const h=controllerHarness({speechOptions:{enabled:true}});await attempt(h);await review(h);
   h.clock.now+=1000;const cancellationCount=h.speech.cancellations.length;await h.call('pause');
   assert.equal(h.state.paused,true);assert.equal(h.env.feedbackSpeech.isBusy(),false);
   assert.ok(h.speech.cancellations.length>cancellationCount);assert.equal(h.speech.calls.length,1);
   assert.equal(h.state.remainingMs,0);
   h.clock.now+=10000;await h.call('tick');assert.equal(h.state.index,0);
-  await h.call('pause');assert.equal(h.state.paused,false);assert.equal(h.speech.calls.length,1);
+  await h.call('pause');assert.equal(h.state.paused,false);assert.equal(h.speech.calls.length,2);
   h.clock.now+=100000;await h.call('tick');assert.equal(h.state.index,0);
-  await h.call('completeFeedback');assert.equal(h.state.index,1);assert.equal(h.speech.calls.length,1);
+  await h.finishSpeech();assert.equal(h.state.index,1);assert.equal(h.speech.calls.length,2);
 });
 
-await check('Pausing manual feedback keeps its zero deadline and leaves both feedback actions usable on resume',async()=>{
+await check('Pausing feedback retains the compact outcome and optional continuation remains usable on resume',async()=>{
   const h=controllerHarness({speechOptions:{enabled:true}});await attempt(h);await review(h);
   h.clock.now+=3000;await h.call('tick');assert.equal(h.state.phase,'feedback');assert.equal(h.state.remainingMs,0);
   await h.call('pause');assert.equal(h.state.paused,true);assert.equal(h.env.feedbackSpeech.isBusy(),false);
   assert.equal(h.state.remainingMs,0);await h.call('pause');h.clock.now++;await h.call('tick');
   assert.equal(h.state.index,0);assert.equal(h.state.deadline,null);
   await h.call('completeFeedback');assert.equal(h.state.index,1);
-  assert.equal(h.speech.calls.length,1);
+  assert.equal(h.speech.calls.length,2);
 });
 
 await check('Camera loss or generation reset cancels spoken success and requires another attempt',async()=>{
@@ -373,19 +384,20 @@ await check('Camera loss or generation reset cancels spoken success and requires
     await attempt(h);await review(h);const cancellations=h.speech.cancellations.length;
     if(kind==='generation')h.cameraState.generation++;
     await h.emitCameraState({running:kind!=='loss',phase:kind==='loss'?'idle':'running'});
-    assert.equal(h.env.feedbackSpeech.isBusy(),false);assert.ok(h.speech.cancellations.length>cancellations);
+    assert.equal(h.env.feedbackSpeech.isBusy(),kind==='generation','Changed camera speaks a new unknown result only when available');
+    assert.ok(h.speech.cancellations.length>cancellations);
     h.clock.now+=10000;await h.call('tick');
     assert.equal(h.state.index,0);assert.equal(h.state.results.size,0);
     assert.notEqual(h.state.feedback?.status,'match');
   }
 });
 
-await check('Disabling spoken feedback cancels audio without changing the learner-controlled review transition',async()=>{
+await check('Disabling spoken feedback cancels audio and uses a reading interval before automatic continuation',async()=>{
   const h=controllerHarness({speechOptions:{enabled:true}});await attempt(h);await review(h);
   h.clock.now+=3500;await h.call('tick');assert.equal(h.state.phase,'feedback');
-  h.env.feedbackSpeech.setEnabled(false);assert.equal(h.env.feedbackSpeech.isBusy(),false);
+  h.env.$('spoken-feedback').checked=false;await h.call('speechSettingAction');assert.equal(h.env.feedbackSpeech.isBusy(),false);
   await h.call('tick');assert.equal(h.state.index,0);assert.equal(h.speech.calls.length,1);
-  await h.call('completeFeedback');assert.equal(h.state.index,1);
+  h.clock.now+=3000;await h.call('tick');assert.equal(h.state.index,1);
 });
 
 await check('Observed mismatch and tracking uncertainty retry from squares without another watch-only round',async()=>{
@@ -394,8 +406,7 @@ await check('Observed mismatch and tracking uncertainty retry from squares witho
     await attempt(h);await review(h);
     assert.equal(h.state.feedback.status,status);
     const playCount=h.events.filter(e=>e.kind==='play').length;
-    h.clock.now+=3000;await h.call('tick');assert.equal(h.state.phase,'feedback');
-    await h.call('retryFeedback');
+    h.clock.now+=3000;await h.call('tick');
     assert.equal(h.state.phase,'positioning');assert.equal(h.state.index,0);
     assert.equal(h.state.watched,true);assert.equal(h.state.results.size,0);
     assert.equal(h.video.currentTime,.5);assert.equal(h.video.paused,true);
@@ -424,8 +435,8 @@ await check('Pause during movement discards the attempt and resumes from fresh s
   assert.equal(h.state.watched,true);assert.equal(h.video.currentTime,.5);
 });
 
-await check('Pause preserves the finalized feedback outcome and requires manual continuation on resume',async()=>{
-  const h=controllerHarness();await attempt(h);await review(h);
+await check('Pause preserves the finalized feedback outcome and resumes automatic continuation',async()=>{
+  const h=controllerHarness({speechOptions:{enabled:true}});await attempt(h);await review(h);
   h.clock.now+=1200;await h.call('pause');
   const feedback=h.state.feedback,remaining=h.state.remainingMs;
   assert.equal(h.state.paused,true);assert.equal(remaining,0);
@@ -433,7 +444,7 @@ await check('Pause preserves the finalized feedback outcome and requires manual 
   assert.equal(h.state.feedback,feedback);
   await h.call('pause');assert.equal(h.state.paused,false);
   h.clock.now+=100000;await h.call('tick');assert.equal(h.state.index,0);
-  await h.call('completeFeedback');assert.equal(h.state.index,1);
+  await h.finishSpeech();assert.equal(h.state.index,1);
   assert.equal(h.state.results.get('step-1').status,'matched');
 });
 
@@ -462,8 +473,8 @@ await check('Camera loss during review cancels the cached success instead of adv
   await h.call('completeFeedback');assert.equal(h.state.results.size,0);assert.equal(h.state.index,0);
 });
 
-await check('All five clips use watch once, squares, self-paced attempt and review; a completed match advances only with Next',async()=>{
-  const h=controllerHarness();await h.call('watchDemonstration','lesson');
+await check('All five clips use watch once, squares, self-paced attempt and review; a completed match advances after speech',async()=>{
+  const h=controllerHarness({speechOptions:{enabled:true}});await h.call('watchDemonstration','lesson');
   for(let index=0;index<5;index++){
     assert.equal(h.state.index,index);assert.equal(h.state.phase,'watching');
     const createdBefore=h.review.created.length;
@@ -473,7 +484,7 @@ await check('All five clips use watch once, squares, self-paced attempt and revi
     await attempt(h);await review(h);assert.equal(h.state.feedback.status,'match');
     assert.equal(h.state.results.has(`step-${index+1}`),false,'A pending review is not a recorded completion');
     h.clock.now+=3000;await h.call('tick');assert.equal(h.state.index,index);
-    await h.call('completeFeedback');
+    await h.finishSpeech();
     assert.equal(h.state.results.get(`step-${index+1}`).status,'matched');
   }
   assert.equal(h.state.phase,'finished');assert.equal(h.state.results.size,5);

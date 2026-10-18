@@ -53,7 +53,7 @@ function harness(index=0){
   };
   const video={currentTime:lesson.steps[index].practiceStartSeconds,readyState:4,paused:true,pause(){this.paused=true;}};
   const context={console,Map,Set,Number,Math,structuredClone,$,video,INDICES:[...LESSON_CONTROLS.indices],POINT_COUNT:'four',
-    performance:{now:()=>1000},feedbackSpeech:{cancel(){},isBusy:()=>false},
+    performance:{now:()=>1000},feedbackSpeech:{cancel(){},isBusy:()=>false},aiFeedback:{cancel(){}},feedbackCycle:null,
     hardwareFeedback:{neutral(){},update(){}},createFullHeightLayout,
     cameraFeedAvailable:()=>true,createStartPositionSession:()=>({bodyFrame:null,aspect:null}),
     drawTeacher(){},drawGuides(){},render(){},syncPracticeModeUI(){},clearEvidence(){},
@@ -76,7 +76,7 @@ function harness(index=0){
   for(const name of ['step','reference','guidance','pathReference','total','practiceStart'])
     vm.runInContext(`globalThis.${name}=${initializers.get(name)}`,context);
   for(const name of ['practiceMode','activeControlIndices','controlOptions','controlCount','choose',
-    'recordAndAdvance','completeFeedback','retryFeedback','stop','finish','renderProgress','seedScreenTargets','holdTeacherAtBoundary'])
+    'cancelFeedbackFlow','recordAndAdvance','completeFeedback','retryFeedback','stop','finish','renderProgress','seedScreenTargets','holdTeacherAtBoundary'])
     vm.runInContext(functions.get(name),context);
   assert.ok(nextHandler,'Actual Next handler exists');
   vm.runInContext(`globalThis.manualNext=${slice(nextHandler)}`,context);
@@ -120,7 +120,7 @@ async function controllerChecks(){
   await check('Clip-5 mismatch or tracking uncertainty still retries without completing the five-clip lesson',async()=>{
     for(const status of ['mismatch','unknown']){
       const h=harness(4);h.state.feedback={status};h.state.reviewAction='retry';await h.call('completeFeedback');
-      assert.equal(h.state.phase,'feedback','Next cannot accept a mismatched or unknown attempt');
+      assert.equal(h.state.phase,'positioning','Continuation retries a mismatched or unknown attempt');
       await h.call('retryFeedback');
       assert.equal(h.state.phase,'positioning');assert.equal(h.state.index,4);assert.equal(h.state.results.size,0);
       assert.equal(h.calls.cameraStops,0);assert.equal(h.calls.choose.length,0);

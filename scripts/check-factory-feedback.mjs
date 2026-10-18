@@ -358,7 +358,7 @@ async function controllerChecks(){
       ruleVersion:'CONSTRUCTED actual-controller integration fixture'};
     return {h,sent,ai,review};
   }
-  await check('Actual controller shows local feedback immediately, then applies AI text without pass/score/progression or speech changes',async()=>{
+  await check('Actual controller shows local feedback immediately, then speaks final AI wording without changing pass/score/progression',async()=>{
     const {h,sent,ai,review}=fixture();try{
       await h.call('beginReview',review,'retry');assert.equal(h.state.phase,'feedback');
       assert.deepEqual([...h.state.feedback.messages],payload().messages);assert.equal(sent.length,1);
@@ -369,7 +369,8 @@ async function controllerChecks(){
       for(const key of ['status','passed','percent','issues','limbs','ruleVersion'])
         assert.deepEqual(h.state.feedback[key],before[key],key);
       assert.equal(h.state.phase,'feedback');assert.equal(h.state.index,0);assert.equal(h.state.results.size,0);
-      assert.equal(h.state.reviewAction,'retry');assert.equal(h.speech.calls.length,speechCount);
+      assert.equal(h.state.reviewAction,'retry');assert.equal(speechCount,0);
+      assert.equal(h.speech.calls.length,1);assert.deepEqual([...h.speech.calls[0].args[0].messages],messages);
     }finally{ai.cancel();}
   });
   await check('Actual Try again discards the pending request and an old result cannot repaint the retry',async()=>{
@@ -437,6 +438,11 @@ async function browserChecks(){
     page.on('pageerror',error=>browserEvidence.pageErrors.push(error.message));
     await page.addInitScript(()=>{
       window.qaCameraRequests=0;
+      class FakeUtterance{constructor(text){this.text=text;}}
+      Object.defineProperty(window,'SpeechSynthesisUtterance',{configurable:true,value:FakeUtterance});
+      Object.defineProperty(window,'speechSynthesis',{configurable:true,value:{
+        getVoices:()=>[{name:'CONSTRUCTED software QA English voice',lang:'en-US',localService:true}],
+        speak(){},cancel(){},addEventListener(){},removeEventListener(){}}});
       if(navigator.mediaDevices)navigator.mediaDevices.getUserMedia=async()=>{
         window.qaCameraRequests++;throw new DOMException('QA blocks physical camera access','NotAllowedError');
       };
@@ -455,7 +461,7 @@ async function browserChecks(){
     await page.evaluate(()=>{
       const banner=document.createElement('div');banner.textContent='SOFTWARE QA FIXTURE · constructed review + simulated SDK · no camera or hardware';
       banner.style.cssText='position:fixed;top:0;left:0;right:0;z-index:10000;text-align:center;background:#fff0bc;color:#302a13;font:12px sans-serif;padding:3px';
-      document.body.append(banner);document.getElementById('spoken-feedback').checked=false;
+      document.body.append(banner);document.getElementById('spoken-feedback').checked=true;
       document.getElementById('spoken-feedback').dispatchEvent(new Event('change'));
       window.qaEmitTargets=(key,progress=0)=>{
         const diagnostics=window.startPositionDiagnostics,frame=diagnostics.fixedFrame||diagnostics.screenLayout?.frame;
@@ -500,7 +506,9 @@ async function browserChecks(){
         }
       });
       await page.waitForFunction(()=>window.firstThreeDiagnostics.phase==='feedback');
+      await page.waitForFunction(()=>!window.firstThreeDiagnostics.aiFeedback.pending);
       browserEvidence.snapshots.afterConstructedMotion=await page.evaluate(()=>window.firstThreeDiagnostics);
+      const sessionsBeforeConstructedReview=fixture.state.sessions.length;
       await page.evaluate(()=>window.qaEnterConstructedReview({status:'mismatch',passed:false,percent:null,
         messages:['Left hand: too fast.','Right hand: too slow.'],
         issues:[{index:33,code:'too_fast'},{index:34,code:'too_slow'}],
@@ -513,7 +521,8 @@ async function browserChecks(){
       assert.equal(await page.locator('#feedback-ai-source').isVisible(),true);
       assert.equal(await page.locator('#feedback-ai-source').textContent(),'AI wording');
       assert.equal(await page.locator('#feedback-retry').isVisible(),true);assert.equal(await page.locator('#feedback-next').isVisible(),false);
-      assert.ok(fixture.state.sessions.length===1);assert.ok(diagnostics.feedback.issues.length>0);
+      assert.equal(fixture.state.sessions.length,sessionsBeforeConstructedReview+1,'Each new measured review makes one SDK request');
+      assert.ok(diagnostics.feedback.issues.length>0);
       assert.equal(await page.locator('#overlay-reason').textContent(),diagnostics.feedback.messages.join('\n'));
       browserEvidence.snapshots.aiWording=diagnostics;
       await page.screenshot({path:fileURLToPath(new URL('ai-wording-software-fixture.png',out))});

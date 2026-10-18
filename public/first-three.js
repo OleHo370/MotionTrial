@@ -54,9 +54,11 @@ const state={manifest:null,data:null,sources:new Map(),sourceId:null,loading:fal
   cameraRunning:false,completionNotice:null,screenLayout:null,teacherFreezePending:false,teacherBoundaryAtMs:null,teacherIntro:false,
   watched:false,watchPurpose:null,attemptStartedAtMs:null,attemptInterrupted:null,attemptCameraGeneration:null,
   reviewAction:null,pausePhase:null,endTargets:null,targetStatus:null,stepSixMode:'full-body',trails:new Map(INDICES.map(i=>[i,[]])),lastDrawn:undefined,lastSample:null};
-const aiFeedback=createPracticeAiFeedback();
+const FEEDBACK_FLOW_RULES={aiWaitMs:12000,readingMs:3000};
+const aiFeedback=createPracticeAiFeedback({timeoutMs:FEEDBACK_FLOW_RULES.aiWaitMs});
 let feedbackSequence=0;
 let feedbackWordingSource='local';
+let feedbackCycle=null;
 const step=()=>state.manifest?.steps[state.index],reference=()=>state.refs[state.index];
 const guidance=()=>state.guidanceRefs[state.index];
 const pathReference=()=>state.pathRefs[state.index];
@@ -105,7 +107,7 @@ const hardwareFeedback=attachArduinoFeedback({getContext:()=>({
 })});
 const put=(id,text)=>{if($(id).textContent!==text)$(id).textContent=text;};
 const displayReason=result=>result?.messages?.join(' ')||result?.reason;
-function clearEvidence(){aiFeedback.cancel();feedbackWordingSource='local';feedbackSpeech.cancel();hardwareFeedback.neutral();state.placement=createStartPositionSession(guidance(),controlOptions());state.positioning=null;state.fixedFrame=null;state.movement=null;state.feedback=null;state.endTargets=null;state.targetStatus=null;state.screenLayout=null;state.teacherFreezePending=false;state.teacherBoundaryAtMs=null;state.teacherIntro=false;state.attemptStartedAtMs=null;state.attemptInterrupted=null;state.attemptCameraGeneration=null;state.reviewAction=null;for(const i of INDICES)state.trails.set(i,[]);seedScreenTargets();}
+function clearEvidence(){cancelFeedbackFlow();feedbackWordingSource='local';hardwareFeedback.neutral();state.placement=createStartPositionSession(guidance(),controlOptions());state.positioning=null;state.fixedFrame=null;state.movement=null;state.feedback=null;state.endTargets=null;state.targetStatus=null;state.screenLayout=null;state.teacherFreezePending=false;state.teacherBoundaryAtMs=null;state.teacherIntro=false;state.attemptStartedAtMs=null;state.attemptInterrupted=null;state.attemptCameraGeneration=null;state.reviewAction=null;for(const i of INDICES)state.trails.set(i,[]);seedScreenTargets();}
 function cameraFeedAvailable(){const v=$('camera-video');return !!v.srcObject&&v.videoWidth>0&&v.videoHeight>0;}
 function screenGuides(frame){return projectFourPointGuides(guidance(),null,frame.aspect,frame);}
 function screenPaths(frame,session){return projectPracticeTubes(pathReference(),frame,session);}
@@ -126,7 +128,7 @@ function seedScreenTargets(aspect=$('camera-video').videoWidth/$('camera-video')
   state.placement=createStartPositionSession(guidance(),controlOptions());state.positioning=null;
   state.placement.bodyFrame=layout.frame;state.placement.aspect=aspect;state.screenLayout=layout;
 }
-function phase(name,duration=0){if(name!=='feedback'){aiFeedback.cancel();feedbackSpeech.cancel();}state.phase=name;state.remainingMs=duration;state.deadline=duration&&!state.paused?performance.now()+duration:null;hardwareFeedback.update();render();}
+function phase(name,duration=0){if(name!=='feedback')cancelFeedbackFlow();state.phase=name;state.remainingMs=duration;state.deadline=duration&&!state.paused?performance.now()+duration:null;hardwareFeedback.update();render();}
 function controls(){
   for(const id of ['practice-full-body','practice-arms-only'])$(id).disabled=!state.ready||state.loading||state.awaitingCamera||state.phase==='preparing';
   $('start-practice').disabled=!state.ready||state.awaitingCamera||state.loading;
@@ -164,6 +166,10 @@ function render(){
     put('overlay-value',passed?'Complete':'Try again');
     put('overlay-reason',state.feedback?.messages?.join('\n')||'Tracking unclear.');
     if($('feedback-ai-source'))$('feedback-ai-source').hidden=feedbackWordingSource!=='factory';
+    if($('feedback-continuation'))put('feedback-continuation',!state.camera?.getState().running?'Start the camera to try again.'
+      :feedbackCycle?.pendingAi?'Preparing spoken feedback…'
+      :passed?(speaking?'Next step after the message.':'Continuing shortly.')
+      :(speaking?'Try again after the message.':'Try again shortly.'));
     $('feedback-retry').disabled=!state.camera?.getState().running;
     $('feedback-next').hidden=!passed;$('feedback-next').disabled=!state.camera?.getState().running;
     $('feedback-next').textContent=state.index===total()-1?'Finish lesson':'Next step';
@@ -418,28 +424,63 @@ function finishAttempt(){
   }
   beginReview(review,review.status==='match'?'advance':'retry');
 }
-function beginReview(review,action){
-  aiFeedback.cancel();feedbackWordingSource='local';feedbackSpeech.cancel();state.feedback=compactPracticeFeedback(review);state.reviewAction=action;video.pause();phase('feedback');
-  if(state.active&&!state.paused)feedbackSpeech.speakReview(state.feedback);
-  if(!state.active||state.paused)return;
-  const local=state.feedback,operation=state.operation,stepId=step().id,generation=state.camera?.getState().generation;
-  void aiFeedback.request({attemptId:`review-${++feedbackSequence}-${operation}`,stepId,status:local.status,
-    messages:local.messages,issues:(local.issues??[]).map(({index,code})=>({index,code}))},{onResult(result){
-    if(state.feedback!==local||state.operation!==operation||step()?.id!==stepId||state.phase!=='feedback'
-      ||!state.active||state.paused||!state.camera?.getState().running||state.camera.getState().generation!==generation)return;
-    // Only displayed wording changes; the measured local verdict and issues stay intact.
-    state.feedback={...local,messages:result.messages,reason:result.messages[0],message:result.messages[0]};feedbackWordingSource='factory';render();
+function cancelFeedbackFlow(){feedbackCycle=null;aiFeedback.cancel();feedbackSpeech.cancel();}
+function currentFeedbackCycle(cycle){
+  const camera=state.camera?.getState();
+  return !!cycle&&feedbackCycle===cycle&&state.operation===cycle.operation&&step()?.id===cycle.stepId
+    &&state.phase==='feedback'&&state.active&&!state.paused&&camera?.running&&camera.generation===cycle.generation;
+}
+function feedbackFlowDiagnostics(){return {automatic:true,aiWaitMs:FEEDBACK_FLOW_RULES.aiWaitMs,
+  readingMs:FEEDBACK_FLOW_RULES.readingMs,pendingAi:!!feedbackCycle?.pendingAi,
+  speechStarted:!!feedbackCycle?.speechStarted,speechDone:!!feedbackCycle?.speechDone,
+  readingDeadlineMs:feedbackCycle?.readingDeadlineMs??null};}
+function speakFeedback(cycle){
+  if(!currentFeedbackCycle(cycle)||cycle.speechStarted)return;
+  cycle.pendingAi=false;cycle.speechStarted=true;cycle.readingDeadlineMs=null;
+  const speaking=feedbackSpeech.speakReview(state.feedback,{onComplete(reason){
+    if(!currentFeedbackCycle(cycle)||cycle.speechDone)return;
+    cycle.speechDone=true;
+    if(reason==='completed'){completeFeedback();return;}
+    cycle.readingDeadlineMs=performance.now()+FEEDBACK_FLOW_RULES.readingMs;render();
   }});
+  if(!currentFeedbackCycle(cycle))return;
+  if(!speaking&&!cycle.speechDone)cycle.readingDeadlineMs=performance.now()+FEEDBACK_FLOW_RULES.readingMs;
+  render();
+}
+function startFeedbackPresentation({requestAi=true}={}){
+  if(!state.feedback||!state.active||state.paused||!state.camera?.getState().running)return;
+  const local=state.feedback,cycle={id:++feedbackSequence,operation:state.operation,stepId:step().id,
+    generation:state.camera.getState().generation,pendingAi:false,speechStarted:false,speechDone:false,readingDeadlineMs:null};
+  feedbackCycle=cycle;
+  const codes=new Set(['too_fast','too_slow','late_start','off_guide','hold_drift','endpoint_unreached','movement_incomplete']);
+  const measured=requestAi&&local.status==='mismatch'&&local.issues?.length
+    &&local.issues.every(issue=>codes.has(issue.code)&&[15,16,27,28,33,34,35,36].includes(issue.index));
+  if(!measured){speakFeedback(cycle);return;}
+  cycle.pendingAi=true;render();
+  void Promise.resolve().then(()=>currentFeedbackCycle(cycle)?aiFeedback.request({attemptId:`review-${cycle.id}-${cycle.operation}`,stepId:cycle.stepId,status:local.status,
+    messages:local.messages,issues:local.issues.map(({index,code})=>({index,code}))}):null).then(result=>{
+    if(!currentFeedbackCycle(cycle)||state.feedback!==local)return;
+    if(result?.source==='factory'){
+      // Only wording changes. The local outcome, issues and automatic action stay intact.
+      state.feedback={...local,messages:result.messages,reason:result.messages[0],message:result.messages[0]};feedbackWordingSource='factory';
+    }
+    speakFeedback(cycle);
+  }).catch(()=>{if(currentFeedbackCycle(cycle))speakFeedback(cycle);});
+}
+function beginReview(review,action){
+  cancelFeedbackFlow();feedbackWordingSource='local';state.feedback=compactPracticeFeedback(review);state.reviewAction=action;video.pause();phase('feedback');
+  startFeedbackPresentation();
 }
 function completeFeedback(){
   if(state.phase!=='feedback'||!state.active||state.paused)return;
-  aiFeedback.cancel();feedbackSpeech.cancel();
+  cancelFeedbackFlow();
   if(!state.camera?.getState().running){void returnToStart('Camera is off. Start practice to continue.');return;}
   if(state.reviewAction==='advance'&&state.feedback?.status==='match'){recordAndAdvance('matched');return;}
+  void returnToStart();
 }
 function retryFeedback(){
   if(state.phase!=='feedback'||!state.active||state.paused)return;
-  aiFeedback.cancel();feedbackSpeech.cancel();void returnToStart();
+  cancelFeedbackFlow();void returnToStart();
 }
 function waitAtStart(reason=null){
   clearEvidence();state.preview=false;state.watchPurpose=null;state.positionNotice=reason||(!referenceAvailable()?'Practice targets could not load. Reload this clip to retry.':null);state.visualOnly=false;phase('positioning');
@@ -487,13 +528,13 @@ function finish(){
 function pause(){
   if(!state.active||['camera','preparing'].includes(state.phase))return;
   if(!state.paused){
-    aiFeedback.cancel();feedbackSpeech.cancel();
+    cancelFeedbackFlow();
     state.pausePhase=state.phase;state.remainingMs=state.deadline===null?0:Math.max(0,state.deadline-performance.now());state.deadline=null;
     state.paused=true;++state.operation;video.pause();state.teacherFreezePending=false;
     if(state.phase!=='feedback')clearEvidence();
   }else{
     const resume=state.pausePhase;state.paused=false;
-    if(resume==='feedback'){phase('feedback');return;}
+    if(resume==='feedback'){phase('feedback');startFeedbackPresentation({requestAi:false});return;}
     if(resume==='watching'){void watchDemonstration(state.watchPurpose||'lesson');return;}
     void returnToStart('Find the squares to begin a fresh, uninterrupted attempt.');return;
   }
@@ -514,6 +555,8 @@ function tick(){
     if(state.deadline!==null)state.remainingMs=Math.max(0,state.deadline-now);
     if(state.phase==='watching'&&!video.seeking&&(video.ended||video.currentTime>=step().teacherFreezeSeconds))void finishWatch();
     else if(state.phase==='demonstrating'&&!video.seeking&&(video.ended||video.currentTime>=step().teacherFreezeSeconds))holdTeacherAtBoundary();
+    else if(state.phase==='feedback'&&currentFeedbackCycle(feedbackCycle)&&feedbackCycle.readingDeadlineMs!==null
+      &&now>=feedbackCycle.readingDeadlineMs&&!feedbackSpeech.isBusy())completeFeedback();
   }
   hardwareFeedback.update();drawTeacher();drawGuides();render();requestAnimationFrame(tick);
 }
@@ -592,7 +635,7 @@ state.camera=createFollowCamera({video:$('camera-video'),canvas:$('camera-overla
   $('camera-empty').hidden=!!status.running||cameraFeedAvailable();
   $('camera-pixels').parentElement.dataset.cameraPhase=status.phase;
   const wasRunning=state.cameraRunning,wasAwaiting=state.awaitingCamera;state.cameraRunning=!!status.running;
-  if(!status.running){aiFeedback.cancel();state.observation=null;feedbackSpeech.cancel();hardwareFeedback.neutral();}
+  if(!status.running){cancelFeedbackFlow();state.observation=null;hardwareFeedback.neutral();}
   if(wasAwaiting&&(status.running||['error','idle'].includes(status.phase)))state.awaitingCamera=false;
   if(state.ready&&state.active&&!state.loading){
     const generation=state.camera?.getState().generation;
@@ -601,8 +644,12 @@ state.camera=createFollowCamera({video:$('camera-video'),canvas:$('camera-overla
     }else if(['demonstrating','grace'].includes(state.phase)&&(!status.running||generation!==state.attemptCameraGeneration)){
       state.attemptInterrupted='The camera stopped or changed during this attempt. Set up and try again.';
     }else if(state.phase==='feedback'&&(!status.running||(state.attemptCameraGeneration!==null&&generation!==state.attemptCameraGeneration))){
-      aiFeedback.cancel();feedbackWordingSource='local';feedbackSpeech.cancel();
+      cancelFeedbackFlow();feedbackWordingSource='local';
       state.reviewAction='retry';state.feedback=compactPracticeFeedback({status:'unknown',passed:false,percent:null,messages:['The camera stopped or changed.']});
+      state.attemptCameraGeneration=null;
+      if(status.running&&!state.paused)startFeedbackPresentation({requestAi:false});
+    }else if(state.phase==='feedback'&&status.running&&!wasRunning&&!state.paused&&!feedbackCycle){
+      startFeedbackPresentation({requestAi:false});
     }else if(!state.paused&&status.running&&!wasRunning&&!['watching','feedback'].includes(state.phase)){
       if(!state.watched)void watchDemonstration('lesson');
       else void returnToStart();
@@ -627,7 +674,12 @@ $('next').addEventListener('click',()=>{if(state.ready&&state.phase!=='finished'
 $('speed').addEventListener('change',()=>{state.speed=Number($('speed').value);video.playbackRate=state.speed;if(state.active&&['demonstrating','grace'].includes(state.phase))void returnToStart('Playback speed changed. Start a fresh attempt from the squares.');});
 $('mirror-preview').addEventListener('change',drawGuides);$('learner-skeleton').addEventListener('change',drawGuides);
 $('start-camera').addEventListener('click',()=>feedbackSpeech.unlock());
-$('spoken-feedback').addEventListener('change',()=>{const enabled=$('spoken-feedback').checked;feedbackSpeech.unlock();feedbackSpeech.setEnabled(enabled);});
+$('spoken-feedback').addEventListener('change',()=>{
+  const enabled=$('spoken-feedback').checked;feedbackSpeech.unlock();feedbackSpeech.setEnabled(enabled);
+  if(!enabled&&currentFeedbackCycle(feedbackCycle)&&feedbackCycle.speechStarted&&!feedbackCycle.speechDone){
+    feedbackCycle.speechDone=true;feedbackCycle.readingDeadlineMs=performance.now()+FEEDBACK_FLOW_RULES.readingMs;render();
+  }
+});
 video.addEventListener('seeking',()=>{teacherDisplaySmoother.reset();state.lastDrawn=undefined;drawTeacher(true);});
 for(const event of ['loadedmetadata','playing','resize'])$('camera-video').addEventListener(event,()=>{
   if(cameraFeedAvailable())$('camera-empty').hidden=true;
@@ -658,6 +710,7 @@ Object.defineProperty(window,'trackingDisplayDiagnostics',{get:()=>({
   cameraVersion:state.camera?.getState().displaySmoothing||null,
 })});
 Object.defineProperty(window,'spokenFeedbackDiagnostics',{get:()=>feedbackSpeech.getState()});
+Object.defineProperty(window,'automaticFeedbackDiagnostics',{get:feedbackFlowDiagnostics});
 Object.defineProperty(window,'arduinoFeedbackDiagnostics',{get:()=>hardwareFeedback.getState()});
 Object.defineProperty(window,'startPositionDiagnostics',{get:()=>({
   continuity:state.manifest?.continuity?structuredClone(state.manifest.continuity):null,

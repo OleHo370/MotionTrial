@@ -166,6 +166,107 @@ const unknown={status:'unknown',percent:99,reason:'Your left foot was hidden.'};
   checks.push('Spoken text stays concise without changing the full written result, and a paused speech engine resumes for the new explicitly requested feedback.');
 }
 
+{
+  const f=fixture(),completed=[],completionStates=[];f.speech.unlock();
+  assert.equal(f.speech.speakReview(mismatch,{onComplete:reason=>{
+    completed.push(reason);completionStates.push({busy:f.speech.isBusy(),timers:f.clock.timers.size,message:f.states.at(-1).message});
+  }}),true);
+  const end=f.last().onend,error=f.last().onerror;end();
+  assert.deepEqual(completed,['completed']);assert.equal(f.last().onend,null);assert.equal(f.last().onerror,null);
+  assert.deepEqual(completionStates,[{busy:false,timers:0,message:'Spoken feedback complete.'}]);
+  end();error();f.clock.advance(18000);assert.deepEqual(completed,['completed']);f.speech.destroy();
+  checks.push('A requested completion fires once after onend, after timers and busy state clear and the idle state is published. Duplicate end/error events and the old watchdog cannot invoke it again.');
+}
+
+{
+  const f=fixture(),completed=[];f.speech.unlock();
+  f.speech.speakReview(mismatch,{onComplete:reason=>completed.push(reason)});
+  const end=f.last().onend,error=f.last().onerror;error({error:'audio-busy'});end();error();
+  assert.deepEqual(completed,['error']);assert.equal(f.clock.timers.size,0);
+  f.engine.throwSpeak=true;
+  assert.equal(f.speech.speakReview(match,{onComplete:reason=>completed.push(reason)}),false);
+  assert.deepEqual(completed,['error','error']);assert.equal(f.speech.isBusy(),false);
+  f.engine.throwSpeak=false;f.speech.speakReview(match,{onComplete(){throw Error('Constructed completion callback error');}});
+  assert.doesNotThrow(()=>f.last().onend());assert.equal(f.clock.timers.size,0);
+  assert.equal(f.speech.speakReview(match),true);f.last().onend();f.speech.destroy();
+  const broken=fixture({Utterance:class{constructor(){throw Error('Constructed utterance error');}}}),constructorReasons=[];
+  broken.speech.unlock();assert.equal(broken.speech.speakReview(match,{onComplete:reason=>constructorReasons.push(reason)}),false);
+  assert.deepEqual(constructorReasons,['error']);assert.equal(broken.clock.timers.size,0);broken.speech.destroy();
+  checks.push('An asynchronous speech error or synchronous utterance/start exception settles completion once with error. A throwing completion callback is isolated and cannot leave speech busy or block the next request.');
+}
+
+{
+  const f=fixture(),completed=[];f.speech.unlock();
+  f.speech.speakReview(match,{onComplete:reason=>completed.push(reason)});
+  const end=f.last().onend,error=f.last().onerror;f.clock.advance(17999);assert.deepEqual(completed,[]);
+  f.clock.advance(1);assert.deepEqual(completed,['watchdog']);assert.equal(f.engine.cancels,1);
+  end();error();f.clock.advance(18000);assert.deepEqual(completed,['watchdog']);f.speech.destroy();
+  checks.push('The finite 18-second watchdog settles a stalled request once with watchdog and cancels its utterance; late engine events cannot complete it again.');
+}
+
+{
+  for(const resolve of ['timeout','voiceschanged']){
+    const f=fixture({voices:[]}),completed=[];f.speech.unlock();
+    assert.equal(f.speech.speakReview(match,{onComplete:reason=>completed.push(reason)}),true);
+    if(resolve==='timeout')f.clock.advance(1000);else f.engine.changeVoices([remote]);
+    assert.deepEqual(completed,['voiceUnavailable']);assert.equal(f.clock.timers.size,0);
+    f.engine.changeVoices([english]);assert.equal(f.engine.spoken.length,0);f.clock.advance(18000);
+    assert.deepEqual(completed,['voiceUnavailable']);f.speech.destroy();
+  }
+  const unsupported=createFeedbackSpeech({synthesis:null,Utterance:null}),unlocked=fixture(),disabled=fixture({enabled:false}),missing=fixture({voices:[remote]});
+  const completions=[],options={onComplete:reason=>completions.push(reason)};
+  unsupported.unlock();disabled.speech.unlock();missing.speech.unlock();
+  for(const speech of [unsupported,unlocked.speech,disabled.speech,missing.speech]){
+    assert.equal(speech.speakReview(match,options),false);speech.destroy();
+  }
+  assert.deepEqual(completions,[]);
+  checks.push('Asynchronous voice discovery failure settles once with voiceUnavailable. Unsupported, locked, disabled or already-unavailable voice requests return false without completion, allowing the controller to apply a written-feedback fallback.');
+}
+
+{
+  for(const action of ['cancel','disable','destroy']){
+    const f=fixture(),completed=[];f.speech.unlock();f.speech.speakReview(match,{onComplete:reason=>completed.push(reason)});
+    const end=f.last().onend,error=f.last().onerror;
+    if(action==='cancel')f.speech.cancel();else if(action==='disable')f.speech.setEnabled(false);else f.speech.destroy();
+    end();error();f.clock.advance(18000);assert.deepEqual(completed,[]);assert.equal(f.clock.timers.size,0);f.speech.destroy();
+  }
+  const f=fixture(),completed=[];f.speech.unlock();f.speech.speakReview(match,{onComplete:reason=>completed.push(`old:${reason}`)});
+  const oldEnd=f.last().onend,oldError=f.last().onerror;
+  f.speech.speakReview(mismatch,{onComplete:reason=>completed.push(`new:${reason}`)});
+  oldEnd();oldError();assert.deepEqual(completed,[]);f.last().onend();assert.deepEqual(completed,['new:completed']);f.speech.destroy();
+  checks.push('Cancellation, disabling, destruction and replacement never invoke the abandoned request completion, including captured late engine events. Only the current replacement request can settle.');
+}
+
+{
+  let controller;const completed=[];
+  const f=fixture({onState:state=>{if(state.message==='Spoken feedback complete.')controller?.cancel();}});controller=f.speech;
+  f.speech.unlock();f.speech.speakReview(match,{onComplete:reason=>completed.push(reason)});f.last().onend();
+  assert.deepEqual(completed,[]);assert.equal(f.clock.timers.size,0);f.speech.destroy();
+  let replacementController,didReplace=false;const replaced=[];
+  const replacement=fixture({onState:state=>{
+    if(state.message==='Spoken feedback complete.'&&!didReplace){didReplace=true;replacementController.speakReview(mismatch,{onComplete:reason=>replaced.push(`new:${reason}`)});}
+  }});replacementController=replacement.speech;replacement.speech.unlock();
+  replacement.speech.speakReview(match,{onComplete:reason=>replaced.push(`old:${reason}`)});replacement.last().onend();
+  assert.deepEqual(replaced,[]);assert.equal(replacement.speech.isBusy(),true);
+  replacement.last().onend();assert.deepEqual(replaced,['new:completed']);replacement.speech.destroy();
+  checks.push('A controller cancellation or replacement during the published idle state invalidates completion before delivery, so reentrant presentation changes cannot advance an obsolete review.');
+}
+
+{
+  const f=fixture(),completed=[];f.speech.unlock();
+  f.speech.speakReview(match,{onComplete:reason=>{
+    completed.push(reason);f.speech.speakReview(mismatch,{onComplete:nextReason=>completed.push(nextReason)});
+  }});
+  const oldEnd=f.last().onend;oldEnd();assert.equal(f.speech.isBusy(),true);assert.equal(f.engine.spoken.length,2);
+  oldEnd();assert.deepEqual(completed,['completed']);assert.equal(f.speech.isBusy(),true);
+  f.last().onend();assert.deepEqual(completed,['completed','completed']);assert.equal(f.clock.timers.size,0);f.speech.destroy();
+  const synchronous=fixture(),syncReasons=[];synchronous.speech.unlock();
+  synchronous.engine.speak=utterance=>{synchronous.engine.spoken.push(utterance);utterance.onend();};
+  assert.equal(synchronous.speech.speakReview(match,{onComplete:reason=>syncReasons.push(reason)}),false);
+  assert.deepEqual(syncReasons,['completed']);assert.equal(synchronous.clock.timers.size,0);synchronous.speech.destroy();
+  checks.push('A completion may safely start the next speech request without a stale callback clearing it. A synchronously completed fake engine returns false with one completion and no timers left behind.');
+}
+
 const report={passed:true,checkGroups:checks.length,checks,
   provenance:'Deterministic software lifecycle regression using an explicitly FAKE speech synthesis engine, fake voices/utterances and a fake clock. No sound was produced. No real browser speech output, installed voice availability, physical speakers or audibility is claimed.',
   limitations:['Actual browser autoplay behavior, installed local English voice availability, output volume and audibility require browser/device testing.']};

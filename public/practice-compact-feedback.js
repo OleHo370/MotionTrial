@@ -27,5 +27,5 @@ export function compactPracticeFeedback(review){
         :review?.status==='unknown'?'Tracking unclear.':'Try this motion again.'];
     }
   }
-  return {...review,messages,reason:messages[0],message:messages[0],feedbackStyle:'compact',manualContinuation:true};
+  return {...review,messages,reason:messages[0],message:messages[0],feedbackStyle:'compact',manualContinuation:false};
 }

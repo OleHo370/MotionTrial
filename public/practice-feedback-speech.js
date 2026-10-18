@@ -69,14 +69,21 @@ export function createFeedbackSpeech({
   }
   const current=request=>!destroyed&&active===request&&request.token===sequence;
   function cancelEngine(){try{synthesis.cancel();}catch{/* Written feedback must remain usable. */}}
-  function finish(request,nextMessage,{cancelSpeech=false}={}){
+  function finish(request,nextMessage,{cancelSpeech=false,reason='completed'}={}){
     if(!current(request))return;
-    active=null;sequence++;clearRequest(request);
+    active=null;const finishedSequence=++sequence;clearRequest(request);
+    const onComplete=request.onComplete;request.onComplete=null;
     if(cancelSpeech&&request.utterance)cancelEngine();
     message=nextMessage;publish();
+    // Publishing can cancel, destroy, or replace this review. A completion
+    // belongs only to the request that still owns the published idle state.
+    if(!destroyed&&sequence===finishedSequence&&typeof onComplete==='function'){
+      try{onComplete(reason);}catch{/* A controller callback cannot break speech cleanup. */}
+    }
   }
   function cancelActive({notify=true}={}){
     const previous=active;active=null;sequence++;clearRequest(previous);
+    if(previous)previous.onComplete=null;
     if(previous?.utterance)cancelEngine();
     message=readyMessage();if(notify)publish();
   }
@@ -90,20 +97,20 @@ export function createFeedbackSpeech({
       utterance.voice=selectedVoice;utterance.lang=selectedVoice.lang;
       utterance.rate=1.08;utterance.volume=1;
       utterance.onend=()=>finish(request,'Spoken feedback complete.');
-      utterance.onerror=()=>finish(request,'Speech could not finish. Written feedback remains available.',{cancelSpeech:true});
+      utterance.onerror=()=>finish(request,'Speech could not finish. Written feedback remains available.',{cancelSpeech:true,reason:'error'});
       message='Speaking feedback…';publish();
       if(!current(request))return;
       if(synthesis.paused&&typeof synthesis.resume==='function')synthesis.resume();
       if(!current(request))return;
       synthesis.speak(utterance);
-    }catch{finish(request,'Speech could not start. Written feedback remains available.',{cancelSpeech:true});}
+    }catch{finish(request,'Speech could not start. Written feedback remains available.',{cancelSpeech:true,reason:'error'});}
   }
   function voicesChanged(){
     if(destroyed)return;
     readVoices();
     if(active&&!active.started){
       if(selectedVoice)start(active);
-      else if(voiceState!=='loading')finish(active,readyMessage());
+      else if(voiceState!=='loading')finish(active,readyMessage(),{reason:'voiceUnavailable'});
     }else if(!active){message=readyMessage();publish();}
   }
   if(supported){
@@ -137,27 +144,27 @@ export function createFeedbackSpeech({
       else{readVoices();if(!active){message=readyMessage();publish();}}
       return getState();
     },
-    speakReview(result){
+    speakReview(result,{onComplete}={}){
       if(destroyed)return false;
       cancelActive({notify:false});readVoices();
       if(!supported||!isEnabled||!unlocked){message=readyMessage();publish();return false;}
       if(voiceState==='missing'||voiceState==='error'){message=readyMessage();publish();return false;}
-      const request={token:++sequence,text:reviewText(result),utterance:null,voiceTimer:null,watchdog:null,started:false};
+      const request={token:++sequence,text:reviewText(result),onComplete,utterance:null,voiceTimer:null,watchdog:null,started:false};
       active=request;message=selectedVoice?'Preparing spoken feedback…':'Loading an installed English voice…';
       try{
         // This deadline includes voice discovery; it is never extended by
         // voiceschanged, onstart, repeated callbacks, or browser queue delays.
-        request.watchdog=setTimer(()=>finish(request,'Speech timed out. Written feedback remains available.',{cancelSpeech:true}),MAXIMUM_SPEECH_MS);
+        request.watchdog=setTimer(()=>finish(request,'Speech timed out. Written feedback remains available.',{cancelSpeech:true,reason:'watchdog'}),MAXIMUM_SPEECH_MS);
         publish();if(!current(request))return false;
         if(selectedVoice)start(request);
         else request.voiceTimer=setTimer(()=>{
           if(!current(request))return;
           readVoices();
           if(selectedVoice)start(request);
-          else{voiceState='missing';finish(request,readyMessage());}
+          else{voiceState='missing';finish(request,readyMessage(),{reason:'voiceUnavailable'});}
         },VOICE_WAIT_MS);
-      }catch{finish(request,'Speech could not start. Written feedback remains available.',{cancelSpeech:true});}
-      return !!active;
+      }catch{finish(request,'Speech could not start. Written feedback remains available.',{cancelSpeech:true,reason:'error'});}
+      return current(request);
     },
     cancel(){if(!destroyed)cancelActive();},
     isBusy(){return !!active&&!destroyed;},
