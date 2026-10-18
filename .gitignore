@@ -7,13 +7,36 @@ tests/fixtures/*.y4m
 test-results*/
 playwright-report/
 .env*
+!.env.example
+!.env.factory.example
 hardware/**/arduino_secrets.h
 hardware/arduino-feedback.local.json
 .arduino-tools/
 *.tsbuildinfo
 artifacts/
 
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local test coverage and editor state
+coverage/
+.nyc_output/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
 # Local logs and operating-system files
 *.log
 Thumbs.db
 .DS_Store
+Desktop.ini
+*.tmp
+*.bak
+
+# Local-only original UI import archives; hashes stay in the source manifest.
+docs/qi-mirror/source-packages/*.zip

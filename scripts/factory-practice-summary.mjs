@@ -11,15 +11,19 @@ const keys=(value,allowed)=>Object.keys(value).every(key=>allowed.includes(key))
 const text=(value,max)=>typeof value==='string'&&value.length>0&&value.length<=max&&!/[\u0000-\u001f\u007f<>]/.test(value);
 const id=value=>typeof value==='string'&&/^[A-Za-z0-9][A-Za-z0-9._:-]{0,119}$/.test(value);
 const words=value=>value.trim().split(/\s+/).filter(Boolean).length;
-const canonicalStep=value=>stepIds.includes(value)?value:Number.isInteger(value)&&value>=1&&value<=5?stepIds[value-1]:null;
+const normalizeLessonStepCount=value=>value===undefined?stepIds.length:
+  Number.isInteger(value)&&value>=1&&value<=stepIds.length?value:null;
+const canonicalStep=(value,lessonStepCount)=>stepIds.slice(0,lessonStepCount).includes(value)?value:
+  Number.isInteger(value)&&value>=1&&value<=lessonStepCount?stepIds[value-1]:null;
 
 export function normalizePracticeSummaryRequest(value){
-  if(!object(value)||!keys(value,['sessionId','attempts','results'])||!id(value.sessionId)
+  const lessonStepCount=normalizeLessonStepCount(value?.lessonStepCount);
+  if(!object(value)||!keys(value,['sessionId','attempts','results','lessonStepCount'])||!id(value.sessionId)
     ||!Array.isArray(value.attempts)||value.attempts.length>200
-    ||!Array.isArray(value.results)||value.results.length>5)return null;
+    ||!lessonStepCount||!Array.isArray(value.results)||value.results.length>lessonStepCount)return null;
   const attempts=[],seenAttempts=new Set(),results=[],seenResults=new Set();
   for(const source of value.attempts){
-    const stepId=canonicalStep(source?.stepId);
+    const stepId=canonicalStep(source?.stepId,lessonStepCount);
     if(!object(source)||!keys(source,['attemptId','stepId','status','messages','issues','context'])||!id(source.attemptId)
       ||seenAttempts.has(source.attemptId)||!stepId||!['match','mismatch','unknown'].includes(source.status)
       ||!Array.isArray(source.messages)||!source.messages.length||source.messages.length>8
@@ -40,14 +44,14 @@ export function normalizePracticeSummaryRequest(value){
       ...(context?{context}:{})});
   }
   for(const source of value.results){
-    const stepId=canonicalStep(source?.stepId);
+    const stepId=canonicalStep(source?.stepId,lessonStepCount);
     if(!object(source)||!keys(source,['stepId','status'])||!stepId||seenResults.has(stepId)
       ||!['matched','manual'].includes(source.status))return null;
     // A manually skipped step is not evidence of a successful motion.
     if(source.status==='matched'&&!attempts.some(attempt=>attempt.stepId===stepId&&attempt.status==='match'))return null;
     seenResults.add(stepId);results.push({stepId,status:source.status});
   }
-  return{sessionId:value.sessionId,attempts,results};
+  return{sessionId:value.sessionId,attempts,results,...(lessonStepCount===stepIds.length?{}:{lessonStepCount})};
 }
 
 const countText=count=>`${count} ${count===1?'attempt':'attempts'}`;
@@ -76,6 +80,8 @@ const corrections={too_fast:'Follow the teacher\'s pace more closely.',too_slow:
   movement_incomplete:'Follow the whole movement through to its target.'};
 
 export function practiceSummaryEvidence(request){
+  const lessonStepCount=request.lessonStepCount??stepIds.length;
+  const stepCountText=['zero','one','two','three','four','five'][lessonStepCount];
   const matched=request.results.filter(result=>result.status==='matched').length;
   const manual=request.results.filter(result=>result.status==='manual').length;
   const unknown=request.attempts.filter(attempt=>attempt.status==='unknown').length;
@@ -99,8 +105,8 @@ export function practiceSummaryEvidence(request){
   const progression=laterReachedSteps.size
     ?` After earlier corrections, later attempts reached the targets in ${describeSteps([...laterReachedSteps])}.`:'';
   const entries=[{entryId:'completion',kind:'completion',allowedText:[
-    `${history}You completed ${matched} of the five steps with matching feedback.${manual?` You moved past ${manual} ${manual===1?'step':'steps'} manually.`:''}${progression}`,
-    `${history}Matching feedback confirmed completion of ${matched} of the five steps.${manual?` Another ${manual} ${manual===1?'step was':'steps were'} advanced manually.`:''}${progression}`,
+    `${history}You completed ${matched} of the ${stepCountText} ${lessonStepCount===1?'step':'steps'} with matching feedback.${manual?` You moved past ${manual} ${manual===1?'step':'steps'} manually.`:''}${progression}`,
+    `${history}Matching feedback confirmed completion of ${matched} of the ${stepCountText} ${lessonStepCount===1?'step':'steps'}.${manual?` Another ${manual} ${manual===1?'step was':'steps were'} advanced manually.`:''}${progression}`,
   ]}];
   const grouped=new Map();
   for(const attempt of request.attempts){
@@ -137,7 +143,7 @@ export function practiceSummaryEvidence(request){
       'The recorded feedback did not identify a specific hand or foot correction. Continue matching the demonstration and reaching the targets in your next practice.',
     ]});
   }
-  const evidence={matched,manual,unknown,uncertainTiming,attemptCount:request.attempts.length,repeatAttempts,
+  const evidence={lessonStepCount,matched,manual,unknown,uncertainTiming,attemptCount:request.attempts.length,repeatAttempts,
     laterReachedSteps:[...laterReachedSteps].sort((left,right)=>left-right),entries,
     transcript:request.attempts.map(({attemptId,stepId,status,messages,context})=>({attemptId,stepId,status,messages,
       ...(context?{context}:{})}))};

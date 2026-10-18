@@ -174,6 +174,8 @@ export function validateCoachingOutput(output,entries,{maxWords=200,maxChars=240
 }
 
 export function conversationalSummaryEntries(request,evidence){
+  const lessonStepCount=request.lessonStepCount??5;
+  const stepCountText=['zero','one','two','three','four','five'][lessonStepCount];
   const observed=request.attempts.filter(attempt=>['mismatch','unknown'].includes(attempt.status));
   const themes=new Map();
   for(const attempt of observed)for(const issue of attempt.issues){
@@ -193,9 +195,9 @@ export function conversationalSummaryEntries(request,evidence){
   const trackingUnclear=request.attempts.some(attempt=>attempt.issues.some(issue=>issue.code==='tracking_unknown'));
   const referenceUnclear=request.attempts.some(attempt=>attempt.issues.some(issue=>issue.code==='reference_unknown'));
   const attemptIncomplete=request.attempts.some(attempt=>attempt.issues.some(issue=>issue.code==='attempt_incomplete'));
-  const takeaway=evidence.matched===5&&evidence.manual===0?[
+  const takeaway=evidence.matched===lessonStepCount&&evidence.manual===0?[
     `You worked through the whole sequence and reached the targets in every step.${evidence.laterReachedSteps.length?' Later attempts reached the targets after earlier corrections.':''} ${themes.size?'Let’s use the earlier feedback to give your next practice a clear focus.':'For the next round, give each movement its full guided path as you follow the sequence.'}`,
-    `You reached the ending targets throughout the five-step sequence.${evidence.laterReachedSteps.length?' Some steps reached their targets after another attempt.':''} ${themes.size?'The most useful next step is to carry one or two of the earlier corrections into your next round.':'For the next practice, pay attention to how each movement leads into the next.'}`,
+    `You reached the ending targets throughout the ${stepCountText}-step sequence.${evidence.laterReachedSteps.length?' Some steps reached their targets after another attempt.':''} ${themes.size?'The most useful next step is to carry one or two of the earlier corrections into your next round.':'For the next practice, pay attention to how each movement leads into the next.'}`,
   ]:evidence.matched>0?[
     `You reached the ending targets in the steps marked complete.${evidence.manual?' Some steps were advanced manually, so those movements remain unverified.':''} For your next round, use the feedback as a practice focus rather than a score for the whole sequence.`,
     `Your completed steps reached their ending targets.${evidence.manual?' The manually advanced steps have not been confirmed by the tracker.':''} Let’s turn the feedback you received into a clear plan for the next practice.`,

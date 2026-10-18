@@ -36,8 +36,8 @@ move the lesson to a different origin.
 - Images and fonts live under `public/qi-mirror`. Original teacher clips, pose
   references, model files, and WASM keep their existing URLs and bytes.
 - The archive's replacements for the original layout, review/capture/about
-  workflow, tests, and TypeScript configuration are retained as source reference
-  in the original archives; they are not installed over existing files.
+  workflow, tests, and TypeScript configuration remain documented as source
+  reference; the integrated pages use the project structure described above.
 - Font licenses and image provenance are included. The shared Chinese fonts are
   deduplicated, with both source metadata records retained.
 
@@ -71,7 +71,11 @@ running/build directory and private data. That copy used shared installed
 dependencies and a QA-only `turbopack.root` setting for their filesystem paths.
 The repository's `next.config.ts` is unchanged.
 
-Both original ZIPs, the supplied merge guide, and their provenance documents are
-retained under this directory. The original guide's replacement instructions
-describe its author's integration; the additive route map above implements the
-user's requirement to preserve the existing project.
+The supplied merge guide and provenance documents are retained under this
+directory. The imported pages and assets are versioned directly. Original ZIP
+packages are local-only backups excluded from Git; their exact names, sizes and
+SHA-256 identities are recorded in the [source-package manifest](source-packages/README.md).
+The original guide's replacement instructions describe its author's integration;
+the additive route map above implements the user's requirement to preserve the
+existing project. See the [current route map](../routes.md) for active and retained
+earlier experiences.

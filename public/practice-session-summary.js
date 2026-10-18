@@ -1,7 +1,11 @@
 // Lesson wording only: retain every review locally, without camera observations
 // or any authority to change the lesson's measured result or progression.
 import {normalizePracticeFeedbackContext} from './practice-feedback-context-schema.js';
-const stepIds=new Set(['first-three-01','first-three-02','first-three-03','first-six-04','first-six-05']);
+const stepOrder=['first-three-01','first-three-02','first-three-03','first-six-04','first-six-05'];
+const stepIds=new Set(stepOrder);
+const normalizeLessonStepCount=value=>value===undefined?stepOrder.length:
+  Number.isInteger(value)&&value>=1&&value<=stepOrder.length?value:null;
+const activeStep=(stepId,count)=>stepIds.has(stepId)&&stepOrder.indexOf(stepId)<count;
 const statuses=new Set(['match','mismatch','unknown']);
 const resultStatuses=new Set(['matched','manual']);
 const issueCodes=new Set(['too_fast','too_slow','late_start','off_guide','hold_drift',
@@ -18,8 +22,8 @@ const wordCount=messages=>messages.join(' ').trim().split(/\s+/).filter(Boolean)
 const cloneAttempt=attempt=>({...attempt,messages:[...attempt.messages],issues:attempt.issues.map(issue=>({...issue})),
   ...(attempt.context?{context:{...attempt.context,limbs:attempt.context.limbs.map(limb=>({...limb}))}}:{})});
 
-function normalizeAttempt(value){
-  if(!value||!safeId(value.attemptId)||!stepIds.has(value.stepId)||!statuses.has(value.status)
+function normalizeAttempt(value,lessonStepCount=stepOrder.length){
+  if(!value||!safeId(value.attemptId)||!activeStep(value.stepId,lessonStepCount)||!statuses.has(value.status)
     ||!Array.isArray(value.messages)||!value.messages.length||value.messages.length>8
     ||!value.messages.every(message=>safeText(message,600))||value.messages.join(' ').length>2400
     ||wordCount(value.messages)>200||!Array.isArray(value.issues)||value.issues.length>16)return null;
@@ -35,10 +39,10 @@ function normalizeAttempt(value){
     ...(context?{context}:{})};
 }
 
-function normalizeResults(values){
+function normalizeResults(values,lessonStepCount=stepOrder.length){
   const results=[];
   for(const value of values){
-    if(!value||!stepIds.has(value.stepId)||!resultStatuses.has(value.status))return null;
+    if(!value||!activeStep(value.stepId,lessonStepCount)||!resultStatuses.has(value.status))return null;
     if(results.some(result=>result.stepId===value.stepId))return null;
     results.push({stepId:value.stepId,status:value.status});
   }
@@ -48,17 +52,19 @@ function normalizeResults(values){
 // Reject an oversized remote request instead of silently dropping early retries.
 // The complete local history can still produce a grounded written/spoken summary.
 export function practiceSummaryPayload(value){
+  const lessonStepCount=normalizeLessonStepCount(value?.lessonStepCount);
   if(!value||!safeId(value.sessionId)||!Array.isArray(value.attempts)||value.attempts.length>maximumAttempts
-    ||!Array.isArray(value.results)||value.results.length>stepIds.size)return null;
+    ||!lessonStepCount||!Array.isArray(value.results)||value.results.length>lessonStepCount)return null;
   const attempts=[],seen=new Set();
   for(const valueAttempt of value.attempts){
-    const attempt=normalizeAttempt(valueAttempt);
+    const attempt=normalizeAttempt(valueAttempt,lessonStepCount);
     if(!attempt||seen.has(attempt.attemptId))return null;
     seen.add(attempt.attemptId);attempts.push(attempt);
   }
-  const results=normalizeResults(value.results);
+  const results=normalizeResults(value.results,lessonStepCount);
   if(!results)return null;
-  const payload={sessionId:value.sessionId,attempts,results};
+  const payload={sessionId:value.sessionId,attempts,results,
+    ...(lessonStepCount===stepOrder.length?{}:{lessonStepCount})};
   if(new TextEncoder().encode(JSON.stringify(payload)).byteLength>maximumBodyBytes)return null;
   return payload;
 }
@@ -73,12 +79,17 @@ export function createPracticeSessionHistory({sessionId}={}){
       if(!attempt||seen.has(attempt.attemptId))return false;
       seen.add(attempt.attemptId);attempts.push(attempt);return true;
     },
-    snapshot(results=[]){
+    snapshot(results=[],{lessonStepCount=stepOrder.length}={}){
+      const count=normalizeLessonStepCount(lessonStepCount);
+      if(!count)throw new TypeError('Lesson step count must be an integer from 1 to 5.');
       const values=results instanceof Map?[...results.values()]:results;
-      if(!Array.isArray(values)||values.length>stepIds.size)throw new TypeError('Lesson results must be bounded.');
-      const normalized=normalizeResults(values);
+      if(!Array.isArray(values)||values.length>count)throw new TypeError('Lesson results must be bounded.');
+      const normalized=normalizeResults(values,count);
       if(!normalized)throw new TypeError('Lesson results must identify unique known movements.');
-      return {sessionId:currentSessionId,attempts:attempts.map(cloneAttempt),results:normalized};
+      if(attempts.some(attempt=>!activeStep(attempt.stepId,count)))
+        throw new TypeError('Lesson history contains a movement outside this lesson.');
+      return {sessionId:currentSessionId,attempts:attempts.map(cloneAttempt),results:normalized,
+        ...(count===stepOrder.length?{}:{lessonStepCount:count})};
     },
     clear(nextSessionId){
       if(!safeId(nextSessionId))throw new TypeError('A new bounded session identifier is required.');
@@ -91,10 +102,15 @@ export function createPracticeSessionHistory({sessionId}={}){
 
 // These counts come from the retained journal, never from generated prose.
 export function practiceSessionStats(payload){
+  const total=normalizeLessonStepCount(payload?.lessonStepCount);
+  if(!total)throw new TypeError('Lesson step count must be an integer from 1 to 5.');
   const attempts=Array.isArray(payload?.attempts)?payload.attempts:[];
   const results=Array.isArray(payload?.results)?payload.results:[];
+  if(attempts.some(attempt=>!activeStep(attempt.stepId,total))
+    ||results.some(result=>!activeStep(result.stepId,total)))
+    throw new TypeError('Lesson history contains a movement outside this lesson.');
   const visited=new Set(attempts.map(attempt=>attempt.stepId));
-  return {matched:results.filter(result=>result.status==='matched').length,total:stepIds.size,
+  return {matched:results.filter(result=>result.status==='matched').length,total,
     attempts:attempts.length,retries:Math.max(0,attempts.length-visited.size),
     unclear:attempts.filter(attempt=>attempt.status==='unknown').length};
 }
@@ -123,7 +139,7 @@ export function localPracticeSessionSummary(payload){
   const coordination=measured.find(attempt=>attempt.context?.practiceFocus==='coordination');
   const range=measured.find(attempt=>attempt.context?.practiceFocus==='range');
   const path=ranked.find(theme=>theme.code==='off_guide'),hold=ranked.find(theme=>theme.code==='hold_drift');
-  let takeaway=stats.matched===5?'You stayed with the whole sequence and reached the ending targets in every step.'
+  let takeaway=stats.matched===stats.total?'You stayed with the whole sequence and reached the ending targets in every step.'
     :stats.matched?'You reached the ending targets in the steps marked complete. Let’s use this session to choose a clear focus for your next round.'
     :'This session gives you a starting point. Work through one movement at a time and use the guides to check the path.';
   if(stats.retries&&stats.matched)takeaway+=' Some steps took another attempt, and you kept working toward their ending positions.';

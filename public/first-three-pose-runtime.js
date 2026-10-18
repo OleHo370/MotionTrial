@@ -4694,7 +4694,26 @@ async function createCenterPoseClient() {
       }));
       if (landmarks.some((p2) => ![p2.x, p2.y, p2.z, p2.visibility].every(Number.isFinite) || p2.visibility < 0 || p2.visibility > 1 || p2.presence !== void 0 && (!Number.isFinite(p2.presence) || p2.presence < 0 || p2.presence > 1)))
         return { status: "inference_error", landmarks: [] };
-      return { status: "pose", landmarks };
+      // Preserve the model's own 3D output for optional study views. These are
+      // estimated world coordinates, never reconstructed from normalized z.
+      const worldPose = result.worldLandmarks?.[0];
+      let worldLandmarks;
+      if (Array.isArray(worldPose) && worldPose.length === 33 && worldPose.every((p2) => p2 && typeof p2 === "object")) {
+        const points = worldPose.map((p2, index) => ({
+          index,
+          x: p2.x,
+          y: p2.y,
+          z: p2.z,
+          visibility: p2.visibility,
+          ...p2.presence === void 0 ? {} : { presence: p2.presence }
+        }));
+        if (points.every((p2) => [p2.x, p2.y, p2.z, p2.visibility].every(Number.isFinite) &&
+            p2.visibility >= 0 && p2.visibility <= 1 &&
+            (p2.presence === void 0 || Number.isFinite(p2.presence) && p2.presence >= 0 && p2.presence <= 1))) {
+          worldLandmarks = points;
+        }
+      }
+      return { status: "pose", landmarks, ...worldLandmarks ? { worldLandmarks } : {} };
     } finally {
       result?.close();
     }

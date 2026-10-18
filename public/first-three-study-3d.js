@@ -74,11 +74,80 @@ export function selectLesson3DSample(data,step,source,time){
     sourceTimeSeconds:sample.sourceTimeSeconds,expectedSourceTime:time,reason:null};
 }
 
+/** Uploaded VIDEO inference already retains genuine MediaPipe world points.
+ * Validate them in memory without the fixed-rate archive contract, fetching a
+ * built-in recording, or converting normalized image depth to world depth. */
+export function validateUploadedLesson3DData(data,source,expectedSourceSha256){
+  const video=source?.video;
+  if(source?.uploaded!==true||!video||data?.schemaVersion!=='first-three-recorded-pose-v1'
+    ||data.extractionVersion!=='uploaded-instructor-lesson-v1'
+    ||!/^[a-f0-9]{64}$/i.test(expectedSourceSha256??'')||data.sourceSha256!==expectedSourceSha256
+    ||data.sourceClipSha256!==video.sha256||data.sourceSha256!==video.sha256
+    ||data.modelSha256!==LESSON_3D_MODEL_SHA256||data.width!==video.width||data.height!==video.height
+    ||!Number.isFinite(video.durationSeconds)||video.durationSeconds<=0||!Number.isFinite(data.durationMs)
+    ||Math.abs(data.durationMs-video.durationSeconds*1000)>2
+    ||!Array.isArray(data.samples)||!data.samples.length)
+    throw new Error('The uploaded 3D observations do not match this instructor video.');
+  const validPoints=points=>Array.isArray(points)&&points.length===33&&points.every((point,index)=>point?.index===index
+    &&[point.x,point.y,point.z].every(Number.isFinite)
+    &&(point.visibility===undefined||Number.isFinite(point.visibility)&&point.visibility>=0&&point.visibility<=1)
+    &&(point.presence===undefined||point.presence===null||Number.isFinite(point.presence)&&point.presence>=0&&point.presence<=1));
+  let previous=-Infinity,previousSource=-Infinity,worldCount=0;
+  for(const sample of data.samples){
+    if(!Number.isFinite(sample?.tMs)||sample.tMs<0||sample.tMs<=previous
+      ||!Number.isFinite(sample.sourceTimeSeconds)||sample.sourceTimeSeconds<0||sample.sourceTimeSeconds<=previousSource
+      ||sample.sourceTimeSeconds>video.durationSeconds+1e-7
+      ||Math.abs(sample.tMs-sample.sourceTimeSeconds*1000)>2
+      ||!['pose','no_pose','inference_error','decode_error','duplicate_frame'].includes(sample.status))
+      throw new Error('The uploaded 3D observations must retain increasing source-video timestamps.');
+    previous=sample.tMs;previousSource=sample.sourceTimeSeconds;
+    if(sample.status!=='pose'){
+      if((sample.landmarks?.length??0)||(sample.worldLandmarks?.length??0))
+        throw new Error('An unavailable uploaded 3D observation contains retained landmarks.');
+      continue;
+    }
+    if(!validPoints(sample.landmarks))throw new Error('The uploaded 3D image landmarks are invalid.');
+    if((sample.worldLandmarks?.length??0)===0)continue;
+    if(!validPoints(sample.worldLandmarks))throw new Error('The uploaded 3D world landmarks are invalid.');
+    worldCount++;
+  }
+  if(!worldCount)throw new Error('This uploaded instructor video does not contain observed 3D world landmarks.');
+  return {...data,displayYawRadians:0,displayYawReferenceFrames:[],displayYawReferenceSeconds:[],
+    displayYawProvenance:{kind:'unrotated-native-mediapipe-world',
+      description:'Uploaded world coordinates retain the native MediaPipe pose orientation. The 3D scene applies only its documented hip centering, display axes and optional mirror. No recorded-stance rotation or camera calibration is inferred.'}};
+}
+
+/** Latest genuine upload observation only, scoped to the selected actual
+ * source-time range. A missing world frame clears the drawing immediately. */
+export function selectUploadedLesson3DSample(data,step,source,time){
+  const unavailable=reason=>({sample:null,frameIndex:null,sourceFrameIndex:null,
+    sourceTimeSeconds:null,expectedSourceTime:time,reason});
+  const start=step?.practiceStartSeconds??step?.startSeconds,end=step?.teacherFreezeSeconds??step?.endSeconds;
+  if(source?.uploaded!==true||!data?.samples?.length||!STEP_IDS.has(step?.id)||!Number.isFinite(time)
+    ||!Number.isFinite(start)||!Number.isFinite(end)||end<=start
+    ||step.sourceId!==undefined&&source.id!==undefined&&step.sourceId!==source.id)
+    return unavailable('selection_unavailable');
+  if(time<start-1e-7||time>end+1e-7)return unavailable('outside_selected_clip');
+  let low=0,high=data.samples.length;
+  while(low<high){const middle=(low+high)>>1;if(data.samples[middle].sourceTimeSeconds<=time+1e-8)low=middle+1;else high=middle;}
+  const sample=data.samples[low-1];
+  if(!sample||sample.sourceTimeSeconds<start-1e-7||sample.sourceTimeSeconds>end+1e-7)
+    return unavailable('no_observation_in_selected_clip');
+  const ageMs=(time-sample.sourceTimeSeconds)*1000;
+  if(ageMs<-.00001||ageMs>150.00001)return unavailable('observation_too_old');
+  if(Math.abs(time-end)<1e-7&&Math.abs(sample.sourceTimeSeconds-end)>1e-7)
+    return unavailable('finish_boundary_observation_unavailable');
+  if(sample.status!=='pose')return unavailable('tracking_unavailable');
+  if(sample.worldLandmarks?.length!==33)return unavailable('world_landmarks_unavailable');
+  return {sample,frameIndex:null,sourceFrameIndex:null,sourceTimeSeconds:sample.sourceTimeSeconds,
+    expectedSourceTime:time,reason:null};
+}
+
 export function createLesson3DPreview({container,getContext,onState=()=>{}}={}){
   if(!container||typeof getContext!=='function')throw new Error('A teacher 3D preview needs a container and lesson context.');
   const cache=new Map();
   let visible=false,destroyed=false,revision=0,scene=null,modulePromise=null,sceneModule=null,loadKey=null,loadedData=null;
-  let lastSignature=null,lastPublished=null;
+  let lastSignature=null,lastPublished=null,uploadedDataReference=null,uploadedDataRevision=0;
   const status={version:LESSON_3D_VERSION,visible:false,loading:false,ready:false,error:null,
     stepId:null,sourceId:null,poseSrc:null,expectedSourceTime:null,sourceTimeSeconds:null,
     frameIndex:null,sourceFrameIndex:null,sampleStatus:null,reason:'hidden',drawnPoints:0,drawnBones:0,
@@ -117,6 +186,7 @@ export function createLesson3DPreview({container,getContext,onState=()=>{}}={}){
     let promise=cache.get(key);
     if(!promise){
       promise=(async()=>{
+        if(source.uploaded===true)return validateUploadedLesson3DData(source.rawData,source,expectedSourceSha256);
         // Fetch a dedicated 3D archive when provided; the lesson's control-point
         // adapter and its matching references remain independent and unchanged.
         const response=await fetch(poseSrc);
@@ -141,12 +211,16 @@ export function createLesson3DPreview({container,getContext,onState=()=>{}}={}){
     const context=getContext()??{},source=context.source,step=context.step;
     status.visible=true;status.stepId=step?.id??null;status.sourceId=source?.id??null;
     status.expectedSourceTime=Number.isFinite(context.currentTime)?context.currentTime:null;
-    status.poseSrc=context.poseSrc??source?.study3dPoseSrc??'/practice-media/recut-six/master.study-3d.poses.json';
+    status.poseSrc=source?.uploaded===true?null:context.poseSrc??source?.study3dPoseSrc??'/practice-media/recut-six/master.study-3d.poses.json';
+    status.provenance=source?.uploaded===true
+      ?'Actual browser-local MediaPipe world landmarks from the uploaded instructor video, retained in memory. Native pose orientation with display-only hip centering and axes; estimated depth, not calibrated motion capture.'
+      :'Archived MediaPipe world landmarks from the corresponding teacher source frames. Estimated depth, not calibrated motion capture.';
     // Reflect display x only, after the archive's recorded-stance rotation.
     // Anatomical identities, world coordinates, and matching remain unchanged.
     status.mirrored=context.mirror!==false;
-    if(!STEP_IDS.has(step?.id)||!source||!status.poseSrc){clearScene('selection_unavailable');status.ready=false;publish();return;}
-    const key=`${source.id}:${status.poseSrc}:${source.video?.sha256}:${context.expectedSourceSha256}`;
+    if(!STEP_IDS.has(step?.id)||!source||source.uploaded!==true&&!status.poseSrc){clearScene('selection_unavailable');status.ready=false;publish();return;}
+    if(source.uploaded===true&&source.rawData!==uploadedDataReference){uploadedDataReference=source.rawData;uploadedDataRevision++;}
+    const key=`${source.id}:${source.uploaded===true?`in-memory-upload-${uploadedDataRevision}`:status.poseSrc}:${source.video?.sha256}:${context.expectedSourceSha256}`;
     if(key!==loadKey){
       scene?.dispose();scene=null;
       loadKey=key;loadedData=null;status.loading=true;status.error=null;status.ready=false;
@@ -158,8 +232,9 @@ export function createLesson3DPreview({container,getContext,onState=()=>{}}={}){
       clearScene('teacher_frame_loading');publish();return;
     }
     if(!loadedData||!scene){publish();return;}
-    const selected=selectLesson3DSample(loadedData,step,source,context.currentTime);
-    const signature=`${step.id}:${selected.frameIndex??'-'}:${selected.reason??''}`;
+    const selected=source.uploaded===true?selectUploadedLesson3DSample(loadedData,step,source,context.currentTime)
+      :selectLesson3DSample(loadedData,step,source,context.currentTime);
+    const signature=`${step.id}:${source.uploaded===true?selected.sample?.tMs??'-':selected.frameIndex??'-'}:${selected.reason??''}`;
     if(signature!==lastSignature){
       lastSignature=signature;
       try{scene.update({mode:'front',frontSample:selected.sample,backSample:null,showTrails:false,resetToken:step.id});}

@@ -24,6 +24,7 @@ import {createFeedbackSpeech} from './practice-feedback-speech.js';
 import {attachArduinoFeedback} from './arduino-feedback-ui.js';
 import {FULL_HEIGHT_LAYOUT_RULES as TARGET_LAYOUT,cameraViewportBounds,createFullHeightLayout} from './full-height-layout.js';
 import {UPPER_BODY_LAYOUT_RULES,createUpperBodyLayout} from './upper-body-layout.js';
+import {attachInstructorUpload} from './instructor-upload.js';
 
 const $=id=>document.getElementById(id),video=$('teacher-video');
 const feedbackSpeech=createFeedbackSpeech({enabled:$('spoken-feedback').checked,onState(status){
@@ -72,12 +73,15 @@ let summarySequence=0;
 let summaryCycle=null;
 let lessonSummary=null;
 let lessonSummaryStats=null;
+let builtInLesson=null,uploadPreparing=false,instructorUpload=null;
+state.lessonKind='built-in';
 const step=()=>state.manifest?.steps[state.index],reference=()=>state.refs[state.index];
 const guidance=()=>state.guidanceRefs[state.index];
 const pathReference=()=>state.pathRefs[state.index];
 const total=()=>state.manifest?.steps.length||5;
 const practiceStart=()=>step()?.practiceStartSeconds??step()?.startSeconds;
 const recording=()=>state.sources.get(step()?.sourceId);
+const teacher3DAvailable=()=>state.lessonKind!=='uploaded'||!!recording()?.rawData?.samples?.some(sample=>sample.worldLandmarks?.length===33);
 function practiceMode(){return state.index===5&&state.stepSixMode==='arms-only'?'arms-only':'full-body';}
 function activeControlIndices(){return practiceMode()==='arms-only'?[33,34]:INDICES;}
 function controlOptions(){return practiceMode()==='arms-only'?{controlIndices:activeControlIndices()}:{};}
@@ -94,7 +98,7 @@ function syncPracticeModeUI(){
     :'Head near the top · feet near the bottom · palms and feet tracked');
   put('camera-framing',practiceMode()==='arms-only'?'Head at the top, waist at the bottom.':'Head near the top, feet near the bottom.');
   put('hardware-controls-scope',practiceMode()==='arms-only'?'both palms':'all four points');
-  put('practice-feedback-scope',practiceMode()==='arms-only'?'Step 6 receives arms-only feedback for both palms.':'All five clips receive four-point practice feedback.');
+  put('practice-feedback-scope',practiceMode()==='arms-only'?'Step 6 receives arms-only feedback for both palms.':`All ${total()} clips receive four-point practice feedback.`);
   put('practice-framing-help',practiceMode()==='arms-only'
     ?'Frame your head at the top and waist at the bottom of the preview. Step 6 palm targets use this head-to-waist height with the same proportions in both directions.'
     :'Stand with your head near the top and feet near the bottom of the preview. Target spacing uses this full standing height across all steps.');
@@ -133,7 +137,7 @@ const lesson3D=createLesson3DPreview({container:$('teacher-3d-view'),getContext:
     :'No confident 3D points in this teacher frame.');
 }});
 async function toggleTeacher3D(show=!lesson3D.getState().visible){
-  if(show&&!state.ready)return;
+  if(show&&(!state.ready||!teacher3DAvailable()))return;
   $('teacher-3d-panel').hidden=!show;
   document.querySelector('.practice-grid').classList.toggle('has-teacher-3d',show);
   $('toggle-teacher-3d').setAttribute('aria-expanded',String(show));
@@ -165,18 +169,20 @@ function seedScreenTargets(aspect=$('camera-video').videoWidth/$('camera-video')
 }
 function phase(name,duration=0){if(name!=='feedback')cancelFeedbackFlow();state.phase=name;state.remainingMs=duration;state.deadline=duration&&!state.paused?performance.now()+duration:null;hardwareFeedback.update();render();}
 function controls(){
-  $('toggle-teacher-3d').disabled=!state.ready;
+  $('upload-instructor').disabled=!state.ready||state.loading||uploadPreparing;
+  $('toggle-teacher-3d').disabled=!state.ready||uploadPreparing||!teacher3DAvailable();
   for(const id of ['practice-full-body','practice-arms-only'])$(id).disabled=!state.ready||state.loading||state.awaitingCamera||state.phase==='preparing';
-  $('start-practice').disabled=!state.ready||state.awaitingCamera||state.loading;
+  $('start-practice').disabled=!state.ready||state.awaitingCamera||state.loading||uploadPreparing;
+  if(uploadPreparing)$('start-camera').disabled=true;
   $('start-practice').hidden=!!state.camera?.getState().running&&state.active;
   $('start-practice').textContent=state.phase==='finished'?'Practice again':'Start practice';
   $('practice-toggle').disabled=!state.active||['loading','preparing','camera','finished','stopped'].includes(state.phase);
   $('practice-toggle').textContent=state.paused?'Resume':'Pause';
   $('practice-toggle').setAttribute('aria-pressed',String(state.paused));
   $('end-practice').disabled=!state.active&&!state.camera?.getState().running&&!state.awaitingCamera;
-  for(const id of ['replay','next','previous','speed'])$(id).disabled=!state.ready;
-  $('next').disabled=!state.ready||state.phase==='finished';
-  $('previous').disabled=!state.ready||state.index===0;
+  for(const id of ['replay','next','previous','speed'])$(id).disabled=!state.ready||uploadPreparing;
+  $('next').disabled=!state.ready||state.phase==='finished'||uploadPreparing;
+  $('previous').disabled=!state.ready||state.index===0||uploadPreparing;
   $('replay').textContent=state.camera?.getState().running?(state.watched?'Restart at squares':'Watch again'):'Watch demo';
 }
 function render(){
@@ -258,6 +264,11 @@ function renderProgress(){
 }
 function nearestSample(time){
   if(!state.data||state.loading||state.sourceId!==step()?.sourceId||video.seeking||video.readyState<2)return null;
+  if(state.manifest?.schemaVersion==='uploaded-instructor-lesson-v1'){
+    const samples=state.data.samples;let low=0,high=samples.length;
+    while(low<high){const mid=(low+high)>>1;if(samples[mid].tMs<=time*1000+1e-4)low=mid+1;else high=mid;}
+    const sample=samples[low-1];return sample&&time*1000-sample.tMs<=150?sample:null;
+  }
   if(state.manifest?.schemaVersion==='recut-six-teaching-v1'){
     // The 15 Hz archive keeps actual frame IDs. Hold its latest observation
     // briefly on unsampled video frames, without showing a future cut pose or
@@ -406,6 +417,10 @@ function observe(observation){
   const now=performance.now();
   if(observation)seedScreenTargets(observation.aspectRatio);
   if(!state.active||state.paused){hardwareFeedback.update();drawGuides();render();return;}
+  if(state.lessonKind==='uploaded'&&state.phase==='positioning'&&!referenceAvailable()){
+    state.positioning=null;state.positionNotice=step()?.unassessedReason||'Instructor targets are unavailable. Adjust the video boundaries or continue manually in Settings.';
+    hardwareFeedback.neutral();drawGuides();render();return;
+  }
   if(state.phase==='positioning'){
     state.positioning=evaluateStartPosition(guidance(),observation?.sample??null,{...controlOptions(),bodyFrame:state.screenLayout?.frame,attemptAspectRatio:observation?.aspectRatio||state.placement?.aspect||1,nowMs:now,observedAtMs:observation?.observedAtMs??now,session:state.placement});
     if(state.positioning.holdReady){state.fixedFrame=state.positioning.bodyFrame;void startAttempt();return;}
@@ -455,6 +470,7 @@ async function finishWatch(){
 }
 async function startAttempt(){
   if(!state.watched||!state.active||state.paused||!state.fixedFrame||!state.camera?.getState().running)return;
+  if(state.lessonKind==='uploaded'&&!referenceAvailable()){waitAtStart(step()?.unassessedReason||'The uploaded instructor target is unavailable. Adjust its boundaries or continue manually in Settings.');return;}
   const token=++state.operation;video.pause();state.feedback=null;state.reviewAction=null;state.attemptInterrupted=null;phase('preparing');
   try{
     if(!await seek(practiceStart(),token)||token!==state.operation||!state.active||state.paused)return;
@@ -575,7 +591,7 @@ function retryFeedback(){
   cancelFeedbackFlow();void returnToStart();
 }
 function waitAtStart(reason=null){
-  clearEvidence();state.preview=false;state.watchPurpose=null;state.positionNotice=reason||(!referenceAvailable()?'Practice targets could not load. Reload this clip to retry.':null);state.visualOnly=false;phase('positioning');
+  clearEvidence();state.preview=false;state.watchPurpose=null;state.positionNotice=reason||(!referenceAvailable()?(state.lessonKind==='uploaded'?'Instructor targets are unclear for this step. Adjust its video boundaries, or use Next in Settings for an unassessed transition.':'Practice targets could not load. Reload this clip to retry.'):null);state.visualOnly=false;phase('positioning');
 }
 async function returnToStart(reason=null){
   if(!state.ready||!state.active)return;
@@ -592,7 +608,7 @@ async function choose(index,manual=false){
   const token=++state.operation;video.pause();state.index=index;state.lastDrawn=undefined;state.lastSample=null;state.observation=null;state.watched=false;state.round=0;
   state.active=!!state.camera?.getState().running;state.paused=false;state.preview=false;state.visualOnly=false;state.loading=true;clearEvidence();$('completion').hidden=true;$('load-error').hidden=true;phase('preparing');drawTeacher(true);drawGuides();
   for(const [id,key]of [['screenshot-start','start'],['screenshot-end','end']]){
-    const image=$(id);image.src=step().screenshots[key];image.hidden=false;image.style.transform='scaleX(-1)';image.alt=`Original teacher ${key} frame, mirrored`;
+    const image=$(id),src=step().screenshots?.[key],figure=image.closest?.('figure');image.hidden=!src;if(figure)figure.hidden=!src;if(src)image.src=src;else image.removeAttribute?.('src');image.style.transform='scaleX(-1)';image.alt=`Original teacher ${key} frame, mirrored`;
     image.nextElementSibling.textContent=`Exact source frame · ${key==='start'?'start':'finish'}`;
   }
   try{
@@ -648,7 +664,7 @@ function summaryReadingMs(){
   return Math.min(FEEDBACK_FLOW_RULES.maximumReadingMs,Math.max(FEEDBACK_FLOW_RULES.readingMs,words*300));
 }
 function startLessonSummary(){
-  const payload=sessionHistory.snapshot([...state.results.values()]);
+  const payload=sessionHistory.snapshot([...state.results.values()],{lessonStepCount:total()});
   lessonSummaryStats=practiceSessionStats(payload);
   lessonSummary=localPracticeSessionSummary(payload);
   const cycle={id:++summarySequence,operation:state.operation,pendingAi:true,leadInDone:false,
@@ -770,13 +786,39 @@ async function boot(){
     state.refs=lesson.references.slice(0,5);
     state.guidanceRefs=lesson.guidanceReferences.slice(0,5);
     state.pathRefs=manifest.steps.map((s,i)=>preparePracticeTubes(state.guidanceRefs[i],s,state.sources));
+    builtInLesson={manifest:state.manifest,data:state.data,sources:state.sources,refs:state.refs,guidanceRefs:state.guidanceRefs,pathRefs:state.pathRefs};
     if(state.guidanceRefs.some((ref,i)=>!ref.referenceUsable||!prepareStartPosition(ref).usable
       ||!state.pathRefs[i].referenceUsable||!INDICES.every(index=>ref.guides.find(guide=>guide.index===index)?.valid)))
       throw new Error('Practice targets could not load for all five clips. Reload to retry.');
     fitPortraitCamera();
-    $('step-list').replaceChildren(...manifest.steps.map((s,index)=>{const li=document.createElement('li'),button=document.createElement('button');button.dataset.index=String(index);button.textContent=`${index+1}. ${s.title}`;button.addEventListener('click',()=>choose(index,true));li.append(button);return li;}));
+    renderStepList();
     state.ready=true;const requested=Number(new URLSearchParams(location.search).get('step'));await choose(Number.isInteger(requested)&&requested>=1?Math.min(requested,total())-1:0);
   }catch(error){$('load-error').textContent=error.message;$('load-error').hidden=false;put('status','The lesson could not load. Reload to retry.');}
+}
+function renderStepList(){
+  $('step-list').replaceChildren(...state.manifest.steps.map((entry,index)=>{
+    const li=document.createElement('li'),button=document.createElement('button');button.dataset.index=String(index);
+    button.textContent=`${index+1}. ${entry.title}${entry.assessmentAvailable===false?' · demonstration only':''}`;
+    button.addEventListener('click',()=>choose(index,true));li.append(button);return li;
+  }));
+}
+async function installInstructorLesson(lesson,kind){
+  if(!lesson?.manifest?.steps?.length)throw new Error('The lesson is not ready yet.');
+  stop();cancelSummaryFlow();lesson3D.hide();$('teacher-3d-panel').hidden=true;
+  document.querySelector('.practice-grid').classList.remove('has-teacher-3d');
+  const previous={manifest:state.manifest,data:state.data,sources:state.sources,refs:state.refs,guidanceRefs:state.guidanceRefs,pathRefs:state.pathRefs,kind:state.lessonKind};
+  Object.assign(state,{manifest:lesson.manifest,data:lesson.data,sources:lesson.sources,refs:lesson.refs,guidanceRefs:lesson.guidanceRefs,pathRefs:lesson.pathRefs,
+    lessonKind:kind,ready:true,index:0,sourceId:null,stepSixMode:'full-body'});
+  sessionHistory.clear(crypto.randomUUID());state.results.clear();state.feedback=null;feedbackContext=null;state.lastDrawn=undefined;teacherDisplaySmoother.reset();
+  $('toggle-teacher-3d').hidden=!teacher3DAvailable();
+  const downloadNote=document.querySelector('#movement-details .settings-note');if(downloadNote)downloadNote.hidden=kind==='uploaded';
+  renderStepList();
+  if(!await choose(0,false)){
+    Object.assign(state,{...previous,lessonKind:previous.kind});renderStepList();await choose(0,false);
+    $('toggle-teacher-3d').hidden=!teacher3DAvailable();if(downloadNote)downloadNote.hidden=previous.kind==='uploaded';
+    throw new Error('The new teacher video could not load. The previous lesson has been restored.');
+  }
+  const footer=document.querySelector('footer span');if(footer)footer.textContent=kind==='uploaded'?`${lesson.manifest.source.file} · uploaded instructor · local MediaPipe`:'Original 24.mp4 · demonstration 0.5–15.5 s · local MediaPipe';
 }
 state.camera=createFollowCamera({video:$('camera-video'),canvas:$('camera-overlay'),deviceSelect:$('camera-device'),startButton:$('start-camera'),stopButton:$('stop-camera'),mirrorCheckbox:$('mirror-preview'),skeletonCheckbox:$('learner-skeleton'),statusElement:$('camera-status'),pointIndices:INDICES,getPointIndices:activeControlIndices,showConnections:false,pointColors:FOUR_POINT_COLORS,adaptSample:LESSON_CONTROLS.liveAdapter,onObservation:observe,onState(status){
   $('camera-empty').hidden=!!status.running||cameraFeedAvailable();
@@ -805,7 +847,7 @@ state.camera=createFollowCamera({video:$('camera-video'),canvas:$('camera-overla
   render();
 }});
 $('start-practice').addEventListener('click',async()=>{
-  if(!state.ready||state.loading)return;feedbackSpeech.unlock();if(state.phase==='finished'){sessionHistory.clear(crypto.randomUUID());state.results.clear();if(!await choose(0))return;}
+  if(!state.ready||state.loading||uploadPreparing)return;feedbackSpeech.unlock();if(state.phase==='finished'){sessionHistory.clear(crypto.randomUUID());state.results.clear();if(!await choose(0))return;}
   else if(state.phase==='stopped'||state.sourceId!==step().sourceId||video.readyState<2){if(!await choose(state.index))return;}
   if(state.camera.getState().running){state.active=true;state.paused=false;if(state.watched)void returnToStart();else void watchDemonstration('lesson');return;}
   state.active=true;state.paused=false;state.preview=false;state.visualOnly=false;state.awaitingCamera=true;video.pause();++state.operation;clearEvidence();phase('camera');$('start-camera').click();
@@ -855,7 +897,7 @@ if(visibilityTest){
   new ResizeObserver(fitPortraitCamera).observe($('camera-pixels').parentElement);
 }
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&state.ready)stop();});
-window.addEventListener('pagehide',()=>{stop();state.camera?.destroy();feedbackSpeech.destroy();hardwareFeedback.destroy();lesson3D.destroy();});
+window.addEventListener('pagehide',()=>{stop();state.camera?.destroy();feedbackSpeech.destroy();hardwareFeedback.destroy();lesson3D.destroy();instructorUpload?.destroy();});
 for(const event of ['waiting','stalled'])video.addEventListener(event,()=>{
   if(state.active&&!state.paused&&state.phase==='demonstrating'&&state.movement&&video.readyState<3)
     state.attemptInterrupted='The demonstration was interrupted. Try this clip again with uninterrupted playback.';
@@ -899,4 +941,10 @@ Object.defineProperty(window,'movementPathDiagnostics',{get:()=>({
   pathReferences:JSON.parse(JSON.stringify(state.pathRefs)),projectedPaths:JSON.parse(JSON.stringify(state.projectedPaths)),
   session:state.movement?JSON.parse(JSON.stringify(state.movement)):null,practiceMode:'self-paced-review',pathRequired:false,rules:{...REVIEW_RULES}
 })});
+instructorUpload=attachInstructorUpload({button:$('upload-instructor'),onBusy(value){
+  if(value){stop();cancelSummaryFlow();}
+  uploadPreparing=value;if(!value&&!state.camera?.getState().running)$('start-camera').disabled=false;controls();
+},onApply:lesson=>installInstructorLesson(lesson,'uploaded'),onRestore:()=>installInstructorLesson(builtInLesson,'built-in')});
+Object.defineProperty(window,'instructorUploadDiagnostics',{get:()=>({...instructorUpload.getState(),lessonKind:state.lessonKind,
+  source:state.manifest?.source?.file,stepCount:total(),provenance:state.manifest?.provenance??null})});
 requestAnimationFrame(tick);void boot();

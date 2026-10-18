@@ -16,7 +16,11 @@ const validFrame=frame=>frame&&Number.isFinite(frame.scale)&&frame.scale>=.025&&
 
 export function createFullHeightLayout(reference,references,aspect,routeReferences=[]){
   if(!Number.isFinite(aspect)||aspect<=0||!validFrame(reference?.teacherFrame))return null;
-  const rules=FULL_HEIGHT_LAYOUT_RULES,viewport=cameraViewportBounds(aspect);
+  const calibration=reference.framingCalibration,uploaded=reference.uploaded===true;
+  if(uploaded&&(!calibration||!Number.isFinite(calibration.topY)||!Number.isFinite(calibration.bottomY)
+    ||calibration.topY<0||calibration.bottomY>1||calibration.bottomY-calibration.topY<.15))return null;
+  const rules=uploaded?{...FULL_HEIGHT_LAYOUT_RULES,headTopY:calibration.topY,footBottomY:calibration.bottomY,calibrationImage:null}:FULL_HEIGHT_LAYOUT_RULES;
+  const viewport=cameraViewportBounds(aspect);
   const factor=viewport.height*(1-2*rules.edge)/(rules.footBottomY-rules.headTopY);
   const extents=[],verticalTubeBounds=[],top=viewport.top+rules.edge*viewport.height;
   // One horizontal origin across the lesson avoids moving targets between steps.
@@ -60,5 +64,6 @@ export function createFullHeightLayout(reference,references,aspect,routeReferenc
     tubeVerticalShift:verticalShift,
     horizontalBounds:{left:(left+origin)/aspect,right:(right+origin)/aspect},
     calibration:{image:rules.calibrationImage,headTopY:rules.headTopY,footBottomY:rules.footBottomY,
-      provenance:'Visually reviewed upright source-frame bounds; recorded joint observations remain unchanged.'}};
+      provenance:uploaded?calibration.provenance:'Visually reviewed upright source-frame bounds; recorded joint observations remain unchanged.',
+      ...(uploaded?{sourceTimeSeconds:calibration.sourceTimeSeconds,source:'uploaded-instructor'}:{})}};
 }
