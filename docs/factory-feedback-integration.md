@@ -2,14 +2,17 @@
 
 The current five-step player finishes an attempt when all active ending targets
 are reached with fresh tracking. Its local evaluator supplies measured issues,
-and its compact formatter names the affected hand or foot. Factory is not yet
-installed or connected. The following is an optional server integration plan.
+and its compact formatter names the affected hand or foot. Factory is installed
+and integrated as optional wording in `scripts/factory-practice-feedback.mjs`.
+Local feedback appears immediately and remains available if Factory fails.
 
 ## Data flow
 
-After the local review, send one request to a Node endpoint such as
-`POST /api/practice-feedback`. For this static player, add the endpoint to the
-existing loopback server in `scripts/serve-dual-view.mjs` when implementing it.
+After the local review, the browser sends one background request to
+`POST /api/practice-feedback` on the existing loopback server in
+`scripts/serve-dual-view.mjs`. Only supported measured mismatch issues invoke AI.
+Matched and uncertain attempts keep the local wording. A valid applied response
+is labeled **AI wording** on the compact feedback card.
 Send the attempt and step IDs, actual issue codes and affected limb names, plus
 supported per-limb timing/position metrics. A long wait for another limb is not
 itself evidence that an already completed limb moved slowly.
@@ -29,17 +32,32 @@ npm install -g droid
 npm install @factory/droid-sdk
 ```
 
-The Node APIs are imported from `@factory/droid-sdk/node`, require Node 18 or
-later, and start the `droid` executable from PATH. Configure `FACTORY_API_KEY`
-only in the server environment or authenticate the local CLI as supported by
-Factory. Keep the key out of browser files, URLs and Git.
+The Node APIs are imported from `@factory/droid-sdk/node` and require Node 18 or
+later. Installed versions are CLI `0.244.0` (Node 20+) and SDK `0.9.1`.
+The current TypeScript SDK requires `FACTORY_API_KEY`; browser login alone does
+not supply it. Configure it in the server environment or in the repository-root
+`.env.factory.local`, which the existing `.env*` rule excludes from Git. The
+server loads this file at startup only when the environment lacks the key.
+Keep the key out of browser files, URLs, diagnostics and Git. On Windows, the
+service resolves npm's native `droid.exe` explicitly because Node cannot directly
+launch the `droid.cmd` shortcut. Set `FACTORY_FEEDBACK_ENABLED=0` to keep local
+feedback without Factory calls.
 
 ## Server sketch
 
-This example is a proposed adapter, not an installed or executed integration.
+This example illustrates the adapter. The executed implementation lives in
+`scripts/factory-practice-feedback.mjs`; it also bounds request size, rate,
+concurrency and duration, validates origins, and checks every structured phrase
+against the corresponding measured issue.
 Provide an isolated working directory and validate the result before displaying
 it. Request an output schema and disable all discovered tools for this wording
 task; disabling only shell execution does not disable other agent tools.
+In CLI 0.244.0, the built-in `ToolSearch` schema catalog remains available even
+when included in `disabledToolIds`. The actual adapter allows only that exact
+catalog exception, verifies every other tool is disabled, and rejects a run that
+emits any tool event or requests permission. The isolated directory and empty
+MCP configuration give the wording request no application files or external
+tool integrations. The sketch below omits those additional production checks.
 
 ```ts
 import {
@@ -108,4 +126,8 @@ it if Factory times out, fails, or introduces unsupported claims.
 - [SDK tool controls](https://github.com/Factory-AI/droid-sdk-typescript/blob/main/examples/node/tool-controls.ts)
 - [Structured output example](https://github.com/Factory-AI/droid-sdk-typescript/blob/main/examples/node/structured-output.ts)
 
-Checked against the official documentation on 2026-10-17.
+Deterministic checks: `node scripts/check-factory-feedback.mjs`.
+The separate `node scripts/check-factory-feedback-live.mjs` diagnostic consumes
+Factory usage for a labeled software example and never opens a webcam or USB.
+
+Checked against the installed SDK and official documentation on 2026-10-18.

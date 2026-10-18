@@ -1,6 +1,14 @@
 # MotionTrial status
 
-Updated: 2026-10-17.
+Updated: 2026-10-18.
+
+## Latest: Factory Droid SDK feedback — 2026-10-18
+
+The five-step player now requests optional Factory wording after the local review. Its compact local feedback appears and speaks immediately; valid AI wording updates only the text and is labeled **AI wording**. Triangle completion, measured issues, pass/retry, progress, target geometry, camera inference and Arduino signals remain local. Retry, navigation, pause, camera changes, newer attempts and timeouts cancel or discard late responses. Matched attempts and uncertain tracking retain their local wording without a model request.
+
+The loopback server now exposes `POST /api/practice-feedback` and a credential-free configuration status endpoint. The pinned SDK is `@factory/droid-sdk@0.9.1`, using installed Droid CLI `0.244.0`. The key is stored only in the local, Git-ignored `.env.factory.local`, outside the public directory. Model input contains recognized issue codes and derived anatomical labels, without camera frames, landmarks or recordings. Structured wording must cover exactly the supplied measured issues with compatible brief phrases. Failures retain local feedback. The service bounds request size, concurrency, rate and duration. Every data/action tool is disabled; the CLI's persistent ToolSearch catalog is the only metadata exception, and any tool-use event rejects the AI result.
+
+Verification: all 124 existing unit tests and TypeScript checking pass, alongside 27 Factory integration groups, 32 review-flow, 12 self-paced controller, 10 speech and 14 hardware-guidance groups. Three browser groups show the compact AI label and Retry using explicit constructed review outcomes and simulated SDK responses; no physical camera requests or page errors occurred. A separate real authenticated SDK request through an isolated practice HTTP server returned validated left-hand/right-hand feedback in 9.3 seconds using clearly labeled software issues. No physical webcam or Arduino was used. A source scan found no credential in Git-visible source files. The live practice server on port 8766 has been restarted and reports Factory configured; hardware remains disconnected and idle. Evidence: `artifacts/factory-feedback-review/`. Guide: `docs/factory-feedback-integration.md`; QA: `scripts/check-factory-feedback.mjs`; explicit paid diagnostic: `scripts/check-factory-feedback-live.mjs`.
 
 ## Latest: self-paced targets and compact feedback — 2026-10-17
 

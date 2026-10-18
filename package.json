@@ -17,6 +17,7 @@
     "data:reset": "tsx scripts/reset-data.ts"
   },
   "dependencies": {
+    "@factory/droid-sdk": "0.9.1",
     "@fix-webm-duration/fix": "1.0.1",
     "@fix-webm-duration/parser": "1.0.1",
     "@mediapipe/tasks-vision": "1.1.1",

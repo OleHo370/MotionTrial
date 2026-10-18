@@ -6,13 +6,15 @@ import { fileURLToPath } from 'node:url';
 // Wi-Fi transport preserved for later: uncomment this import and its factory below.
 // import { createArduinoFeedbackRelay } from './arduino-feedback-relay.mjs';
 import { createArduinoUsbRelay } from './arduino-usb-relay.mjs';
+import { createFactoryPracticeFeedbackService } from './factory-practice-feedback.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../public');
 const port = Number(process.env.DUAL_VIEW_PORT || 8766);
 const types = {'.html':'text/html; charset=utf-8','.json':'application/json','.js':'text/javascript','.mjs':'text/javascript','.wasm':'application/wasm','.mp4':'video/mp4','.jpg':'image/jpeg','.png':'image/png','.task':'application/octet-stream'};
 // Wi-Fi default preserved: relay = createArduinoFeedbackRelay()
-export function createDualViewServer({ publicRoot = root, relay = createArduinoUsbRelay() } = {}) {
+export function createDualViewServer({ publicRoot = root, relay = createArduinoUsbRelay(), feedback = createFactoryPracticeFeedbackService() } = {}) {
 const server = http.createServer(async (req, res) => {
   try {
+    if (feedback && await feedback.handle(req, res)) return;
     if (await relay.handle(req, res)) return;
     const url = new URL(req.url, 'http://127.0.0.1');
     const target = path.resolve(publicRoot, '.' + decodeURIComponent(url.pathname === '/' ? '/dual-view.html' : url.pathname));
@@ -36,8 +38,9 @@ const server = http.createServer(async (req, res) => {
     stream.pipe(res);
   } catch { res.writeHead(404).end('File not found'); }
 });
-server.on('close', () => { void relay.close(); });
+server.on('close', () => { void relay.close(); void feedback?.close(); });
 server.shutdown = async () => {
+  await feedback?.close();
   await relay.close();
   if (server.listening) await new Promise(resolve => server.close(resolve));
 };
@@ -45,6 +48,10 @@ return server;
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  if (!process.env.FACTORY_API_KEY) {
+    try { process.loadEnvFile(path.resolve(root, '../.env.factory.local')); }
+    catch (error) { if (error.code !== 'ENOENT') throw new Error('Check the local Factory environment file.'); }
+  }
   /* Wi-Fi pairing setup preserved; USB does not need an IP, network or pairing key.
   let defaultKey = null;
   try {

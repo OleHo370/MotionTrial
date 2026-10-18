@@ -12,6 +12,7 @@ import {createAttemptReview as realCreateAttemptReview,observeAttemptReview as r
   finalizeAttemptReview as realFinalizeAttemptReview} from '../public/practice-attempt-review.js';
 import {createEndTargetSession,evaluateEndTargets} from '../public/practice-end-targets.js';
 import {compactPracticeFeedback} from '../public/practice-compact-feedback.js';
+import {createPracticeAiFeedback} from '../public/practice-ai-feedback.js';
 
 const require=createRequire(import.meta.url),{parse}=require('next/dist/compiled/acorn');
 const controllerURL=new URL('../public/first-three.js',import.meta.url);
@@ -96,6 +97,9 @@ function controllerHarness({functions=null,overrides={},stateOverrides={},speech
     performance:{now:()=>clock.now},setTimeout,clearTimeout,
     requestAnimationFrame:()=>1,cancelAnimationFrame(){},
     $,video,INDICES:indices,POINT_COUNT:'four',feedbackSpeech,createEndTargetSession,evaluateEndTargets,compactPracticeFeedback,
+    // Optional AI wording is disabled by default in deterministic controller QA.
+    // Integration checks explicitly inject a non-networking fetch fixture.
+    aiFeedback:createPracticeAiFeedback({fetchImpl:null}),feedbackSequence:0,feedbackWordingSource:'local',
     hardwareFeedback:{neutral(){events.push({kind:'hardware-neutral',at:clock.now});},
       update(){events.push({kind:'hardware-update',at:clock.now});},destroy(){}},
     ATTEMPT_REVIEW_RULES:{completionGraceMs:1000,feedbackMs:3000,maximumAgeMs:450},
