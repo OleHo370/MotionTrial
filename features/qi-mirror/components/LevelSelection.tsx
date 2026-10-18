@@ -222,7 +222,7 @@ export default function LevelSelection({ levels }: { levels: GameLevel[] }) {
           <h2 id="ql-preview-title" className={level.title.length > 34 ? 'ql-long-title' : undefined}>{level.title}</h2><p className="ql-chinese-title" lang="zh-CN">{level.chineseTitle}</p>
         </div>
         <LevelPreview key={level.src} level={level} />
-        <Link className="ql-enter" href={level.number === 1 ? '/practice' : `/qi-mirror/enter?form=${level.number}`} prefetch={false}><span>Begin this form<small lang="zh-CN">习此一式</small></span><span aria-hidden="true">↗</span></Link>
+        <Link className="ql-enter" href={level.number === 1 ? 'http://127.0.0.1:8766/first-three.html?step=1' : `/qi-mirror/enter?form=${level.number}`} prefetch={false}><span>Begin this form<small lang="zh-CN">习此一式</small></span><span aria-hidden="true">↗</span></Link>
         <p className="ql-preview-note">Watch the form. Then make it your own.<br /><span lang="zh-CN">先观其形，再循其势。</span></p>
       </aside>
     </div>

@@ -52,7 +52,7 @@ test('homepage renders four scenes, local fonts, reduced motion and narrow layou
   expect(errors).toEqual([]);
 });
 
-test('level one opens existing practice and other form choices keep their routes', async ({ page }, info) => {
+test('level one opens original opening lesson and other form choices keep their routes', async ({ page }, info) => {
   await page.goto('/qi-mirror/cover');
   await page.getByRole('link', { name: '开始游戏' }).click();
   await expect(page).toHaveURL(/\/qi-mirror\/levels$/);
@@ -61,17 +61,30 @@ test('level one opens existing practice and other form choices keep their routes
   await expect(page.locator('.ql-enter')).toHaveAttribute('href', '/qi-mirror/enter?form=2');
   for (let level = 1; level <= 24; level++) {
     await page.getByRole('button', { name: new RegExp(`^Choose level ${level}:`) }).click();
-    await expect(page.locator('.ql-enter')).toHaveAttribute('href', level === 1 ? '/practice' : `/qi-mirror/enter?form=${level}`);
+    await expect(page.locator('.ql-enter')).toHaveAttribute('href', level === 1 ? 'http://127.0.0.1:8766/first-three.html?step=1' : `/qi-mirror/enter?form=${level}`);
   }
   await page.screenshot({ path: info.outputPath('levels-desktop.png') });
   await page.setViewportSize({ width: 320, height: 568 });
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
   await page.screenshot({ path: info.outputPath('levels-mobile.png') });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  // Do not contact the user's hardware while checking the original static page.
+  await page.route('**/api/arduino/**', route => route.fulfill({
+    status: 503, contentType: 'application/json', body: JSON.stringify({ error: 'Hardware disabled for navigation check.' }),
+  }));
   await page.getByRole('button', { name: /^Choose level 1:/ }).click();
   await page.getByRole('link', { name: /Begin this form/ }).click();
-  await expect(page).toHaveURL(/\/practice$/);
+  await expect(page).toHaveURL('http://127.0.0.1:8766/first-three.html?step=1');
   await expect(page.locator('[data-qimirror-root]')).toHaveCount(0);
-  await expect(page.locator('.practice-page[data-parent-form="1"]')).toBeVisible();
+  await expect(page.locator('#teacher-video')).toBeVisible();
+  await expect(page.locator('#camera-video')).toBeVisible();
+  await expect.poll(() => page.evaluate(() => (window as unknown as { firstThreeDiagnostics?: { ready: boolean; index: number } }).firstThreeDiagnostics?.ready)).toBe(true);
+  expect(await page.evaluate(() => (window as unknown as { firstThreeDiagnostics: { index: number } }).firstThreeDiagnostics.index)).toBe(0);
+  const teacher = await page.locator('#teacher-pixels').boundingBox();
+  const camera = await page.locator('#camera-pixels').boundingBox();
+  expect(teacher).not.toBeNull(); expect(camera).not.toBeNull();
+  expect(teacher!.x + teacher!.width).toBeLessThanOrEqual(camera!.x + 1);
+  expect(await page.evaluate(() => (window as unknown as { cameraRequests: number }).cameraRequests)).toBe(0);
 });
 
 test('bamboo loading reaches instructions without starting video or camera', async ({ page }, info) => {
