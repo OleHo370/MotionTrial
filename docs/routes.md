@@ -9,11 +9,12 @@ The current product starts at the [Qi Mirror homepage](http://127.0.0.1:3100/qi-
 | [Qi Mirror](http://127.0.0.1:3100/qi-mirror) | Current landing page with interactive ink, Tai Chi introduction and practice entry points. |
 | [Choose a form](http://127.0.0.1:3100/qi-mirror/levels) | The 24-form selection wheel. |
 | [Opening lesson](http://127.0.0.1:8766/first-three.html?step=1) | Five-step opening, instructor-video upload, live tracking, spoken coaching, Factory AI Wellness Movement Review and optional USB cues. |
+| [Prepare the opening](http://127.0.0.1:3100/qi-mirror/enter?form=1&lesson=opening) | The shared bamboo loading screen, followed by the original port-8766 opening lesson. |
 | [Prepare a form](http://127.0.0.1:3100/qi-mirror/enter?form=2) | Preloads the chosen form's video and reference before entering practice. |
 | [Step-by-step learning](http://127.0.0.1:3100/qi-mirror/practice?mode=guided&form=2) | Slow demonstrations, held targets and learner-paced progression. |
 | [Whole-form practice](http://127.0.0.1:3100/qi-mirror/practice?mode=forms&routine=original24) | Continuous reference practice and the available recording library. |
 
-From the form selector, **form 1 opens the dedicated port-8766 opening lesson**. **Forms 2–24 open `/qi-mirror/enter?form=N`**, which prepares their resources and continues to `/qi-mirror/practice?mode=guided&form=N`. The homepage also offers direct step-by-step and whole-form practice links.
+From the form selector, **form 1 opens `/qi-mirror/enter?form=1&lesson=opening`**, shows the bamboo screen through 100%, then opens the dedicated port-8766 opening lesson. **Forms 2–24 open `/qi-mirror/enter?form=N`**, which prepares their resources and continues to `/qi-mirror/practice?mode=guided&form=N`. The earlier direct `/qi-mirror/enter?form=1` link still prepares the imported guided lesson. The homepage also offers direct step-by-step and whole-form practice links.
 
 ## Retained earlier routes
 

@@ -13,6 +13,7 @@ practice controller, reference asset, database, or Arduino transport is replaced
 | `/qi-mirror/cover` | Original ink-landscape cover from the UI package |
 | `/qi-mirror/levels` | Discrete 24-form wheel and original-color previews |
 | `/qi-mirror/enter?form=1` | Resource-backed bamboo loading before the selected form |
+| `/qi-mirror/enter?form=1&lesson=opening` | Bamboo loading before the original five-clip opening player |
 | `/qi-mirror/practice?mode=guided&form=1` | Separate imported guided-learning UI |
 | `/qi-mirror/practice?mode=forms&routine=original24` | Separate imported whole-form UI |
 
@@ -24,6 +25,15 @@ The USB lesson remains `http://127.0.0.1:8766/first-three.html`, served by the
 existing `scripts/serve-dual-view.mjs`. Its USB relay endpoints are provided by
 that local server. This integration does not start it, change its firmware, or
 move the lesson to a different origin.
+
+The form wheel's Level 1 **Begin this form** link uses the opening-specific
+loading route. It reuses the same bamboo presentation, checks availability of
+the original player and its startup files, and leaves 100% visible for at least
+500 ms before continuing to `first-three.html?step=1`. A failed check offers retry
+or Back to forms; leaving cancels pending work. The fixed-target read-only check
+uses local file HEAD requests without booting another player or invoking camera,
+Arduino or Factory endpoints. It does not preload the older guided lesson or
+change the practice player's startup. Forms 2–24 retain their existing loaders.
 
 ## Isolation
 

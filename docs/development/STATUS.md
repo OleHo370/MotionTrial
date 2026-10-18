@@ -4,6 +4,14 @@ Updated: 2026-10-18.
 
 Paths and command examples in this history are relative to the repository root.
 
+## Latest: bamboo transition before the original opening lesson — 2026-10-18
+
+Level 1's **Begin this form** link now enters `/qi-mirror/enter?form=1&lesson=opening`, reusing the existing bamboo loading presentation before continuing to `http://127.0.0.1:8766/first-three.html?step=1`. Its 100% state stays visible for at least 500 ms so the 420 ms bamboo reveal can finish; the shared one-second minimum remains. Forms 2–24 and the earlier direct `/qi-mirror/enter?form=1` guided-lesson link keep their original paths and preparation.
+
+The opening-specific transition checks the fixed local player, manifest, teacher display guides, recorded poses and video with HEAD requests through a same-origin readiness endpoint. It does not fetch the unrelated guided lesson, add cross-origin access, boot a hidden player or invoke camera, Arduino or Factory endpoints. Readiness failures keep the existing retry/back controls; navigation cancels the request and completion timers. The original opening player, its startup, tracking, feedback, video bytes and USB server are unchanged.
+
+The production build, TypeScript checking and all 124 core tests pass. Five focused browser cases pass: all form destinations and opening 0→100→original-player navigation with a measured completion dwell, unavailable-page retry, cancellation on Back during preparation or the completion dwell, unchanged form-2 guided navigation, and the earlier direct form-1 guided link. Desktop/mobile previews are retained under `artifacts/bamboo-opening-review/`; the browser fixtures block camera, hardware and paid AI. The updated port-3100 build is running; port 8766 was not restarted. An actual browser check also confirmed Level 1's loading screen at 100%, followed by the original five-step teacher/webcam page with the camera off. The real read-only readiness endpoint returns 200 with caching disabled.
+
 ## Latest: test configurations grouped and generated root types excluded — 2026-10-18
 
 The two Playwright configurations now live in `config/`, with fixture, test, report and result paths adjusted to retain their original locations. The npm browser-test commands explicitly select the relocated configurations; `test:e2e:qi-mirror` provides the dedicated Qi Mirror suite. The small Next.js configuration uses the conventional root `next.config.mjs` and retains the exact SQLite and response-header settings. Generated `next-env.d.ts` stays on disk, is excluded from Git and is regenerated through `next typegen` before type checking. No TypeScript files remain tracked at the repository root.
