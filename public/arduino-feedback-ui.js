@@ -29,7 +29,8 @@ export function attachArduinoFeedback({getContext,document:doc=document,
       try{
         const context=getContext(),nowMs=now();
         lastSignal=guidance.update(context.reference,context.pathReference,context.observation,context.frame,
-          {nowMs,active:context.active===true,contextKey:context.contextKey,controlIndices:context.controlIndices});
+          {nowMs,active:context.active===true,contextKey:context.contextKey,controlIndices:context.controlIndices,
+            triangleOnlyIndices:context.triangleOnlyIndices});
       }catch{guidance.reset();lastSignal={state:'idle',reason:'Tracking unavailable.'};}
       client.setSignal(lastSignal);
     },

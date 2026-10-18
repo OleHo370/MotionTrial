@@ -3,7 +3,7 @@
 import {REVIEW_RULES} from './practice-attempt-review.js';
 
 export const HARDWARE_GUIDANCE_RULES=Object.freeze({
-  version:'raw-four-point-hardware-guidance-v1',
+  version:'raw-four-point-hardware-guidance-v2',
   warningDelayMs:250,recoveryDelayMs:200,
   visibilityThreshold:REVIEW_RULES.visibilityThreshold,
   maximumAgeMs:REVIEW_RULES.maximumAgeMs,
@@ -38,7 +38,7 @@ function guideDistance(point,control){
     nearest=Math.min(nearest,segmentDistance(point,control.points[i-1],control.points[i]));
   return nearest;
 }
-function controlsFor(reference,pathReference,indices,selected=false){
+function controlsFor(reference,pathReference,indices,selected=false,triangleOnlyIndices=[]){
   const sourceGuides=reference?.guides,paths=pathReference?.paths;
   const guides=Array.isArray(sourceGuides)&&selected?sourceGuides.filter(g=>indices?.includes(g?.index)):sourceGuides;
   if(reference?.referenceUsable!==true||pathReference?.referenceUsable!==true
@@ -50,12 +50,17 @@ function controlsFor(reference,pathReference,indices,selected=false){
   for(const index of indices){
     const guide=guides.find(g=>g?.index===index),path=paths.find(p=>p?.index===index);
     if(guide?.valid!==true||!finitePoint(guide.start)||!finitePoint(guide.end))return null;
+    const triangleOnly=triangleOnlyIndices.includes(index);
+    const hasBeam=path?.available===true&&!path.stationary&&Number.isFinite(path.halfWidth)&&path.halfWidth>0
+      &&Array.isArray(path.points)&&path.points.length>=2&&path.points.every(finitePoint);
+    if(triangleOnly&&hasBeam)return null;
     const moving=guide.targetGeometry?.mode!=='hold'&&distance(guide.start,guide.end)
       >=(index>=35?REVIEW_RULES.minimumFootDisplacement:REVIEW_RULES.minimumHandDisplacement);
-    if(moving&&(path?.available!==true||!Array.isArray(path.points)
+    if(moving&&!triangleOnly&&(path?.available!==true||!Array.isArray(path.points)
       ||path.points.length<2||!path.points.every(finitePoint)))return null;
     controls.push({index,label:guide.label??NAMES[index],moving,start:{...guide.start},end:{...guide.end},
-      points:moving?path.points.map(p=>({x:p.x,y:p.y})):[]});
+      points:moving&&!triangleOnly?path.points.map(p=>({x:p.x,y:p.y})):[],
+      ...(triangleOnly?{triangleOnly:true}:{})});
   }
   return controls;
 }
@@ -69,6 +74,8 @@ const rawKey=observation=>JSON.stringify([observation.sample.status,observation.
  * Input is the same raw, unmirrored observation and frozen body frame consumed
  * by the end-of-clip reviewer. The broad route is a spatial UNION, so this does
  * not demand a teacher phase, ordered checkpoints, or synchronised progress.
+ * A triangle-only control checks its shown endpoint instead. Drawable beam
+ * controls retain their original distance rule throughout the movement.
  * Repeated render calls may expire a result but cannot accumulate support.
  */
 export function createHardwareGuidance(){
@@ -87,11 +94,14 @@ export function createHardwareGuidance(){
     result={state:'idle',reason:'Practice is not active.',limbs:unknownLimbs(activeIndices)};return snapshot();
   }
   reset();
-  function update(reference,pathReference,observation,frame,{nowMs,active=false,contextKey=null,controlIndices}={}){
+  function update(reference,pathReference,observation,frame,{nowMs,active=false,contextKey=null,controlIndices,triangleOnlyIndices=[]}={}){
     const indices=selectionIndices(controlIndices),armsOnly=controlIndices!==undefined&&!!indices;
     activeIndices=indices??INDICES;
     if(!active){reset();return snapshot();}
-    const controls=controlsFor(reference,pathReference,indices,armsOnly),fk=frameKey(frame),ck=controlKey(controls);
+    const triangleSelectionValid=Array.isArray(triangleOnlyIndices)&&new Set(triangleOnlyIndices).size===triangleOnlyIndices.length
+      &&triangleOnlyIndices.every(index=>indices?.includes(index));
+    const controls=triangleSelectionValid?controlsFor(reference,pathReference,indices,armsOnly,triangleOnlyIndices):null;
+    const fk=frameKey(frame),ck=controlKey(controls);
     if(previousReference!==reference||previousPathReference!==pathReference||previousFrameKey!==fk
       ||previousControlKey!==ck||previousContext!==contextKey){
       reset();previousReference=reference;previousPathReference=pathReference;
@@ -125,10 +135,13 @@ export function createHardwareGuidance(){
     if(lastValidAtMs===null||observedAtMs-lastValidAtMs>REVIEW_RULES.maximumObservedGapMs)clearEvidence();
     lastValidAtMs=observedAtMs;
     const limbs=controls.map(control=>{
-      const deviation=guideDistance(normalize(points.get(control.index),frame),control);
+      const point=normalize(points.get(control.index),frame);
+      const deviation=control.triangleOnly?distance(point,control.end):guideDistance(point,control);
       const status=deviation>HARDWARE_GUIDANCE_RULES.warningRadius?'outside'
         :deviation<=HARDWARE_GUIDANCE_RULES.recoveryRadius?'inside':'border';
-      return {index:control.index,label:control.label,moving:control.moving,deviation,status};
+      return {index:control.index,label:control.label,moving:control.moving,deviation,status,
+        ...(control.triangleOnly?{triangleOnly:true,targetDeviation:deviation,
+          outsideFinishTarget:deviation>HARDWARE_GUIDANCE_RULES.warningRadius}:{})};
     });
     for(const limb of limbs){
       if(limb.status==='outside'){
@@ -142,8 +155,10 @@ export function createHardwareGuidance(){
     if(sustained.length)mode='off';
     else if(allInside&&observedAtMs-recoverySince>=HARDWARE_GUIDANCE_RULES.recoveryDelayMs)mode='good';
     const state=mode==='off'?'off':outside.length?'idle':mode;
+    const warningLimbs=sustained.length?sustained:outside;
+    const warningLocation=warningLimbs.some(limb=>limb.outsideFinishTarget)?'finish triangle or movement guideline':'general guideline';
     const reason=state==='off'?(outside.length
-      ?`${(sustained.length?sustained:outside).map(limb=>limb.label).join(' and ')} outside the general guideline.`
+      ?`${warningLimbs.map(limb=>limb.label).join(' and ')} outside the ${warningLocation}.`
       :'Move fully inside the guidelines to clear the warning.')
       :state==='good'?armsOnly?'Both palms are within the general guidelines.':'All four points are within the general guidelines.'
       :outside.length?'Checking movement outside the guideline.':armsOnly?'Checking both palms.':'Checking all four points.';

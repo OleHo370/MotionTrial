@@ -2,6 +2,12 @@
 
 Updated: 2026-10-17.
 
+## Latest: hardware warnings for triangle-only controls — 2026-10-17
+
+During the normal imitation and finish allowance, a palm or foot with a progress beam retains its original beam-distance warning. A control whose finish triangle has no drawable beam now uses distance from that triangle's center. The controller derives this selection from the same projected guides used for drawing, across all six steps; arms-only mode considers only its selected palms. The existing broad 0.42-unit warning, 0.34-unit recovery, 250 ms warning delay and 200 ms recovery delay are unchanged. Missing/stale tracking, watch-only playback, positioning, review, pause and stopped practice remain neutral. Raw tracking, marker sizes, progress, review outcomes, USB transport and firmware remain unchanged.
+
+Verification: 14 new triangle-only hardware groups pass, including every limb independently, all six genuine lesson guide sets, unchanged beam travel, invalid selections, unknown tracking and the real browser UI/USB client forwarding the existing `off` command through explicitly fake HTTP. The existing 15 hardware, 13 USB client/UI, 32 controller, 11 arms-only rule and nine browser/controller groups also pass. No physical LED, buzzer or learner webcam was activated. Software evidence: `artifacts/arduino-feedback-review/finish-target-summary.json`; repeat with `node scripts/check-hardware-finish-targets.mjs`. Refresh the practice page to load the change.
+
 ## Latest: smaller arms-only start and finish markers — 2026-10-17
 
 The step-6 arms-only squares and triangles now match the original full-body markers in displayed size, including the different camera crop. Target centers retain their proportional head-to-waist placement. Only marker drawing dimensions changed; movement arrows, raw tracking, readiness/comparison thresholds and the clip progress/review flow remain unchanged. Full-body rendering retains its original size calculation. Syntax and the nine existing controller/browser checks pass with explicitly constructed palm inputs and physical camera/Arduino access blocked.

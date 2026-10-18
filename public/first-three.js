@@ -93,6 +93,7 @@ function selectPracticeMode(mode){
 const hardwareFeedback=attachArduinoFeedback({getContext:()=>({
   reference:guidance(),pathReference:pathReference(),observation:state.observation,frame:state.fixedFrame,
   ...controlOptions(),
+  triangleOnlyIndices:hardwareTriangleOnlyIndices(),
   active:state.active&&!state.paused&&['demonstrating','grace'].includes(state.phase)
     &&!!state.camera?.getState().running&&!state.attemptInterrupted,
   contextKey:`${state.operation}:${state.index}:${state.camera?.getState().generation??0}`,
@@ -103,6 +104,15 @@ function clearEvidence(){feedbackSpeech.cancel();hardwareFeedback.neutral();stat
 function cameraFeedAvailable(){const v=$('camera-video');return !!v.srcObject&&v.videoWidth>0&&v.videoHeight>0;}
 function screenGuides(frame){return projectFourPointGuides(guidance(),null,frame.aspect,frame);}
 function screenPaths(frame,session){return projectPracticeTubes(pathReference(),frame,session);}
+function hardwareTriangleOnlyIndices(){
+  if(!state.fixedFrame)return [];
+  const beamIndices=new Set(screenPaths(state.fixedFrame,null).filter(route=>route.available&&!route.stationary
+    &&Number.isFinite(route.halfWidth)&&route.halfWidth>0&&Array.isArray(route.points)&&route.points.length>=2
+    &&route.points.every(point=>Number.isFinite(point.x)&&Number.isFinite(point.y))).map(route=>route.index));
+  return screenGuides(state.fixedFrame).filter(guide=>activeControlIndices().includes(guide.index)&&guide.valid
+    &&guide.end&&guide.end.x>=0&&guide.end.x<=1&&guide.end.y>=0&&guide.end.y<=1
+    &&!beamIndices.has(guide.index)).map(guide=>guide.index);
+}
 function seedScreenTargets(aspect=$('camera-video').videoWidth/$('camera-video').videoHeight){
   if(!state.active||state.loading||!guidance()||!state.placement||state.fixedFrame||!cameraFeedAvailable()||!Number.isFinite(aspect)||aspect<=0)return;
   if(state.placement.bodyFrame&&state.placement.aspect===aspect)return;
