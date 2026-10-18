@@ -137,7 +137,7 @@ async function usePrerecordedInstructorCamera(page: Page, stationary = false) {
 }
 
 test('real reference + neutral test camera: unknown repeats, pause cancels, stop releases, mobile fits', async ({ page }, testInfo) => {
-  testInfo.annotations.push({ type: 'provenance', description: 'Real MediaPipe reference inference. Camera is the explicitly synthetic, blank Y4M fixture from playwright.config.ts; no physical-camera claim.' });
+  testInfo.annotations.push({ type: 'provenance', description: 'Real MediaPipe reference inference. Camera is the explicitly synthetic, blank Y4M fixture from config/playwright.config.ts; no physical-camera claim.' });
   await page.addInitScript(() => {
     const original = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
     window.__practiceQa = { calls: 0, starts: [] };

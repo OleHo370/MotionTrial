@@ -185,7 +185,7 @@ test('every audited step can be completed manually without a camera or a matchin
 
 test('blank camera stays unknown with optional auto; manual next remains possible and stop releases the stream', async ({ page }, testInfo) => {
   test.setTimeout(150_000);
-  testInfo.annotations.push({ type: 'provenance', description: 'Real MediaPipe receives the explicitly synthetic blank Y4M test camera from playwright.config.ts. It must remain unknown and never automatically advance. No physical-camera validation claim.' });
+  testInfo.annotations.push({ type: 'provenance', description: 'Real MediaPipe receives the explicitly synthetic blank Y4M test camera from config/playwright.config.ts. It must remain unknown and never automatically advance. No physical-camera validation claim.' });
   await trackCameraRequests(page);
   const playlist = await loadTeaching(page);
   await ready(page);

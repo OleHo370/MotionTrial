@@ -126,6 +126,7 @@ The custom lesson is held locally for the current browser session. **Change vide
 ```text
 app/qi-mirror/              Homepage, form selection, loading and practice routes
 features/qi-mirror/         Qi Mirror components, teaching UI and interactions
+config/                    Playwright test configurations
 public/first-three.*       Factory-enabled opening practice experience
 public/practice-*.js       Practice rules, feedback, speech and session history
 public/practice-media/     Instructor clips, teaching maps and real pose references
@@ -138,7 +139,7 @@ docs/                      Current guides, diagram, development history and arch
 tests/                     Unit, integration and browser checks
 ```
 
-The repository root keeps the project README, coding-agent guidance and application configuration. Supporting documents are organized under `docs/`: current guides at the top level, implementation history in `docs/development/`, and earlier planning, practice notes and prompts in `docs/archive/`.
+The repository root keeps the project README, coding-agent guidance and framework configuration (`next.config.mjs`, `postcss.config.mjs` and `tsconfig.json`). Test configurations are grouped in `config/`; Next.js generates its local type declarations automatically. Supporting documents are organized under `docs/`: current guides at the top level, implementation history in `docs/development/`, and earlier planning, practice notes and prompts in `docs/archive/`.
 
 Source videos, model assets, attribution records and licenses are versioned with the app. Generated diagnostics, local recordings, credentials, dependencies, build output and imported source-package backups are excluded from Git. The [documentation index](docs/README.md) is the entry point for supporting material.
 
@@ -155,6 +156,8 @@ node scripts/check-instructor-upload.mjs
 ```
 
 The upload browser check uses an actual instructor video and the real local MediaPipe model. The suite also verifies custom lesson targets, 3D synchronization, session totals, Factory request payloads and restoration of the original lesson. The core suite contains **124 passing tests**. A separate authenticated Factory check has verified the custom-lesson review through the running SDK integration.
+
+Run browser suites against the running local app with `npm run test:e2e` or `npm run test:e2e:qi-mirror`. Add `-- --list` to inspect the discovered checks. `npm run typecheck` generates the Next.js type declarations before checking the project.
 
 ## Credits
 

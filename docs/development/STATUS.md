@@ -4,6 +4,12 @@ Updated: 2026-10-18.
 
 Paths and command examples in this history are relative to the repository root.
 
+## Latest: test configurations grouped and generated root types excluded — 2026-10-18
+
+The two Playwright configurations now live in `config/`, with fixture, test, report and result paths adjusted to retain their original locations. The npm browser-test commands explicitly select the relocated configurations; `test:e2e:qi-mirror` provides the dedicated Qi Mirror suite. The small Next.js configuration uses the conventional root `next.config.mjs` and retains the exact SQLite and response-header settings. Generated `next-env.d.ts` stays on disk, is excluded from Git and is regenerated through `next typegen` before type checking. No TypeScript files remain tracked at the repository root.
+
+README, repository guidance and current test documentation describe the new layout. Verification: the Next.js configuration object matches the original settings; `npm run typecheck` successfully generates types and passes; all 124 core tests pass; the relocated general Playwright configuration discovers the same 23 tests in five files as before, and the dedicated Qi Mirror configuration discovers five tests. Test listing does not activate browsers, cameras, hardware or Factory model calls.
+
 ## Latest: supporting Markdown moved out of the repository root — 2026-10-18
 
 Fifteen supporting Markdown files now live under `docs/`. The implementation history is `docs/development/STATUS.md`; fourteen earlier specifications, prompts, practice notes and runbooks are grouped under `docs/archive/planning/`, `docs/archive/prompts/` and `docs/archive/practice/`. The repository root contains only `README.md` and `AGENTS.md` as Markdown files. Archived documents have historical-context labels, and the documentation index and archive index provide a clear navigation structure.

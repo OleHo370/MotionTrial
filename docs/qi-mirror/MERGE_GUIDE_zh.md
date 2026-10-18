@@ -1,5 +1,7 @@
 # 氣mirror 前端 UI 增量包合并说明
 
+> Historical import guide. Current tooling uses [next.config.mjs](../../next.config.mjs) and the [Playwright configurations](../../config/). Use the npm commands in the [project README](../../README.md) for current setup and checks.
+
 日期：2026-10-18（Asia/Shanghai）。此包交付首页、选关、跟练外观、竹子加载和宣纸弹窗的当前实现，供队友审查并合并到已有 MotionTrial 项目。它不是完整项目、构建产物或数据库备份。
 
 ## 基线与包结构

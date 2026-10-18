@@ -59,7 +59,7 @@ with an empty test data directory, then run:
 $env:MOTIONTRIAL_DATA_DIR = "$PWD/.test-data/qi-mirror-browser"
 node node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port 3100
 # In another terminal:
-node node_modules/@playwright/test/cli.js test --config=playwright.qi-mirror.config.ts
+npm run test:e2e:qi-mirror
 ```
 
 The browser checks cover narrow layouts, form navigation, instructions without
@@ -69,7 +69,7 @@ client navigation. They do not assess human movement or activate USB hardware.
 The integration was built in an isolated QA copy to preserve the original
 running/build directory and private data. That copy used shared installed
 dependencies and a QA-only `turbopack.root` setting for their filesystem paths.
-The repository's `next.config.ts` is unchanged.
+The current repository uses `next.config.mjs` with the same SQLite and response-header settings; Playwright configurations live under `config/`.
 
 The supplied merge guide and provenance documents are retained under this
 directory. The imported pages and assets are versioned directly. Original ZIP

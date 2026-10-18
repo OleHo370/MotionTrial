@@ -1,11 +1,12 @@
 # Qi Mirror project guidance
 
-## Documentation layout
+## Repository layout
 
 - Keep only `README.md` and `AGENTS.md` as Markdown files in the repository root.
 - Current engineering guides and the documentation index belong in `docs/`.
 - Update implementation and verification history in `docs/development/STATUS.md`.
 - Earlier specifications, practice notes and prompts belong in `docs/archive/`, grouped by purpose. Preserve working references when relocating documents.
+- Keep optional tool/test configurations in `config/`. Retain framework-discovered root configuration files; generated `next-env.d.ts` stays local and ignored by Git. Use the npm test scripts so relocated configuration paths are applied.
 
 ## Project conventions
 
