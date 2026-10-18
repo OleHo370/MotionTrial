@@ -1,0 +1,440 @@
+/* Imported Qi Mirror styles. Every selector is gated by the additive page wrapper. */
+/* The game shell shares the landing page's local type and ink palette.
+   Video and tracking canvases retain their original colors and geometry. */
+[data-qimirror-root] .practice-loading-overlay { position: fixed; inset: 0; z-index: 1000; overflow: auto; background: #f7f6f2; }
+[data-qimirror-root] .practice-page {
+  --qi-display: 'Qi Local Display', 'Bodoni MT', Georgia, 'Times New Roman', serif;
+  --qi-body: 'Qi Local UI', 'Segoe UI', Arial, sans-serif;
+  --qi-chinese: 'Qi Ma Shan Zheng', 'Qi WenKai Brand', 'KaiTi', cursive;
+  --practice-bg: #f7f6f2;
+  --practice-navy: #262822;
+  --practice-muted: #70746a;
+  --practice-line: #d9dad1;
+  --practice-teal: #30342a;
+  --practice-soft: #eaeae1;
+  --practice-amber: #92611c;
+  min-height: 100svh;
+  padding: 0 clamp(18px, 3vw, 52px) 30px;
+  font-family: var(--qi-body);
+  background-color: var(--practice-bg);
+  background-image: linear-gradient(to bottom, #f7f6f2 8%, #f7f6f2f7 40%, #f7f6f2e8 100%), url('/qi-mirror/landing-art/ink-landscape.jpg');
+  background-size: 100% 100%, 100% auto;
+  background-position: center, center bottom;
+  background-repeat: no-repeat;
+}
+
+[data-qimirror-root] .practice-page :is(button, a, input, select) { font-family: var(--qi-body); }
+[data-qimirror-root] .practice-page :is(button, a, summary, select, input):focus-visible {
+  outline: 2px solid #30342a;
+  outline-offset: 4px;
+}
+[data-qimirror-root] .practice-page :is(h1, h2, p) { overflow-wrap: break-word; }
+[data-qimirror-root] .practice-page :is(h1, h2) { color: var(--practice-navy); }
+[data-qimirror-root] .practice-page .practice-header {
+  height: 68px;
+  border-bottom-color: #cfd1c5;
+  gap: 18px;
+}
+[data-qimirror-root] .practice-page .practice-brand {
+  flex-shrink: 0;
+  gap: 9px;
+  color: var(--practice-navy);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-decoration: none;
+}
+[data-qimirror-root] .practice-page .practice-brand-symbol {
+  display: block;
+  width: 38px;
+  height: 38px;
+  background: transparent;
+  border-radius: 0;
+  color: #30342a;
+}
+[data-qimirror-root] .practice-page .practice-brand-qi {
+  font-family: var(--qi-chinese);
+  font-size: 30px;
+  line-height: 1;
+}
+[data-qimirror-root] .practice-page .practice-brand-word {
+  margin-left: 4px;
+  padding-left: 13px;
+  border-left: 1px solid #babdb0;
+  font-family: var(--qi-display);
+  font-size: 27px;
+  line-height: 1;
+  letter-spacing: -.5px;
+}
+[data-qimirror-root] .practice-page .practice-header-right { font-size: 11px; gap: 24px; }
+[data-qimirror-root] .practice-page .practice-header-right a { color: #666b5f; text-underline-offset: 5px; }
+[data-qimirror-root] .practice-page .practice-header-right a:hover { color: #20231e; }
+[data-qimirror-root] .practice-page .practice-prototype {
+  padding: 5px 0 5px 17px;
+  border: 0;
+  border-left: 1px solid #cfd1c5;
+  border-radius: 0;
+  background: transparent;
+  color: #777b6f;
+  font-size: 10px;
+  font-weight: 400;
+}
+[data-qimirror-root] .practice-page .practice-dot { background: #555c4a; }
+[data-qimirror-root] .practice-page .practice-mode-control {
+  margin-top: 16px;
+  border: 1px solid #cbd0c0;
+  border-radius: 2px;
+  background: #eeeee6;
+  padding: 3px;
+  gap: 3px;
+}
+[data-qimirror-root] .practice-page .practice-mode-control button {
+  border-radius: 1px;
+  padding: 7px 17px;
+  color: #717669;
+  font-size: 11px;
+  transition: color 140ms, background-color 140ms;
+}
+[data-qimirror-root] .practice-page .practice-mode-control button[aria-pressed=true] {
+  background: #30342a;
+  color: #f7f6f2;
+  box-shadow: none;
+  font-weight: 400;
+}
+[data-qimirror-root] .practice-page .practice-header > .practice-mode-control {
+  margin: 0;
+  flex-shrink: 0;
+}
+[data-qimirror-root] .practice-page .practice-intro {
+  position: relative;
+  align-items: center;
+  padding: 24px 0 22px;
+  gap: 18px;
+}
+[data-qimirror-root] .practice-page .practice-kicker {
+  color: #767b6d;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 1.8px;
+  line-height: 1.5;
+}
+[data-qimirror-root] .practice-page h1, [data-qimirror-root] .practice-page.teaching-page .practice-intro h1 {
+  font-family: var(--qi-display);
+  font-size: clamp(32px, 2.9vw, 45px);
+  line-height: 1.1;
+  font-weight: 400;
+  letter-spacing: -.8px;
+}
+[data-qimirror-root] .practice-page .practice-intro p { font-size: 12px; line-height: 1.6; margin-top: 8px; }
+[data-qimirror-root] .practice-page .practice-intro-seal {
+  width: 58px;
+  height: 58px;
+  color: #565d4c;
+  opacity: .13;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+[data-qimirror-root] .practice-page .practice-action-count {
+  gap: 11px;
+  padding: 0 0 0 20px;
+  border-left: 1px solid #cfd1c5;
+  font-size: 10px;
+  line-height: 1.6;
+}
+[data-qimirror-root] .practice-page .practice-action-count strong {
+  width: 39px;
+  height: 39px;
+  border: 1px solid #b9bfac;
+  border-radius: 50%;
+  background: transparent;
+  font-family: var(--qi-display);
+  font-size: 24px;
+  font-weight: 400;
+  color: #30342a;
+}
+[data-qimirror-root] .practice-page :is(.teaching-options, .practice-settings, .practice-library) { color: #666d5d; }
+[data-qimirror-root] .practice-page .teaching-options { gap: 18px; margin-bottom: 12px; font-size: 11px; }
+[data-qimirror-root] .practice-page :is(.teaching-options, .practice-settings, .practice-library, .practice-camera-settings) select {
+  border: 1px solid #c9cebe;
+  border-radius: 2px;
+  background-color: #fbfaf6;
+  color: #3d4435;
+  font-family: var(--qi-body);
+  font-size: 11px;
+  min-height: 33px;
+  padding: 6px 26px 6px 9px;
+}
+[data-qimirror-root] .practice-page :is(.teaching-options, .practice-settings, .practice-camera-settings, .practice-mirror) input {
+  accent-color: #3c4433;
+}
+[data-qimirror-root] .practice-page :is(.teaching-step-strip, .practice-sequence) {
+  gap: 7px;
+  padding: 2px 2px 9px;
+  scrollbar-width: thin;
+  scrollbar-color: #c1c5b7 transparent;
+}
+[data-qimirror-root] .practice-page .teaching-step-strip li { flex-basis: 160px; }
+[data-qimirror-root] .practice-page .teaching-step-strip button {
+  background: #faf9f5d9;
+  border-color: #d4d7ca;
+  border-radius: 2px;
+  color: #747b6a;
+  min-height: 48px;
+  padding: 9px 10px;
+  font-size: 10px;
+  transition: background-color 130ms, border-color 130ms, color 130ms;
+}
+[data-qimirror-root] .practice-page .teaching-step-strip button > span {
+  border-color: #c8cdbd;
+  background: transparent;
+  font-family: var(--qi-display);
+  font-size: 15px;
+}
+[data-qimirror-root] .practice-page .teaching-step-strip button[data-completed=true] { background: #e9ecdf; color: #59654a; }
+[data-qimirror-root] .practice-page .teaching-step-strip button[aria-current=step] {
+  border-color: #30342a;
+  background: #30342a;
+  color: #f7f6f2;
+}
+[data-qimirror-root] .practice-page .teaching-step-strip button[aria-current=step] > span { border-color: #f7f6f263; color: #f7f6f2; }
+[data-qimirror-root] .practice-page .teaching-step-strip button:not([aria-current=step]):hover { border-color: #89917d; background: #eeefe6; }
+[data-qimirror-root] .practice-page .teaching-instruction {
+  position: relative;
+  padding: 17px 20px;
+  border: 1px solid #cdd1c1;
+  border-left: 3px solid #535d46;
+  border-radius: 2px;
+  background: #f2f2eae8;
+  gap: 22px;
+}
+[data-qimirror-root] .practice-page .teaching-instruction h2 { font: 400 25px/1.15 var(--qi-display); letter-spacing: -.3px; margin: 5px 0 6px; }
+[data-qimirror-root] .practice-page .teaching-instruction p { color: #727869; font-size: 11px; line-height: 1.6; }
+[data-qimirror-root] .practice-page .teaching-instruction .teaching-cue { color: #434b39; font-size: 12px; margin-bottom: 3px; }
+[data-qimirror-root] .practice-page .teaching-instruction .teaching-feedback.close { color: #50683d; }
+[data-qimirror-root] .practice-page .teaching-instruction .teaching-feedback.unknown { color: var(--practice-amber); }
+[data-qimirror-root] .practice-page .teaching-actions { gap: 7px; }
+[data-qimirror-root] .practice-page .practice-button {
+  border-radius: 2px;
+  border-color: #30342a;
+  background: #30342a;
+  color: #f8f7f2;
+  font-weight: 400 !important;
+  letter-spacing: .1px;
+  box-shadow: none;
+  transition: background-color 140ms, border-color 140ms, color 140ms;
+}
+[data-qimirror-root] .practice-page .practice-button:hover { background: #494f3e; border-color: #494f3e; color: #fff; }
+[data-qimirror-root] .practice-page .practice-button.secondary { border-color: #bfc5b2; background: #faf9f4; color: #424b35; }
+[data-qimirror-root] .practice-page .practice-button.secondary:hover { border-color: #777f6b; background: #eaece1; color: #272e20; }
+[data-qimirror-root] .practice-page .practice-button:disabled { opacity: .43; cursor: not-allowed; }
+[data-qimirror-root] .practice-page .practice-progress { border-radius: 0; height: 2px; background: #d9ddce; }
+[data-qimirror-root] .practice-page .practice-progress > span { background: #505b42; }
+[data-qimirror-root] .practice-page .practice-settings.teaching-legend { margin-top: 12px; margin-bottom: 12px; }
+[data-qimirror-root] .practice-page .practice-workspace { gap: 22px; align-items: stretch; }
+[data-qimirror-root] .practice-page .practice-panel {
+  border: 1px solid #cdd1c2;
+  border-radius: 2px;
+  background: #fbfaf7e8;
+  box-shadow: 0 4px 18px #343a2505;
+}
+[data-qimirror-root] .practice-page .practice-panel-heading { padding: 15px 18px; min-height: 68px; }
+[data-qimirror-root] .practice-page .practice-panel-heading h2 { font: 400 24px/1.15 var(--qi-display); letter-spacing: -.25px; }
+[data-qimirror-root] .practice-page .practice-panel-heading p { font-size: 10px; line-height: 1.5; margin-top: 4px; }
+[data-qimirror-root] .practice-page .practice-source-tag {
+  white-space: normal;
+  text-align: right;
+  max-width: 148px;
+  border: 0;
+  border-left: 1px solid #d5d9ca;
+  border-radius: 0;
+  color: #747b68;
+  background: transparent;
+  font-size: 9px;
+  padding: 3px 0 3px 12px;
+  line-height: 1.6;
+}
+[data-qimirror-root] .practice-page .practice-source-tag.live { border-color: #d5d9ca; color: #527466; background: transparent; }
+[data-qimirror-root] .practice-page .practice-stage { background: #23271f; }
+[data-qimirror-root] .practice-page .practice-stage-empty {
+  background: radial-gradient(ellipse at 50% 40%, #353b2e, #22261f 80%);
+  padding: 25px;
+  gap: 11px;
+  color: #c5cbbb;
+}
+[data-qimirror-root] .practice-page .practice-stage-empty strong { font: 400 24px/1.25 var(--qi-display); color: #edeee7; max-width: 315px; }
+[data-qimirror-root] .practice-page .practice-stage-empty p { color: #b1baa5; line-height: 1.8; font-size: 11px; max-width: 285px; }
+[data-qimirror-root] .practice-page .practice-camera-seal {
+  display: block;
+  width: 70px;
+  height: 70px;
+  flex-shrink: 0;
+  margin-bottom: 3px;
+  color: #bec7b1;
+  opacity: .4;
+}
+[data-qimirror-root] .practice-page .practice-camera-icon { border-color: #cdd6bf40; border-radius: 50%; color: #c3cbb8; }
+[data-qimirror-root] .practice-page .practice-stage-badge {
+  border-radius: 1px;
+  border-color: #f2f3eb38;
+  background: #252b21e8;
+  color: #ecefe5;
+  backdrop-filter: none;
+  letter-spacing: .35px;
+  padding: 7px 9px;
+}
+[data-qimirror-root] .practice-page .practice-countdown { background: #20251c7a; }
+[data-qimirror-root] .practice-page .practice-countdown strong { font-family: var(--qi-display); font-weight: 400; }
+[data-qimirror-root] .practice-page .practice-countdown span { border-radius: 1px; background: #22271de6; }
+[data-qimirror-root] .practice-page .practice-panel-foot { padding: 14px 18px; font-size: 10px; line-height: 1.5; }
+[data-qimirror-root] .practice-page .practice-camera-hint { color: #797f70; padding-left: 18px; padding-right: 18px; font-size: 10px; }
+[data-qimirror-root] .practice-page .practice-camera-settings { padding: 12px 18px; border-top-color: #e0e3d7; color: #656e59; gap: 10px; }
+[data-qimirror-root] .practice-page .practice-camera-settings > div { gap: 10px; }
+[data-qimirror-root] .practice-page .practice-camera-settings select { max-width: 235px; }
+[data-qimirror-root] .practice-page .practice-console { border-radius: 2px; border-color: #cdd1c1; background: #f5f5eced; padding: 20px; }
+[data-qimirror-root] .practice-page .practice-phase-symbol { border: 1px solid #c6cdb8; background: #e7ebdd; color: #4f5d3e; }
+[data-qimirror-root] .practice-page .practice-phase-symbol.is-amber { border-color: #dbc69d; background: #f6edda; color: #92611c; }
+[data-qimirror-root] .practice-page .practice-phase-symbol.is-error { border-color: #dfb7b0; background: #f8e8e3; color: #9b4435; }
+[data-qimirror-root] .practice-page .practice-phase h2 { font: 400 24px/1.2 var(--qi-display); }
+[data-qimirror-root] .practice-page .practice-phase p { color: #747c68; }
+[data-qimirror-root] .practice-page .practice-completed { border-color: #adbda0; background: #f2f5e9; }
+[data-qimirror-root] .practice-page .practice-completed .practice-phase-symbol { background: #e4ecd7; }
+[data-qimirror-root] .practice-page .practice-sequence li { border-color: #d4d8c9; border-radius: 2px; background: #f5f5ece8; color: #78806e; }
+[data-qimirror-root] .practice-page .practice-sequence li button { border-radius: 1px; }
+[data-qimirror-root] .practice-page .practice-sequence li button > span { border-color: #cbd2bd; }
+[data-qimirror-root] .practice-page .practice-sequence li[data-state=current] { border-color: #30342a; background: #30342a; color: #f7f6f2; }
+[data-qimirror-root] .practice-page .practice-sequence li[data-state=current] button > span { border-color: #f8f7f26b; background: transparent; color: #f7f6f2; }
+[data-qimirror-root] .practice-page .practice-sequence li[data-state=current] small { color: #d7dccd; }
+[data-qimirror-root] .practice-page .practice-sequence li[data-state=passed] { border-color: #c3ceb6; background: #e9edde; color: #526344; }
+[data-qimirror-root] .practice-page .practice-sequence li[data-state=passed] button > span { border-color: #b8c9a7; background: #e1e9d5; color: #526344; }
+[data-qimirror-root] .practice-page .practice-sequence li[data-state=passed] small { color: #526344; }
+[data-qimirror-root] .practice-page .practice-sequence small, [data-qimirror-root] .practice-page .practice-library > span { color: #7a816f; }
+[data-qimirror-root] .practice-page .practice-resources { color: #7b8370; }
+[data-qimirror-root] .practice-page .practice-resources strong { color: #606b52; }
+[data-qimirror-root] .practice-page .practice-notes { max-width: 1500px; margin: 0 auto; padding-top: 20px; font-size: 10px; line-height: 1.8; }
+[data-qimirror-root] .practice-page .practice-notes summary { color: #5b674d; font-weight: 400; text-underline-offset: 4px; }
+[data-qimirror-root] .practice-page .practice-notes code { color: #5d684f; background: #eaeedf; border-radius: 1px; }
+[data-qimirror-root] .practice-page .practice-result-metrics { color: #6e795f; }
+[data-qimirror-root] .practice-page .practice-loading-line { border-radius: 0; background: #e2e7d8; }
+[data-qimirror-root] .practice-page .practice-loading-line span { background: #a6b493; }
+[data-qimirror-root] .practice-page .practice-error { border-radius: 2px; background: #fbf1e9; border-color: #dec9b4; }
+[data-qimirror-root] .practice-page .practice-text-button { color: #50613e; }
+[data-qimirror-root] .practice-page .spinner { border-color: #d6ddca; border-top-color: #5d6b4b; }
+
+@media (min-width: 751px) {
+  [data-qimirror-root] .practice-page .practice-header > .practice-mode-control button { padding: 7px 13px; }
+  [data-qimirror-root] .practice-page .practice-intro, [data-qimirror-root] .practice-page.teaching-page .practice-intro { padding: 12px 0 14px; }
+  [data-qimirror-root] .practice-page h1, [data-qimirror-root] .practice-page.teaching-page .practice-intro h1 { font-size: 36px; line-height: 1.08; }
+  [data-qimirror-root] .practice-page .practice-intro .practice-kicker { margin-bottom: 5px; font-size: 8px; line-height: 1.4; }
+  [data-qimirror-root] .practice-page .practice-intro p { margin-top: 6px; line-height: 1.5; }
+  [data-qimirror-root] .practice-page :is(.teaching-step-strip, .practice-sequence) { padding-top: 1px; padding-bottom: 5px; margin-bottom: 8px; }
+  [data-qimirror-root] .practice-page .teaching-step-strip button { padding-block: 7px; min-height: 42px; }
+  [data-qimirror-root] .practice-page .teaching-step-strip button > span { width: 22px; height: 22px; }
+  [data-qimirror-root] .practice-page .teaching-instruction { padding-block: 11px; }
+  [data-qimirror-root] .practice-page .teaching-instruction h2 { margin: 3px 0 4px; font-size: 23px; line-height: 1.1; }
+  [data-qimirror-root] .practice-page .teaching-instruction p { line-height: 1.5; }
+  [data-qimirror-root] .practice-page .teaching-instruction .teaching-cue { font-size: 11px; }
+  [data-qimirror-root] .practice-page .practice-panel-heading, [data-qimirror-root] .practice-page.teaching-page .practice-panel-heading { min-height: 60px; padding-block: 8px; }
+  [data-qimirror-root] .practice-page .practice-panel-heading h2 { font-size: 22px; line-height: 1.1; }
+  [data-qimirror-root] .practice-page .practice-panel-heading p { margin-top: 3px; line-height: 1.45; }
+  [data-qimirror-root] .practice-page .practice-stage { height: min(37vh, 370px); }
+  [data-qimirror-root] .practice-page.teaching-page .practice-stage { height: min(35vh, 350px); }
+}
+
+@media (min-width: 751px) and (max-height: 800px) {
+  [data-qimirror-root] .practice-page .practice-header { height: 60px; }
+  [data-qimirror-root] .practice-page .practice-intro, [data-qimirror-root] .practice-page.teaching-page .practice-intro { padding: 10px 0 11px; }
+  [data-qimirror-root] .practice-page h1, [data-qimirror-root] .practice-page.teaching-page .practice-intro h1 { font-size: 32px; }
+  [data-qimirror-root] .practice-page .practice-intro p { font-size: 11px; margin-top: 5px; }
+  [data-qimirror-root] .practice-page .teaching-options { margin-bottom: 8px; }
+  [data-qimirror-root] .practice-page .teaching-options select { min-height: 31px; padding-block: 5px; }
+  [data-qimirror-root] .practice-page .teaching-instruction { padding-block: 9px; }
+  [data-qimirror-root] .practice-page .teaching-instruction h2 { font-size: 22px; }
+  [data-qimirror-root] .practice-page .practice-settings.teaching-legend { margin-top: 9px; margin-bottom: 9px; }
+  [data-qimirror-root] .practice-page .practice-panel-heading, [data-qimirror-root] .practice-page.teaching-page .practice-panel-heading { min-height: 56px; padding-block: 6px; }
+  [data-qimirror-root] .practice-page .practice-stage, [data-qimirror-root] .practice-page.teaching-page .practice-stage { height: 28vh; }
+  [data-qimirror-root] .practice-page .practice-camera-seal { width: 50px; height: 50px; margin-bottom: 0; }
+  [data-qimirror-root] .practice-page .practice-stage-empty { gap: 8px; padding-block: 17px; }
+  [data-qimirror-root] .practice-page .practice-stage-empty strong { font-size: 22px; }
+}
+
+@media (max-width: 1100px) {
+  [data-qimirror-root] .practice-page { padding-inline: 25px; }
+  [data-qimirror-root] .practice-page .practice-header-right { gap: 17px; }
+  [data-qimirror-root] .practice-page .practice-header-right .practice-prototype { display: none; }
+  [data-qimirror-root] .practice-page .practice-workspace { gap: 16px; }
+  [data-qimirror-root] .practice-page .practice-panel-heading { padding-inline: 15px; }
+  [data-qimirror-root] .practice-page .practice-panel-heading h2 { font-size: 22px; }
+  [data-qimirror-root] .practice-page .practice-source-tag { max-width: 125px; font-size: 8px; }
+  [data-qimirror-root] .practice-page .practice-intro-seal { width: 48px; height: 48px; }
+  [data-qimirror-root] .practice-page .practice-action-count { padding-left: 14px; }
+  [data-qimirror-root] .practice-page .teaching-instruction { gap: 18px; padding-inline: 17px; }
+}
+
+@media (min-width: 751px) and (max-width: 900px) {
+  [data-qimirror-root] .practice-page .practice-header { gap: 12px; }
+  [data-qimirror-root] .practice-page .practice-header > .practice-mode-control button { padding-inline: 9px; font-size: 10px; }
+  [data-qimirror-root] .practice-page .practice-header-right { gap: 13px; font-size: 10px; }
+  [data-qimirror-root] .practice-page .practice-brand-word { font-size: 24px; padding-left: 10px; }
+}
+
+@media (max-width: 750px) {
+  [data-qimirror-root] .practice-page { padding: 0 17px 24px; background-size: 100% 100%, auto 60%; }
+  [data-qimirror-root] .practice-page .practice-header { height: auto; min-height: 63px; padding-block: 13px; gap: 12px 10px; flex-wrap: wrap; }
+  [data-qimirror-root] .practice-page .practice-brand { gap: 7px; }
+  [data-qimirror-root] .practice-page .practice-brand-symbol { width: 32px; height: 32px; }
+  [data-qimirror-root] .practice-page .practice-brand-qi { font-size: 27px; }
+  [data-qimirror-root] .practice-page .practice-brand-word { font-size: 25px; padding-left: 10px; margin-left: 3px; }
+  [data-qimirror-root] .practice-page .practice-header-right a { display: inline; font-size: 10px; }
+  [data-qimirror-root] .practice-page .practice-header-right a:last-of-type { display: none; }
+  [data-qimirror-root] .practice-page .practice-header-right { gap: 0; margin-left: auto; }
+  [data-qimirror-root] .practice-page .practice-mode-control { margin-top: 13px; width: 100%; }
+  [data-qimirror-root] .practice-page .practice-header > .practice-mode-control { order: 3; flex-basis: 100%; width: 100%; }
+  [data-qimirror-root] .practice-page .practice-mode-control button { font-size: 10px; padding: 8px 6px; }
+  [data-qimirror-root] .practice-page .practice-intro, [data-qimirror-root] .practice-page.teaching-page .practice-intro { padding: 23px 0 20px; gap: 11px; align-items: flex-start; }
+  [data-qimirror-root] .practice-page h1, [data-qimirror-root] .practice-page.teaching-page .practice-intro h1 { font-size: 32px; line-height: 1.08; letter-spacing: -.5px; }
+  [data-qimirror-root] .practice-page .practice-intro p { font-size: 11px; line-height: 1.7; }
+  [data-qimirror-root] .practice-page .practice-kicker { font-size: 8px; letter-spacing: 1.3px; }
+  [data-qimirror-root] .practice-page .practice-intro-seal { display: none; }
+  [data-qimirror-root] .practice-page .practice-action-count { padding-left: 10px; padding-top: 3px; max-width: 76px; flex-direction: column; font-size: 9px; line-height: 1.5; gap: 6px; }
+  [data-qimirror-root] .practice-page .practice-action-count strong { width: 33px; height: 33px; font-size: 21px; }
+  [data-qimirror-root] .practice-page .teaching-options { gap: 11px; font-size: 10px; }
+  [data-qimirror-root] .practice-page .teaching-options label { min-width: 0; }
+  [data-qimirror-root] .practice-page .teaching-options > label:first-child select { max-width: calc(100% - 35px); }
+  [data-qimirror-root] .practice-page .teaching-step-strip li { flex-basis: 145px; }
+  [data-qimirror-root] .practice-page .teaching-step-strip button { font-size: 10px; padding: 9px; }
+  [data-qimirror-root] .practice-page .teaching-instruction { padding: 15px; gap: 13px; }
+  [data-qimirror-root] .practice-page .teaching-instruction h2 { font-size: 24px; }
+  [data-qimirror-root] .practice-page .teaching-instruction .teaching-cue { font-size: 12px; }
+  [data-qimirror-root] .practice-page .teaching-instruction p { font-size: 10px; }
+  [data-qimirror-root] .practice-page .teaching-actions { gap: 6px; }
+  [data-qimirror-root] .practice-page .teaching-actions .practice-button { padding: 8px 10px; }
+  [data-qimirror-root] .practice-page .practice-settings.teaching-legend { font-size: 9px; gap: 8px; margin: 11px auto; }
+  [data-qimirror-root] .practice-page .practice-workspace { gap: 18px; }
+  [data-qimirror-root] .practice-page .practice-panel-heading { min-height: 66px; padding: 14px; }
+  [data-qimirror-root] .practice-page .practice-panel-heading h2 { font-size: 23px; }
+  [data-qimirror-root] .practice-page .practice-panel-heading p { font-size: 9px; }
+  [data-qimirror-root] .practice-page .practice-source-tag { max-width: 111px; font-size: 8px; padding-left: 10px; }
+  [data-qimirror-root] .practice-page .practice-stage, [data-qimirror-root] .practice-page.teaching-page .practice-stage { height: auto; aspect-ratio: 4 / 3; max-height: none; }
+  [data-qimirror-root] .practice-page .practice-stage-empty { padding: 24px; }
+  [data-qimirror-root] .practice-page .practice-stage-empty strong { font-size: 24px; }
+  [data-qimirror-root] .practice-page .practice-panel-foot { padding: 13px 14px; gap: 10px; font-size: 9px; }
+  [data-qimirror-root] .practice-page .practice-camera-settings { padding: 11px 14px; font-size: 9px; }
+  [data-qimirror-root] .practice-page .practice-camera-settings > label { min-width: 140px; }
+  [data-qimirror-root] .practice-page .practice-camera-hint { padding-left: 14px; padding-right: 14px; font-size: 9px; }
+  [data-qimirror-root] .practice-page .practice-console { padding: 16px; }
+  [data-qimirror-root] .practice-page .practice-phase h2 { font-size: 23px; }
+  [data-qimirror-root] .practice-page .practice-controls { padding-left: 0; }
+  [data-qimirror-root] .practice-page .practice-notes { font-size: 9px; gap: 13px; }
+}
+
+@media (max-width: 360px) {
+  [data-qimirror-root] .practice-page { padding-inline: 13px; }
+  [data-qimirror-root] .practice-page .practice-header-right a { font-size: 9px; }
+  [data-qimirror-root] .practice-page .practice-brand-word { font-size: 23px; }
+  [data-qimirror-root] .practice-page h1, [data-qimirror-root] .practice-page.teaching-page .practice-intro h1 { font-size: 28px; }
+  [data-qimirror-root] .practice-page .practice-action-count { max-width: 66px; font-size: 8px; }
+  [data-qimirror-root] .practice-page .teaching-actions { width: 100%; }
+  [data-qimirror-root] .practice-page .teaching-actions .practice-button { flex: 1; padding-inline: 7px; font-size: 9px !important; }
+  [data-qimirror-root] .practice-page .practice-panel-heading h2 { font-size: 21px; }
+  [data-qimirror-root] .practice-page .practice-source-tag { max-width: 92px; font-size: 7px; }
+  [data-qimirror-root] .practice-page .practice-panel-foot { flex-wrap: wrap; }
+}

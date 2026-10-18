@@ -1,0 +1,49 @@
+/* Imported Qi Mirror styles. Every selector is gated by the additive page wrapper. */
+/* The incoming scene is the moving surface; native scrolling supplies its travel. */
+[data-qimirror-root] .qi-home .home-experience-entrance { position: relative; isolation: isolate; }
+[data-qimirror-root] .qi-home .home-experience-entrance > .home-cover { z-index: 0; }
+[data-qimirror-root] .qi-home .home-experience-entrance > .home-scene-experience { z-index: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-qimirror-root] .qi-home .home-experience-entrance[data-entrance-enabled='true'] > .home-cover {
+    position: sticky;
+    top: 0;
+  }
+  [data-qimirror-root] .qi-home .home-experience-entrance[data-entrance-enabled='true'] > .home-cover .home-hero {
+    transform: translate3d(0, calc(var(--experience-reveal, 0) * -4svh), 0) scale(calc(1 - var(--experience-reveal, 0) * .025));
+    opacity: calc(1 - var(--experience-reveal, 0) * .22);
+    transform-origin: 50% 35%;
+  }
+  [data-qimirror-root] .qi-home .home-experience-entrance[data-entrance-enabled='true'] > .home-scene-experience {
+    box-shadow: 0 -18px 48px #14231a24;
+  }
+
+  /* A temporary glass surface over the white page; the header and Tai Chi stay sharp. */
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    [data-qimirror-root] .qi-home .home-experience-entrance[data-entrance-enabled='true'][data-cover-glass='true'] > .home-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+      background: linear-gradient(180deg,
+        rgb(247 248 245 / calc(var(--experience-frost, 0) * .08)),
+        rgb(247 248 245 / calc(var(--experience-frost, 0) * .24)));
+      -webkit-backdrop-filter: blur(calc(var(--experience-frost, 0) * 18px)) saturate(calc(1 - var(--experience-frost, 0) * .15));
+      backdrop-filter: blur(calc(var(--experience-frost, 0) * 18px)) saturate(calc(1 - var(--experience-frost, 0) * .15));
+    }
+  }
+}
+
+/* Preserve the existing separator after the two-scene wrapper. */
+[data-qimirror-root] .qi-home .home-experience-entrance + .home-scene::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 5%;
+  right: 5%;
+  height: 1px;
+  background: var(--home-line);
+  opacity: .65;
+  pointer-events: none;
+}

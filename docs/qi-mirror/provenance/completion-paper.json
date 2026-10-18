@@ -1,0 +1,17 @@
+{
+  "archivedSourceRecord": "artifacts/qi-organic-paper-20261018/image-generation.json",
+  "record": {
+    "tool": "built-in image_gen",
+    "mode": "generate with style reference",
+    "reference": "codex-clipboard-d3fa51fb-1a7d-4262-ac80-3e405fe7f636.jpg",
+    "originalGeneratedPath": "exec-301702f8-4d29-472d-a076-4bc83f066737.png",
+    "asset": "public/landing-art/completion-paper-organic-v2.png",
+    "width": 1774,
+    "height": 887,
+    "bytes": 1880260,
+    "sha256": "1e4c4166b3768f0ec8fbce8a95e63afff2876f5b3d328557548f033c17b6e7d2",
+    "transparentBackgroundRequested": true,
+    "prompt": "Use case: illustration-story. Asset type: actual transparent UI texture for a Chinese ink-wash game completion popup, not a UI mockup. Input image is a STYLE/SILHOUETTE REFERENCE ONLY: isolate the broad warm ivory irregular fibrous paper/wash shape, ignore and DO NOT reproduce its background scenery, green checkmark, captions or any symbols. Create one large continuous warm pale beige xuan-paper wash with a naturally asymmetric silhouette, wide landscape about 2:1. Match the reference's big uneven concave bites and protruding lobes, a deep uneven dip along the upper edge, rough soft fibrous dusty edges and small semi-transparent dry-brush speckles especially at the lower-left and upper-right perimeter. The outside must be genuine transparent alpha, not a colored background and not a checkerboard picture. Avoid ALL straight rectangular edges, rounded rectangles, regular zigzags, triangles, geometric polygons, picture-frame borders, curled corners, folds, stitches, drop shadows, decorative ink drawings, text, logos, symbols, green checkmarks, scenery. The central ~60 percent wide by ~55 percent high area must be opaque uninterrupted very pale warm parchment with subtle fine paper grain, calm uniform enough for dark text overlay. Keep interior light (#e8ddca / #e4d7c1 feel), no stains or vignette. Broad dramatic organic silhouette from reference, with torn/fuzzy transition to transparent at edges. Sheet should fill 90% of canvas width and 86% height, leave a small transparent margin so no fibers clipped. This is a new texture asset inspired by reference, not an edit of the screenshot."
+  },
+  "note": "AI-generated asset provenance; not claimed as CC0. Reference screenshots and machine-local paths are not included."
+}

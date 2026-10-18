@@ -1,0 +1,177 @@
+/* Imported Qi Mirror styles. Every selector is gated by the additive page wrapper. */
+/* A single translucent-edged parchment, rather than a card with a zigzag border. */
+[data-qimirror-root] .practice-completion-dialog {
+  --completion-ink: #302d26;
+  --completion-paper: #f1e6d1;
+  --completion-display: 'Qi Local Display', 'Bodoni MT', Georgia, 'Times New Roman', serif;
+  --completion-body: 'Qi Local UI', 'Segoe UI', Arial, sans-serif;
+  width: min(1100px, calc(100vw - 20px));
+  max-width: none;
+  max-height: calc(100svh - 16px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: var(--completion-ink);
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  font-family: var(--completion-body);
+  text-align: center;
+  isolation: isolate;
+}
+[data-qimirror-root] .practice-completion-dialog::backdrop { background: #20231c8a; animation: qimirror-practice-completion-backdrop 350ms ease-out both; }
+[data-qimirror-root] .practice-completion-dialog:focus { outline: none; }
+[data-qimirror-root] .practice-completion-paper { position: relative; }
+[data-qimirror-root] .practice-completion-reveal {
+  position: relative;
+  mask-image: radial-gradient(ellipse at 18% 82%, #000 46%, #000b 54%, transparent 66%);
+  mask-repeat: no-repeat;
+  mask-position: left bottom;
+  mask-size: 320% 320%;
+  animation: qimirror-practice-completion-paper-open 650ms cubic-bezier(.2, .65, .2, 1) both;
+}
+[data-qimirror-root] .practice-completion-surface { position: relative; width: 100%; height: min(560px, calc(100svh - 16px)); background: transparent; }
+[data-qimirror-root] .practice-completion-paper-art { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: fill; pointer-events: none; user-select: none; }
+[data-qimirror-root] .practice-completion-content {
+  position: absolute;
+  inset: 26% 18% 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  color: var(--completion-ink);
+  background: transparent;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #8f80683b transparent;
+  animation: qimirror-practice-completion-content-in 480ms 140ms ease-out both;
+}
+[data-qimirror-root] .practice-completion-content > * { flex-shrink: 0; }
+[data-qimirror-root] .practice-completion-symbol { width: 37px; height: 37px; color: #625d4d; opacity: .72; }
+[data-qimirror-root] .practice-completion-heading { position: relative; width: 100%; padding-block: 11px 15px; }
+[data-qimirror-root] .practice-completion-dialog .practice-completion-heading h2 {
+  position: relative; z-index: 1; margin: 0; color: var(--completion-ink);
+  font: 400 clamp(36px, 4.5vw, 49px)/1.06 var(--completion-display); letter-spacing: -1px;
+}
+[data-qimirror-root] .practice-completion-stroke {
+  position: absolute; inset: -8px 0 auto; width: 100%; height: 83px; color: #81765e;
+  pointer-events: none; transform-origin: 0 50%; animation: qimirror-practice-completion-brush-write 950ms 200ms both;
+}
+[data-qimirror-root] .practice-completion-dialog .practice-completion-form {
+  max-width: 100%; margin: 0 0 10px; color: #605b4c;
+  font: 400 26px/1.2 var(--completion-display); letter-spacing: -.2px; overflow-wrap: anywhere;
+}
+[data-qimirror-root] .practice-completion-dialog .practice-completion-detail { max-width: 440px; margin: 0 auto; color: #625b4e; font: 400 11px/1.7 var(--completion-body); }
+[data-qimirror-root] .practice-completion-actions { display: flex; align-items: center; justify-content: center; gap: 23px; width: 100%; margin-top: 18px; }
+[data-qimirror-root] .practice-completion-dialog .practice-completion-button {
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  width: 190px; min-width: 0; min-height: 68px; border: 0; border-radius: 0; padding: 9px 15px;
+  color: var(--completion-ink); background: transparent; box-shadow: none;
+  font: 400 28px/1.1 var(--completion-display); transition: color 200ms;
+}
+[data-qimirror-root] .practice-completion-button > span { position: relative; z-index: 1; }
+[data-qimirror-root] .practice-completion-button-brush {
+  position: absolute; inset: -7px -6px; width: calc(100% + 12px); height: calc(100% + 14px);
+  color: var(--completion-ink); opacity: 0; transform: scaleX(.86) scaleY(.6); pointer-events: none;
+  transition: transform 360ms cubic-bezier(.2, .75, .2, 1), opacity 200ms;
+}
+[data-qimirror-root] .practice-completion-dialog .practice-completion-button::after {
+  content: ''; position: absolute; bottom: 11px; left: 24%; width: 52%; height: 1px;
+  background: #7f735e75; transform: rotate(-1deg); transition: opacity 200ms;
+}
+[data-qimirror-root] .practice-completion-dialog .practice-completion-arrow { font: 400 15px/1 var(--completion-body); transition: transform 280ms; }
+[data-qimirror-root] .practice-completion-dialog .practice-completion-button:is(:hover, :focus-visible) { color: var(--completion-paper); }
+[data-qimirror-root] .practice-completion-button:is(:hover, :focus-visible) .practice-completion-button-brush { opacity: 1; transform: scale(1.06); }
+[data-qimirror-root] .practice-completion-dialog .practice-completion-button:is(:hover, :focus-visible)::after { opacity: 0; }
+[data-qimirror-root] .practice-completion-button:is(:hover, :focus-visible) .practice-completion-arrow { transform: translate(2px, -2px); }
+[data-qimirror-root] .practice-completion-dialog .practice-completion-button:focus-visible { outline: 1px solid var(--completion-ink); outline-offset: 1px; }
+[data-qimirror-root] .practice-completion-dialog .practice-completion-button:disabled { cursor: wait; opacity: .5; }
+[data-qimirror-root] .practice-completion-dialog .practice-completion-home {
+  display: inline-flex;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  max-width: calc(100% - 20px);
+  min-height: 36px;
+  margin: 3px auto 0;
+  padding: 5px 14px;
+  border: 0;
+  border-radius: 0;
+  color: var(--completion-ink);
+  background: transparent;
+  box-shadow: none;
+  font: 400 18px/1.35 var(--completion-display);
+  text-align: center;
+  text-decoration: underline;
+  text-decoration-color: #7f735e75;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+  transition: color 200ms, text-decoration-color 200ms;
+}
+[data-qimirror-root] .practice-completion-dialog .practice-completion-home:is(:hover, :focus-visible) { color: #625b4e; text-decoration-color: currentColor; }
+[data-qimirror-root] .practice-completion-dialog .practice-completion-home:focus-visible { outline: 1px solid var(--completion-ink); outline-offset: 1px; }
+[data-qimirror-root] .practice-completion-dialog .practice-completion-home:disabled { cursor: wait; opacity: .5; }
+[data-qimirror-root] .practice-instructions-dialog .practice-completion-detail {
+  max-width: 470px;
+  font-size: 17px;
+  line-height: 1.65;
+}
+[data-qimirror-root] .practice-instructions-dialog .practice-completion-actions { margin-top: 26px; }
+[data-qimirror-root] .practice-completion-dialog .practice-completion-error { color: #914b3f; font: 400 10px/1.5 var(--completion-body); margin-top: 5px; }
+[data-qimirror-root] .practice-completion-dialog[data-stage='leaving'] .practice-completion-reveal { animation: qimirror-practice-completion-paper-away 520ms cubic-bezier(.55, 0, .75, .5) both; }
+[data-qimirror-root] .practice-completion-dialog[data-stage='leaving'] .practice-completion-content { animation: qimirror-practice-completion-content-out 250ms ease-in both; }
+[data-qimirror-root] .practice-completion-dialog[data-stage='leaving']::backdrop { animation: qimirror-practice-completion-backdrop-out 520ms ease-in both; }
+/* A soft expanding wash exposes the art without straight polygon cuts. */
+@keyframes qimirror-practice-completion-paper-open {
+  0% { opacity: 0; mask-size: 0% 0%; }
+  35% { opacity: 1; mask-size: 125% 125%; }
+  100% { opacity: 1; mask-size: 320% 320%; }
+}
+@keyframes qimirror-practice-completion-paper-away {
+  0% { opacity: 1; mask-size: 320% 320%; }
+  55% { opacity: .9; mask-size: 125% 125%; }
+  100% { opacity: 0; mask-size: 0% 0%; }
+}
+@keyframes qimirror-practice-completion-content-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes qimirror-practice-completion-content-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes qimirror-practice-completion-backdrop { from { background: #20231c00; } to { background: #20231c8a; } }
+@keyframes qimirror-practice-completion-backdrop-out { from { background: #20231c8a; } to { background: #20231c00; } }
+@keyframes qimirror-practice-completion-brush-write {
+  0% { clip-path: inset(0 100% 0 0); opacity: 0; transform: translateX(-12px) rotate(-2deg); }
+  12% { opacity: .13; }
+  65% { clip-path: inset(0 -3% 0 0); opacity: .13; transform: translateX(0) rotate(-1deg); }
+  100% { clip-path: inset(0 -3% 0 0); opacity: 0; transform: scaleY(.15) translateY(35px); }
+}
+@media (max-width: 600px) {
+  [data-qimirror-root] .practice-completion-dialog { width: calc(100vw - 8px); }
+  [data-qimirror-root] .practice-completion-surface { height: min(530px, calc(100svh - 16px)); }
+  [data-qimirror-root] .practice-completion-content { inset: 26% 9% 10%; }
+  [data-qimirror-root] .practice-completion-symbol { width: 31px; height: 31px; }
+  [data-qimirror-root] .practice-completion-heading { padding-block: 9px 13px; }
+  [data-qimirror-root] .practice-completion-dialog .practice-completion-heading h2 { font-size: clamp(31px, 8.5vw, 42px); letter-spacing: -.7px; }
+  [data-qimirror-root] .practice-completion-dialog .practice-completion-form { font-size: 22px; margin-bottom: 8px; }
+  [data-qimirror-root] .practice-completion-dialog .practice-completion-detail { font-size: 11px; line-height: 1.6; max-width: 310px; }
+  [data-qimirror-root] .practice-completion-actions { gap: 3px; margin-top: 14px; }
+  [data-qimirror-root] .practice-completion-dialog .practice-completion-button { width: 50%; min-height: 59px; padding-inline: 5px; font-size: 25px; gap: 8px; }
+  [data-qimirror-root] .practice-instructions-dialog .practice-completion-detail { max-width: 310px; font-size: 15px; line-height: 1.6; }
+  [data-qimirror-root] .practice-instructions-dialog .practice-completion-actions { margin-top: 20px; }
+}
+@media (max-height: 480px) {
+  [data-qimirror-root] .practice-completion-content { inset-block: 23% 9%; }
+  [data-qimirror-root] .practice-completion-symbol { display: none; }
+  [data-qimirror-root] .practice-completion-heading { padding-block: 0 8px; }
+  [data-qimirror-root] .practice-completion-dialog .practice-completion-heading h2 { font-size: 33px; }
+  [data-qimirror-root] .practice-completion-dialog .practice-completion-form { font-size: 20px; margin-bottom: 5px; }
+  [data-qimirror-root] .practice-completion-dialog .practice-completion-detail { font-size: 9px; line-height: 1.5; }
+  [data-qimirror-root] .practice-completion-actions { margin-top: 5px; }
+  [data-qimirror-root] .practice-completion-dialog .practice-completion-button { min-height: 48px; font-size: 23px; }
+  [data-qimirror-root] .practice-completion-dialog .practice-completion-home { min-height: 32px; margin-top: 0; padding-block: 3px; }
+  [data-qimirror-root] .practice-instructions-dialog .practice-completion-detail { font-size: 13px; line-height: 1.55; }
+  [data-qimirror-root] .practice-instructions-dialog .practice-completion-actions { margin-top: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-qimirror-root] .practice-completion-dialog, [data-qimirror-root] .practice-completion-dialog::backdrop, [data-qimirror-root] .practice-completion-dialog *, [data-qimirror-root] .practice-completion-dialog *::after { animation: none !important; transition: none !important; }
+  [data-qimirror-root] .practice-completion-stroke { display: none; }
+}

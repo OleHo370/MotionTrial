@@ -1,0 +1,26 @@
+{
+  "integrationDate": "2026-10-17",
+  "timeZone": "America/Toronto",
+  "preservedBaseline": "264eec7e9ba0ca15e42579d9947e192ce6f5b337",
+  "preservedFiles": 862,
+  "existingFilesChanged": 0,
+  "strictTypecheck": "PASS",
+  "unitIntegrationTests": { "passed": 120, "failed": 0 },
+  "productionBuild": "PASS",
+  "browserTests": { "passed": 5, "failed": 0, "browser": "Chrome", "headless": true },
+  "browserScope": [
+    "Four-scene homepage, completed ink reveal, local fonts, reduced motion, desktop and narrow layouts",
+    "Original cover and all 24 form choices remain inside the new namespace",
+    "Resource-backed loading and instructions; Begin leaves camera and videos inactive",
+    "Original workspace style snapshot restored after client navigation from every new page type",
+    "Original practice style snapshot restored after imported practice"
+  ],
+  "qaIsolation": {
+    "separateBuildDirectory": true,
+    "separateDataDirectory": true,
+    "originalNextConfigChanged": false,
+    "qaOnlyTurbopackRootOverride": true,
+    "cameraActivationBlockedInBrowserChecks": true,
+    "hardwareActivated": false
+  }
+}

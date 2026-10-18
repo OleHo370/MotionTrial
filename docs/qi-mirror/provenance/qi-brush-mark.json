@@ -1,0 +1,24 @@
+{
+  "archivedSourceRecord": "artifacts/qi-editorial-20261017/brush-art.json",
+  "record": {
+    "asset": "public/landing-art/qi-brush-mark.png",
+    "source": "AI-generated original image",
+    "method": "Built-in image_gen.imagegen, transparent_background=true",
+    "generatedAt": "2026-10-17",
+    "originalSavedPath": "exec-2fcc08b3-ba3d-44c2-9b45-85ab3ff94c9d.png",
+    "prompt": "Use case: logo-brand\nAsset type: transparent PNG calligraphic title glyph for an elegant black-and-white Chinese ink-painting Tai Chi game landing page.\nPrimary request: create an original large Chinese brush calligraphy artwork of exactly ONE Traditional Chinese character, \"氣\". The character must be correctly written and clearly recognizable: upper radical 气 and lower 米, traditional 氣, NOT the simplified 气. The rice component 米 must be legible.\nStyle/medium: masterful bold semi-cursive Chinese calligraphy with deep charcoal-black ink, powerful broad brush strokes alternating with fine tapered strokes, visible dry-brush streaks and flying-white texture, organic rough ink edges, energetic confident hand movement. Free and expressive yet structurally readable. A sculptural central glyph that can stand as the main title artwork.\nComposition/framing: square canvas; single character centered occupying about 84% of the square, around 8% transparent margin on each side, all strokes fully visible and unclipped. No enclosing circle or giant surrounding arcs. No other objects.\nText (verbatim): \"氣\"\nColor palette: black and dark charcoal ink only, with natural semitransparent dry ink edge detail.\nScene/backdrop: genuinely transparent background with alpha channel. No paper, no colored canvas, no solid white background, no fake checkerboard.\nConstraints: only the character 氣, no additional characters, no English, no seal, no stamp, no watermark, no border, no surrounding ornamental strokes. Preserve correct traditional Chinese character construction.",
+    "dimensions": {
+      "width": 1254,
+      "height": 1254
+    },
+    "bytes": 1215234,
+    "sha256": "17adfd1a2401c5ba0695d94cb713cf9ded8f960037de4b5e2165e8d12acf52e2",
+    "inspection": {
+      "character": "Visual inspection: traditional 氣, upper 气 with lower 米, single character; no other text, seal or border.",
+      "alpha": "System.Drawing decoded Format32bppArgb, all four corners alpha=0; sampled every 8px: 16949 transparent, 12 opaque, 7688 partial-alpha pixels. Exact original generated PNG copied without postprocessing.",
+      "style": "Deep charcoal broad brush calligraphy, variable stroke width, tapered ends and visible dry-brush texture.",
+      "fontDependency": "Image asset; does not load or depend on a font. No external reference image copied."
+    }
+  },
+  "note": "AI-generated asset provenance; not claimed as CC0. Reference screenshots and machine-local paths are not included."
+}

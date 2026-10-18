@@ -1,0 +1,21 @@
+{
+  "archivedSourceRecord": "artifacts/qi-home-brush-20261018/mirror-brush-provenance.json",
+  "record": {
+    "createdDateUserLocal": "2026-10-18",
+    "userTimeZone": "Asia/Shanghai",
+    "mode": "built-in image_gen.imagegen",
+    "intent": "generate",
+    "assetType": "logo-brand transparent brush-calligraphy wordmark",
+    "textVerbatim": "mirror",
+    "transparent_background": true,
+    "inputImages": [],
+    "styleObservationOnly": "Existing public/landing-art/qi-brush-mark.png was visually inspected for brush weight, black-charcoal palette and dry-brush texture; no image supplied to generator and no original asset modified.",
+    "prompt": "Use case: logo-brand.\nAsset type: transparent horizontal brush-calligraphy wordmark image for the home screen of a Chinese ink-painting Tai Chi game.\nPrimary request: write ONLY the exact lowercase English word \"mirror\" using a traditional Chinese calligraphy brush and black sumi ink, as a unified piece of expressive brush lettering.\nText (verbatim): \"mirror\". Exactly SIX lowercase letters, in order m i r r o r, clearly readable. The dot over the i is black ink. Do not add a final letter or remove either middle r.\nStyle/medium: real broad Chinese ink brush dragged across dry paper, thick charcoal-black downstrokes alternating with fine tapered strokes, visible organic bristle grain, dry-brush flying-white gaps, slightly irregular vigorous calligraphic rhythm. The stroke weight and energy must belong beside a bold semi-cursive Chinese 氣 brush character. True broad brushwork, not thin pen handwriting, not elegant copperplate, not western serif type, not a clean digital font.\nComposition/framing: one horizontally arranged word, approximately 3:1 wide canvas, compact minimal transparent margins on all four sides, word occupies about 92% width and 85% height. Keep the six letters close and naturally flowing, with a relaxed nearly level baseline. No flourishes extending beyond the word, no huge sweeping underline, no circle, no frame, no seal, no Chinese characters, no slogan, no other text.\nColor palette: deep black and charcoal ink only; authentic irregular density and clear dry-brush texture. Background is genuinely transparent alpha, including open spaces in letters and outside strokes, with no paper rectangle, no colored background, no checkered background baked in, no shadow.",
+    "sourceImage": "exec-204c2f20-c075-42a4-8e6e-8e9141140f18.png",
+    "savedImage": "mirror-brush-word.png",
+    "postprocessing": "None. Original generated PNG copied byte-for-byte; true alpha retained.",
+    "visualInspection": "Six lowercase letters m i r r o r, broad dry ink brush strokes, clear dot over i, no added text, seal, circle, underline or paper background.",
+    "inspectionRecord": "mirror-brush-inspection.json"
+  },
+  "note": "AI-generated asset provenance; not claimed as CC0. Reference screenshots and machine-local paths are not included."
+}

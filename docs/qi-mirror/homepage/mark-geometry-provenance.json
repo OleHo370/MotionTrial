@@ -1,0 +1,16 @@
+[
+  {
+    "kind": "qi",
+    "source": "qi-brush-mark.png",
+    "sourceSha256": "17adfd1a2401c5ba0695d94cb713cf9ded8f960037de4b5e2165e8d12acf52e2",
+    "vectorContours": 44,
+    "method": "alpha contours >105, area >=7 grid pixels, Douglas-Peucker .65 px; no source color sampled at runtime"
+  },
+  {
+    "kind": "mirror",
+    "source": "mirror-brush-word.png",
+    "sourceSha256": "48d44fbc2fef70db60f5aa62844e699d23698007129819c7917ccbd82538c557",
+    "vectorContours": 48,
+    "method": "alpha contours >105, area >=7 grid pixels, Douglas-Peucker .65 px; no source color sampled at runtime"
+  }
+]

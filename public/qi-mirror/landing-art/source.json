@@ -1,0 +1,22 @@
+{
+  "title": "Landscape",
+  "artist": "Unidentified artist, after Xia Gui",
+  "period": "Qing dynasty (1644–1911)",
+  "museum": "The Metropolitan Museum of Art",
+  "objectId": 51701,
+  "accessionNumber": "47.18.89",
+  "creditLine": "From the Collection of A. W. Bahr, Purchase, Fletcher Fund, 1947",
+  "sourceUrl": "https://www.metmuseum.org/art/collection/search/51701",
+  "apiUrl": "https://collectionapi.metmuseum.org/public/collection/v1/objects/51701",
+  "imageUrl": "https://images.metmuseum.org/CRDImages/as/original/DP202455_CRD.jpg",
+  "license": "CC0 / Public Domain",
+  "licenseUrl": "https://www.metmuseum.org/policies/image-resources",
+  "isPublicDomain": true,
+  "accessedOn": "2026-10-17",
+  "asset": "/landing-art/ink-landscape.jpg",
+  "width": 1956,
+  "height": 1038,
+  "bytes": 318231,
+  "sha256": "8bceecf0287afae169299be8f2cbb9c9c6fd70c3c3f742638c0c61edaf45e634",
+  "processing": "Original downloaded bytes. Display treatment is applied in CSS."
+}

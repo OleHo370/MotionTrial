@@ -1,0 +1,15 @@
+/* Imported Qi Mirror styles. Every selector is gated by the additive page wrapper. */
+/* A local light field around the supplied Tai Chi centre. No filled sweep or ribbon. */
+[data-qimirror-root] .qi-home .home-formation-canvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; opacity:0; z-index:1; transition:opacity 240ms ease; }
+[data-qimirror-root] .qi-home .home-formation-canvas[data-active='true'][data-ready='true'] { opacity:1; }
+[data-qimirror-root] .qi-home .home-wheel[data-formation='true']:has(.home-formation-canvas[data-ready='true']) .home-wheel-geometry { opacity:.10; transform:scale(.93); }
+[data-qimirror-root] .qi-home .home-wheel[data-phase='2'][data-formation='true']:has(.home-formation-canvas[data-ready='true']) .home-wheel-geometry { opacity:.055; }
+[data-qimirror-root] .qi-home .home-wheel[data-formation='true'] .home-wheel-inner-rim { opacity:.12; }
+[data-qimirror-root] .qi-home .home-wheel[data-formation='true'] .home-wheel-ticks { opacity:.42; }
+[data-qimirror-root] .qi-home .home-wheel[data-formation='true'] .home-wheel-haze { opacity:.45; }
+[data-qimirror-root] .qi-home .home-wheel[data-formation='true'] .home-wheel-core { z-index:2; opacity:1; }
+[data-qimirror-root] .qi-home .home-wheel .home-wheel-selector { transition-duration:650ms; }
+[data-qimirror-root] .qi-home .home-wheel .home-wheel-core { transition-duration:750ms; }
+[data-qimirror-root] .qi-home .home-exhibit-tabs::after { transition-duration:420ms; }
+[data-qimirror-root] .qi-home[data-ambient-motion='paused'] .home-formation-canvas { transition:none; }
+@media (prefers-reduced-motion:reduce) { [data-qimirror-root] .qi-home .home-formation-canvas { transition:none; } }

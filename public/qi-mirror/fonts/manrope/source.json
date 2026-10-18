@@ -1,0 +1,29 @@
+{
+  "family": "Manrope",
+  "commit": "b31870aff700ab7a1d74fa0c6887d95beb9e0037",
+  "source": "https://github.com/google/fonts/tree/b31870aff700ab7a1d74fa0c6887d95beb9e0037/ofl/manrope",
+  "license": "SIL Open Font License 1.1",
+  "downloadedUtc": "2026-10-17T21:48:42.9168224Z",
+  "files": [
+    {
+      "bytes": 3075,
+      "file": "FONTLOG.txt",
+      "sha256": "b6b54bcc1dbd1b18d5afd087ec0b578097644b1c9ec3e0a642d4df7808f449c2"
+    },
+    {
+      "bytes": 164700,
+      "file": "Manrope[wght].ttf",
+      "sha256": "3ae11c49db0455a3cc33e37d380f20fdb8c7f8b41dc07625c177e3d87a9d6ae6"
+    },
+    {
+      "bytes": 732,
+      "file": "METADATA.pb",
+      "sha256": "fb204147a7c16d009d4fa53248b6075bc941d7adfa450a825bc5d4cef2f9ded9"
+    },
+    {
+      "bytes": 4387,
+      "file": "OFL.txt",
+      "sha256": "58172e0c0fac2cda8a37b348164bb55e44b0e69051e557e92b1d3f6910141f7b"
+    }
+  ]
+}

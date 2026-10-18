@@ -1,0 +1,11 @@
+/* Imported Qi Mirror styles. Every selector is gated by the additive page wrapper. */
+/* English faces are installed on the deployment PC; Chinese faces already ship locally. */
+@font-face { font-family: 'Qi Local Display'; src: local('Bodoni MT'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Qi Local UI'; src: local('Segoe UI'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Qi Ma Shan Zheng'; src: url('/qi-mirror/fonts/qi/ma-shan-zheng-regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Qi WenKai Brand'; src: url('/qi-mirror/fonts/qi/lxgw-wenkai-tc-qi.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; unicode-range: U+6C23; }
+[data-qimirror-root] .qi-landing, [data-qimirror-root] .practice-page {
+  --qi-display: 'Qi Local Display', 'Bodoni MT', Georgia, 'Times New Roman', serif;
+  --qi-body: 'Qi Local UI', 'Segoe UI', Arial, sans-serif;
+  --qi-chinese: 'Qi Ma Shan Zheng', 'Qi WenKai Brand', 'KaiTi', cursive;
+}

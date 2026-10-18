@@ -1,0 +1,17 @@
+/* Imported Qi Mirror styles. Every selector is gated by the additive page wrapper. */
+body:has([data-qimirror-root]):has(.qi-loading) { overflow: hidden; }
+[data-qimirror-root] .qi-loading { height: 100svh; min-height: 100svh; font-family: var(--qi-body); user-select: none; -webkit-user-select: none; }
+[data-qimirror-root] .qi-loading-landscape { position: absolute; inset: 0; pointer-events: none; z-index: -1; background: url('/qi-mirror/landing-art/ink-landscape.jpg') center 72% / cover; opacity: .18; mask-image: linear-gradient(0deg,#000,transparent 82%); }
+[data-qimirror-root] .qi-loading-bamboo { position: absolute; top: 0; right: clamp(12px,4vw,80px); bottom: 0; height: 100%; width: auto; pointer-events: none; color: #353b2e; }
+[data-qimirror-root] .qi-bamboo-progress { display: block; height: 100%; width: auto; max-width: none; overflow: visible; }
+[data-qimirror-root] .qi-bamboo-reveal { transition: transform 420ms cubic-bezier(.22,.8,.26,1); }
+[data-qimirror-root] .qi-bamboo-shoot { transition: opacity .4s ease-out; }
+[data-qimirror-root] .qi-loading-main { position: absolute; z-index: 1; left: clamp(28px,8vw,154px); bottom: clamp(42px,12svh,150px); max-width: 65%; pointer-events: none; }
+[data-qimirror-root] .qi-loading-word { font-family: var(--qi-display); font-size: clamp(30px,3.3vw,48px); letter-spacing: -.5px; margin: 0 0 8px; line-height: 1; }
+[data-qimirror-root] .qi-loading-progress { font-family: var(--qi-display); font-size: clamp(70px,9vw,128px); line-height: .95; letter-spacing: -3px; font-variant-numeric: tabular-nums; }
+[data-qimirror-root] .qi-loading-progress small { font-family: var(--qi-body); font-size: clamp(16px,1.8vw,24px); vertical-align: top; line-height: 2.1; padding-left: 8px; letter-spacing: 0; opacity: .55; }
+[data-qimirror-root] .qi-loading-error { pointer-events: auto; max-width: 340px; font-size: 13px; line-height: 1.6; margin-top: 22px; }
+[data-qimirror-root] .qi-loading-error p { color: #725b46; }
+[data-qimirror-root] .qi-loading-error button, [data-qimirror-root] .qi-loading-error a { display: inline-block; font-family: var(--qi-body); font-size: 12px; color: inherit; border: 0; border-bottom: 1px solid #20211e65; background: transparent; padding: 5px 0; margin-right: 22px; cursor: pointer; }
+@media (max-width: 760px) { [data-qimirror-root] .qi-loading-bamboo { right: 8px; } [data-qimirror-root] .qi-loading-main { left: 26px; bottom: 11svh; max-width: 60%; } [data-qimirror-root] .qi-loading-word { font-size: 32px; } [data-qimirror-root] .qi-loading-progress { font-size: 78px; } }
+@media (prefers-reduced-motion: reduce) { [data-qimirror-root] .qi-bamboo-reveal, [data-qimirror-root] .qi-bamboo-shoot { transition: none; } }

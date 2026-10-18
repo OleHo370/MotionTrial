@@ -1,0 +1,179 @@
+{
+  "framework": "Next.js App Router source; adapt links/metadata for other React hosts",
+  "externalImports": [
+    "next",
+    "next/link",
+    "react"
+  ],
+  "localImports": [
+    {
+      "from": "app/home-story.css",
+      "import": "./game-type.css"
+    },
+    {
+      "from": "app/page.tsx",
+      "import": "@/components/QiSymbol"
+    },
+    {
+      "from": "app/page.tsx",
+      "import": "@/components/HomeWheelStory"
+    },
+    {
+      "from": "app/page.tsx",
+      "import": "@/components/HomePracticeStudio"
+    },
+    {
+      "from": "app/page.tsx",
+      "import": "@/components/HomeDetails"
+    },
+    {
+      "from": "app/page.tsx",
+      "import": "@/components/HomeCardGroup"
+    },
+    {
+      "from": "app/page.tsx",
+      "import": "@/components/HomeExperienceEntrance"
+    },
+    {
+      "from": "app/page.tsx",
+      "import": "@/components/HomeInkMark"
+    },
+    {
+      "from": "app/page.tsx",
+      "import": "@/components/HomeScrollLink"
+    },
+    {
+      "from": "app/page.tsx",
+      "import": "@/components/HomeMotion"
+    },
+    {
+      "from": "app/page.tsx",
+      "import": "./home-story.css"
+    },
+    {
+      "from": "app/page.tsx",
+      "import": "./home-exhibit.css"
+    },
+    {
+      "from": "app/page.tsx",
+      "import": "./home-stage.css"
+    },
+    {
+      "from": "app/page.tsx",
+      "import": "./home-practice.css"
+    },
+    {
+      "from": "app/page.tsx",
+      "import": "./home-ink.css"
+    },
+    {
+      "from": "app/page.tsx",
+      "import": "./home-unified.css"
+    },
+    {
+      "from": "app/page.tsx",
+      "import": "./home-experience-entrance.css"
+    },
+    {
+      "from": "app/page.tsx",
+      "import": "./home-identity.css"
+    },
+    {
+      "from": "components/HomeCardGroup.tsx",
+      "import": "./HomeMotion"
+    },
+    {
+      "from": "components/HomeExperienceEntrance.tsx",
+      "import": "./HomeMotion"
+    },
+    {
+      "from": "components/HomeFormationCanvas.tsx",
+      "import": "./HomeMotion"
+    },
+    {
+      "from": "components/HomeFormationCanvas.tsx",
+      "import": "./formation-renderer"
+    },
+    {
+      "from": "components/HomeInkMark.tsx",
+      "import": "./HomeMotion"
+    },
+    {
+      "from": "components/HomeInkMark.tsx",
+      "import": "./ink-lettering"
+    },
+    {
+      "from": "components/HomeMotion.tsx",
+      "import": "./QiSymbol"
+    },
+    {
+      "from": "components/HomeMotion.tsx",
+      "import": "./InkSurface"
+    },
+    {
+      "from": "components/HomePracticeStudio.tsx",
+      "import": "./HomeCardGroup"
+    },
+    {
+      "from": "components/HomePracticeStudio.tsx",
+      "import": "./HomeMotion"
+    },
+    {
+      "from": "components/HomePracticeStudio.tsx",
+      "import": "./InkSurface"
+    },
+    {
+      "from": "components/HomeScrollLink.tsx",
+      "import": "./HomeMotion"
+    },
+    {
+      "from": "components/HomeWheelStory.tsx",
+      "import": "./QiSymbol"
+    },
+    {
+      "from": "components/HomeWheelStory.tsx",
+      "import": "./InkSurface"
+    },
+    {
+      "from": "components/HomeWheelStory.tsx",
+      "import": "./HomeFormationCanvas"
+    },
+    {
+      "from": "components/HomeWheelStory.tsx",
+      "import": "../app/home-formation.css"
+    },
+    {
+      "from": "components/HomeWheelStory.tsx",
+      "import": "./HomeMotion"
+    },
+    {
+      "from": "components/ink-lettering.ts",
+      "import": "./ink-mark-shapes"
+    },
+    {
+      "from": "components/ink-lettering.ts",
+      "import": "./ink-material"
+    },
+    {
+      "from": "components/InkSurface.tsx",
+      "import": "./HomeMotion"
+    },
+    {
+      "from": "components/InkSurface.tsx",
+      "import": "./ink-material"
+    }
+  ],
+  "homepageRoutes": [
+    "/",
+    "/levels",
+    "/practice?mode=guided&form=1",
+    "/practice?mode=forms&routine=original24"
+  ],
+  "checkedPreview": {
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "typescript": "5.9.3",
+    "vite": "7.3.7"
+  },
+  "targetNextBuildVerified": false
+}

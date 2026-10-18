@@ -1,0 +1,81 @@
+/* The imported pages are additive. These rules stop matching as soon as their
+   wrapper leaves the document, including after Next.js client navigation. */
+body:has([data-qimirror-root]) > .app-shell > .sidebar,
+body:has([data-qimirror-root]) > .app-shell > .main-shell > .topbar,
+body:has([data-qimirror-root]) > .app-shell > .main-shell > footer {
+  display: none;
+}
+
+body:has([data-qimirror-root]) > .app-shell {
+  display: block;
+}
+
+body:has([data-qimirror-root]) > .app-shell > .main-shell {
+  margin-left: 0;
+  width: 100%;
+}
+
+body:has([data-qimirror-root]) > .app-shell > .main-shell > #main {
+  padding: 0;
+  margin: 0;
+  max-width: none;
+}
+
+[data-qimirror-root] {
+  min-height: 100svh;
+  color: #20211e;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  --qi-display: 'Qi Local Display', 'Bodoni MT', Georgia, 'Times New Roman', serif;
+  --qi-body: 'Qi Local UI', 'Segoe UI', Arial, sans-serif;
+  --qi-chinese: 'Qi Ma Shan Zheng', 'Qi WenKai Brand', 'KaiTi', cursive;
+}
+
+/* Restore the supplied page baseline inside the wrapper, before its component
+   styles apply. The host workspace's element rules remain untouched. */
+[data-qimirror-root] *,
+[data-qimirror-root] *::before,
+[data-qimirror-root] *::after {
+  box-sizing: border-box;
+}
+
+[data-qimirror-root] :is(h1, h2, h3, p, figure) {
+  margin: 0;
+}
+
+[data-qimirror-root] :is(h1, h2, h3) {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: normal;
+}
+
+[data-qimirror-root] a {
+  color: inherit;
+  text-decoration: none;
+}
+
+[data-qimirror-root] :is(button, input, select, textarea) {
+  font: inherit;
+}
+
+[data-qimirror-root] :is(img, svg) {
+  display: block;
+  vertical-align: middle;
+}
+
+[data-qimirror-root] img {
+  max-width: 100%;
+  height: auto;
+}
+
+[data-qimirror-root] footer {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: block;
+  color: inherit;
+  font-size: inherit;
+}

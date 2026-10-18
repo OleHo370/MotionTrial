@@ -1,0 +1,303 @@
+/* Imported Qi Mirror styles. Every selector is gated by the additive page wrapper. */
+
+@import './game-type.css';
+
+/* Homepage only: the collection, practice workspace and shared symbols retain their styles. */
+body:has([data-qimirror-root]):has(.qi-home) > .app-shell > .sidebar, body:has([data-qimirror-root]):has(.qi-home) > .app-shell > .main-shell > .topbar, body:has([data-qimirror-root]):has(.qi-home) > .app-shell > .main-shell > footer { display: none; }
+body:has([data-qimirror-root]):has(.qi-home) > .app-shell { display: block; }
+body:has([data-qimirror-root]):has(.qi-home) > .app-shell > .main-shell { margin-left: 0; width: 100%; }
+body:has([data-qimirror-root]):has(.qi-home) { background: #f8f9f6; }
+body:has([data-qimirror-root]):has(.qi-home) .ui-preview-menu { display: none; }
+[data-qimirror-root] .qi-landing.qi-home {
+  --home-paper: #f8f9f6; --home-ink: #222823; --home-muted: #606960; --home-line: #dfe4dc;
+  --home-moss: #4e6151; --home-surface: #f0f3ed;
+  display: block; position: relative; isolation: isolate; overflow: clip;
+  color: var(--home-ink); background: var(--home-paper); font-family: var(--qi-body); font-size: 16px; line-height: 1.6;
+}
+[data-qimirror-root] .qi-home *, [data-qimirror-root] .qi-home *::before, [data-qimirror-root] .qi-home *::after { box-sizing: border-box; }
+[data-qimirror-root] .qi-home [hidden] { display: none !important; }
+[data-qimirror-root] .qi-home h1, [data-qimirror-root] .qi-home h2, [data-qimirror-root] .qi-home h3, [data-qimirror-root] .qi-home p, [data-qimirror-root] .qi-home figure { margin: 0; }
+[data-qimirror-root] .qi-home h2 { font-family: var(--qi-body); font-size: clamp(30px, 3.1vw, 44px); font-weight: 500; line-height: 1.16; letter-spacing: -.035em; text-wrap: balance; }
+[data-qimirror-root] .qi-home h3 { font-weight: 500; line-height: 1.3; }
+[data-qimirror-root] .qi-home p { line-height: 1.65; }
+[data-qimirror-root] .qi-home a { color: inherit; text-decoration: none; }
+[data-qimirror-root] .qi-home button { font: inherit; color: inherit; cursor: pointer; border: 0; border-radius: 0; box-shadow: none; }
+[data-qimirror-root] .qi-home button:hover { transform: none; }
+[data-qimirror-root] .qi-home a:focus-visible, [data-qimirror-root] .qi-home button:focus-visible, [data-qimirror-root] .qi-home video:focus-visible { outline: 2px solid var(--home-moss); outline-offset: 5px; }
+[data-qimirror-root] .qi-home img { max-width: 100%; }
+[data-qimirror-root] .qi-home svg { display: block; }
+[data-qimirror-root] .qi-home section[id] { scroll-margin-top: 104px; }
+[data-qimirror-root] .qi-home .home-cover { position: relative; display: flex; flex-direction: column; min-height: 640px; padding-top: 80px; isolation: isolate; }
+[data-qimirror-root] .qi-home .home-masthead { position: fixed; z-index: 20; inset: 0 0 auto; background: #f8f9f6f2; border-bottom: 1px solid #dfe4dc88; height: 80px; padding: 0 max(4.5%, calc((100% - 1280px) / 2)); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 28px; }
+[data-qimirror-root] .qi-home .home-wordmark { display: inline-flex; align-items: center; gap: 11px; justify-self: start; }
+[data-qimirror-root] .qi-home .home-wordmark > span { display: flex; gap: 11px; align-items: center; font-size: 12px; letter-spacing: 2px; }
+[data-qimirror-root] .qi-home .home-wordmark [lang] { font-family: var(--qi-chinese); font-size: 22px; }
+[data-qimirror-root] .qi-home .home-wordmark i { width: 1px; height: 12px; background: #777c70; }
+[data-qimirror-root] .qi-home .home-symbol-small { width: 33px; height: 33px; }
+[data-qimirror-root] .qi-home .home-masthead nav { display: flex; gap: 30px; font-size: 14px; }
+[data-qimirror-root] .qi-home .home-masthead nav a { padding: 12px 0; }
+[data-qimirror-root] .qi-home .home-header-entry { justify-self: end; font-size: 14px; padding: 11px 0; }
+[data-qimirror-root] .qi-home .home-header-entry span { padding-left: 9px; }
+[data-qimirror-root] .qi-home .home-hero { flex: 1; min-height: 480px; padding: 24px 24px 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+[data-qimirror-root] .qi-home .home-title { display: flex; justify-content: center; align-items: center; width: min(100%, 580px); line-height: 1; margin-bottom: 12px; }
+[data-qimirror-root] .qi-home .home-qi-mark { width: 33%; height: auto; aspect-ratio: 1; object-fit: contain; transform: rotate(-4deg); }
+[data-qimirror-root] .qi-home .home-mirror-mark { width: 64%; height: auto; object-fit: contain; margin: 16px 0 0 -2%; }
+[data-qimirror-root] .qi-home .home-heading { font-family: var(--qi-display); font-size: clamp(28px, 2.4vw, 34px); line-height: 1.2; margin: 0 0 16px; }
+[data-qimirror-root] .qi-home .home-intro { color: #4f554b; font-size: 17px; }
+[data-qimirror-root] .qi-home .home-actions { display: flex; align-items: center; gap: 22px; margin-top: 22px; }
+[data-qimirror-root] .qi-home .home-primary { display: inline-flex; align-items: center; justify-content: center; gap: 22px; min-height: 48px; min-width: 232px; padding: 12px 22px; color: var(--home-paper); background: var(--home-ink); border-radius: 6px; font-size: 15px; font-weight: 500; transition: background 160ms; }
+[data-qimirror-root] .qi-home .home-primary:hover { background: #3e4a40; }
+[data-qimirror-root] .qi-home .home-text-link { font-size: 15px; padding: 12px 0; }
+[data-qimirror-root] .qi-home .home-text-link:hover, [data-qimirror-root] .qi-home .home-header-entry:hover { text-decoration: underline; text-underline-offset: 6px; }
+[data-qimirror-root] .qi-home .home-text-link span { padding-left: 12px; }
+[data-qimirror-root] .qi-home .home-hero-note { margin-top: 13px; font-size: 12px; color: var(--home-muted); }
+[data-qimirror-root] .qi-home .home-cover-foot { display: flex; justify-content: space-between; gap: 20px; padding: 10px max(4.5%, calc((100% - 1280px) / 2)); font-size: 12px; color: #4d5549; }
+[data-qimirror-root] .qi-home .home-cover-foot a { padding: 8px 0; }
+[data-qimirror-root] .qi-home .home-cover-foot > span { align-self: center; }
+[data-qimirror-root] .qi-home .home-cover-foot a span { margin-left: 15px; }
+[data-qimirror-root] .qi-home .home-section { width: min(1120px, 88%); margin: 0 auto; padding: 76px 0; }
+[data-qimirror-root] .qi-home .home-kicker { color: var(--home-moss); font-size: 14px; margin-bottom: 22px; }
+[data-qimirror-root] .qi-home .home-section-intro { display: grid; grid-template-columns: 1.25fr 1fr; gap: 10%; align-items: end; margin-bottom: 36px; }
+[data-qimirror-root] .qi-home .home-section-intro > p { max-width: 400px; color: var(--home-muted); padding-bottom: 4px; }
+[data-qimirror-root] .qi-home .home-demo { border: 1px solid var(--home-line); background: #fff; border-radius: 12px; overflow: clip; }
+[data-qimirror-root] .qi-home .home-demo-bar { padding: 13px 23px; display: flex; align-items: center; gap: 24px; font-size: 12px; }
+[data-qimirror-root] .qi-home .home-demo-bar > p { color: var(--home-muted); }
+[data-qimirror-root] .qi-home .home-demo-label { display: inline-flex; align-items: center; gap: 9px; font-weight: 600; }
+[data-qimirror-root] .qi-home .home-demo-label > span, [data-qimirror-root] .qi-home .home-truth-dot { display: block; width: 6px; height: 6px; border-radius: 50%; background: #54634b; flex: none; }
+[data-qimirror-root] .qi-home .home-demo-play { display: flex; align-items: center; justify-content: center; gap: 10px; margin-left: auto; min-height: 44px; padding: 8px 15px; background: #f0f3ed; border-radius: 6px; font-size: 13px; transition: background 160ms; }
+[data-qimirror-root] .qi-home .home-demo-play:hover { background: #e0e4d6; }
+[data-qimirror-root] .qi-home .home-demo-play:disabled { cursor: default; opacity: .48; }
+[data-qimirror-root] .qi-home .home-demo-body { display: grid; grid-template-columns: 240px 1fr; min-height: 420px; }
+[data-qimirror-root] .qi-home .home-demo-navigation { padding: 26px 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 30px; }
+[data-qimirror-root] .qi-home .home-demo-tabs { display: flex; flex-direction: column; gap: 5px; }
+[data-qimirror-root] .qi-home .home-demo-tabs button { display: flex; align-items: center; gap: 16px; min-height: 48px; padding: 10px 12px; text-align: left; background: transparent; color: #606960; border-radius: 6px; transition: background 160ms, color 160ms; }
+[data-qimirror-root] .qi-home .home-demo-tabs button[aria-selected='true'] { color: var(--home-ink); background: #f0f3ed; }
+[data-qimirror-root] .qi-home .home-demo-number { font-size: 11px; }
+[data-qimirror-root] .qi-home .home-demo-arrow { margin-left: auto; opacity: 0; }
+[data-qimirror-root] .qi-home .home-demo-tabs button[aria-selected='true'] .home-demo-arrow { opacity: 1; }
+[data-qimirror-root] .qi-home .home-demo-caption h3 { font-size: 17px; margin-bottom: 10px; }
+[data-qimirror-root] .qi-home .home-demo-caption p { font-size: 14px; color: var(--home-muted); }
+[data-qimirror-root] .qi-home .home-demo-stage { min-width: 0; position: relative; display: grid; align-items: center; padding: 30px; background: #f2f5ef; }
+[data-qimirror-root] .qi-home .home-demo-choice { display: flex; align-items: center; justify-content: center; gap: 12%; min-height: 350px; }
+[data-qimirror-root] .qi-home .home-demo-wheel { width: min(46%, 300px); aspect-ratio: 1; position: relative; display: grid; place-items: center; }
+[data-qimirror-root] .qi-home .home-demo-symbol { width: 100%; color: #57674f; }
+[data-qimirror-root] .qi-home .home-demo-wheel > span { position: absolute; font-family: Georgia, serif; font-size: 18px; color: #727a68; background: #f2f5ef; padding: 2px 8px; z-index: 1; }
+[data-qimirror-root] .qi-home .home-demo-wheel > span:nth-of-type(1) { top: -16px; left: 40%; }
+[data-qimirror-root] .qi-home .home-demo-wheel > span:nth-of-type(2) { bottom: -16px; left: 43%; }
+[data-qimirror-root] .qi-home .home-demo-wheel > span:nth-of-type(3) { left: -22px; top: 44%; }
+[data-qimirror-root] .qi-home .home-demo-wheel > span:nth-of-type(4) { left: 1%; top: 3%; }
+[data-qimirror-root] .qi-home .home-demo-wheel b { position: absolute; right: -25px; top: 40%; background: #333c2e; color: #f6f7f0; font-family: Georgia, serif; font-size: 24px; font-weight: 400; padding: 5px 22px; z-index: 2; clip-path: polygon(5% 0, 94% 0, 100% 50%, 94% 100%, 5% 100%, 0 50%); }
+[data-qimirror-root] .qi-home .home-demo-form > span { font-size: 12px; color: #5d6753; }
+[data-qimirror-root] .qi-home .home-demo-form h3 { font-family: var(--qi-display); font-size: clamp(34px, 4vw, 52px); font-weight: 400; margin: 12px 0; }
+[data-qimirror-root] .qi-home .home-demo-form p { font-size: 16px; color: #59624f; margin-bottom: 32px; }
+[data-qimirror-root] .qi-home .home-demo-form .home-demo-sample { display: inline-block; border-top: 1px solid #bfc6b2; padding-top: 9px; font-size: 11px; }
+[data-qimirror-root] .qi-home .home-demo-media { display: grid; align-items: center; gap: 20px; min-height: 350px; grid-template-columns: minmax(0, 1fr); }
+[data-qimirror-root] .qi-home .home-demo-reference { min-width: 0; width: 100%; max-width: 490px; margin: 0 auto; }
+[data-qimirror-root] .qi-home .home-demo-video-wrap { background: #d5d9cd; aspect-ratio: 5 / 4; }
+[data-qimirror-root] .qi-home .home-demo-reference video { display: block; width: 100%; height: 100%; aspect-ratio: 5 / 4; object-fit: contain; background: #d5d9cd; }
+[data-qimirror-root] .qi-home .home-demo-reference figcaption { display: flex; justify-content: space-between; gap: 8px; padding: 11px 0 0; font-size: 11px; color: #5a6352; }
+[data-qimirror-root] .qi-home .home-demo-media-2, [data-qimirror-root] .qi-home .home-demo-media-3 { grid-template-columns: 1fr 1fr; }
+[data-qimirror-root] .qi-home .home-demo-follow { position: relative; min-height: 280px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; text-align: center; background: #e8ebdf; }
+[data-qimirror-root] .qi-home .home-demo-place { font-family: var(--qi-display); font-size: 32px; line-height: 1.2; color: #536049; }
+[data-qimirror-root] .qi-home .home-demo-follow p { font-size: 11px; color: #5b6751; padding: 0 20px; }
+[data-qimirror-root] .qi-home .home-frame-corners { position: absolute; inset: 16px; pointer-events: none; }
+[data-qimirror-root] .qi-home .home-frame-corners span { position: absolute; width: 18px; height: 18px; border-color: #a2ad94; border-style: solid; border-width: 0; }
+[data-qimirror-root] .qi-home .home-frame-corners span:nth-child(1) { top: 0; left: 0; border-top-width: 1px; border-left-width: 1px; }
+[data-qimirror-root] .qi-home .home-frame-corners span:nth-child(2) { top: 0; right: 0; border-top-width: 1px; border-right-width: 1px; }
+[data-qimirror-root] .qi-home .home-frame-corners span:nth-child(3) { bottom: 0; left: 0; border-bottom-width: 1px; border-left-width: 1px; }
+[data-qimirror-root] .qi-home .home-frame-corners span:nth-child(4) { bottom: 0; right: 0; border-bottom-width: 1px; border-right-width: 1px; }
+[data-qimirror-root] .qi-home .home-demo-ink { text-align: center; }
+[data-qimirror-root] .qi-home .home-demo-ink svg { width: 100%; height: auto; max-height: 280px; color: #303a29; overflow: visible; }
+[data-qimirror-root] .qi-home .home-ink-wash { opacity: .22; }
+[data-qimirror-root] .qi-home .home-ink-line { opacity: .86; }
+[data-qimirror-root] .qi-home .is-drawing .home-ink-wash, [data-qimirror-root] .qi-home .is-drawing .home-ink-line { stroke-dasharray: 800; animation: qimirror-home-ink-draw 3.5s cubic-bezier(.2,.6,.2,1) both; }
+[data-qimirror-root] .qi-home .home-demo-ink p { font-size: 13px; }
+[data-qimirror-root] .qi-home .home-demo-ink > span { font-size: 11px; color: var(--home-muted); }
+[data-qimirror-root] .qi-home .home-demo-error { position: absolute; inset: auto 18px 18px; background: var(--home-paper); border: 1px solid #a99a79; padding: 18px; font-size: 14px; }
+[data-qimirror-root] .qi-home .home-demo-error button { padding: 10px 0; background: transparent; text-decoration: underline; }
+[data-qimirror-root] .qi-home .home-demo-bottom { display: flex; justify-content: space-between; gap: 12px; padding: 13px 24px; color: var(--home-muted); font-size: 12px; }
+[data-qimirror-root] .qi-home .home-paths { display: grid; grid-template-columns: 1fr 1fr; gap: 10%; margin-top: 46px; }
+[data-qimirror-root] .qi-home .home-paths > div { padding: 0; }
+[data-qimirror-root] .qi-home .home-paths h3 { font-family: var(--qi-body); font-size: 21px; font-weight: 400; margin-bottom: 10px; }
+[data-qimirror-root] .qi-home .home-paths p { color: var(--home-muted); max-width: 410px; font-size: 15px; margin-bottom: 15px; }
+[data-qimirror-root] .qi-home .home-paths a { display: inline-block; font-size: 14px; padding: 8px 0; }
+[data-qimirror-root] .qi-home .home-paths a span { padding-left: 12px; }
+[data-qimirror-root] .qi-home .home-culture { display: grid; grid-template-columns: 1fr 1fr; width: min(1120px, 88%); margin: 30px auto; min-height: 460px; background: #eef2eb; border-radius: 14px; overflow: clip; }
+[data-qimirror-root] .qi-home .home-artwork { position: relative; overflow: hidden; min-height: 400px; isolation: isolate; }
+[data-qimirror-root] .qi-home .home-culture-copy { padding: 60px 42px 60px 20px; align-self: center; }
+[data-qimirror-root] .qi-home .home-culture-copy > p:not(.home-kicker) { margin-top: 24px; color: #5c6254; max-width: 480px; }
+[data-qimirror-root] .qi-home .home-detail-trigger { display: inline-flex; align-items: center; gap: 26px; min-height: 48px; padding: 10px 0; margin-top: 24px; border-bottom: 1px solid #7b8470; background: transparent; font-size: 14px; }
+[data-qimirror-root] .qi-home .home-detail-trigger > span:last-child { font-size: 24px; font-weight: 300; }
+[data-qimirror-root] .qi-home .home-technology { display: grid; grid-template-columns: 1fr 1fr; gap: 10%; padding-top: 100px; padding-bottom: 100px; }
+[data-qimirror-root] .qi-home .home-tech-explanation { padding-top: 5px; }
+[data-qimirror-root] .qi-home .home-large-copy { font-family: var(--qi-body); font-size: 21px; line-height: 1.35; margin-bottom: 24px; }
+[data-qimirror-root] .qi-home .home-tech-explanation > p:not(.home-large-copy) { color: var(--home-muted); }
+[data-qimirror-root] .qi-home .home-preview-truth { display: flex; align-items: flex-start; gap: 13px; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--home-line); }
+[data-qimirror-root] .qi-home .home-truth-dot { margin-top: 9px; }
+[data-qimirror-root] .qi-home .home-preview-truth p { font-size: 13px; color: var(--home-muted); }
+[data-qimirror-root] .qi-home .home-preview-truth strong { color: #3f4d35; font-weight: 500; }
+[data-qimirror-root] .qi-home .home-finale { width: min(1120px, 88%); margin: 0 auto; padding: 55px 0; border-top: 1px solid var(--home-line); border-bottom: 1px solid var(--home-line); display: flex; align-items: center; gap: 30px; }
+[data-qimirror-root] .qi-home .home-finale-symbol { width: 68px; height: 68px; color: #58614e; flex: none; }
+[data-qimirror-root] .qi-home .home-finale h2 { font-size: 30px; }
+[data-qimirror-root] .qi-home .home-finale p { font-size: 14px; color: var(--home-muted); margin-top: 9px; }
+[data-qimirror-root] .qi-home .home-finale .home-primary { margin-left: auto; }
+[data-qimirror-root] .qi-home .home-footer { width: min(1120px, 88%); margin: 0 auto; padding: 40px 0 50px; display: flex; align-items: center; gap: 30px; background: transparent; border: 0; max-width: none; color: var(--home-muted); font-size: 11px; }
+[data-qimirror-root] .qi-home .home-footer > a:first-child { font-size: 13px; color: var(--home-ink); letter-spacing: 1px; }
+[data-qimirror-root] .qi-home .home-footer > a:last-child { margin-left: auto; padding: 12px 0; }
+[data-qimirror-root] .qi-home .home-detail-dialog { position: fixed; inset: 0 0 0 auto; margin: 0; width: min(540px, 100%); height: 100dvh; max-height: 100dvh; max-width: 100%; padding: 28px 42px 48px; border: 0; background: var(--home-paper); color: var(--home-ink); overflow: auto; box-shadow: -15px 0 55px #20211e16; }
+[data-qimirror-root] .qi-home .home-detail-dialog[open] { animation: qimirror-home-drawer-in .3s cubic-bezier(.2,.7,.2,1) both; }
+[data-qimirror-root] .qi-home .home-detail-dialog::backdrop { background: #161d1490; animation: qimirror-home-backdrop-in .25s ease both; }
+[data-qimirror-root] .qi-home .home-detail-dialog[data-closing] { animation: qimirror-home-drawer-out .18s ease both; }
+[data-qimirror-root] .qi-home .home-detail-dialog[data-closing]::backdrop { animation: qimirror-home-backdrop-out .18s ease both; }
+[data-qimirror-root] .qi-home .home-detail-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; font-size: 12px; color: var(--home-muted); margin-bottom: 62px; }
+[data-qimirror-root] .qi-home .home-detail-header button { min-width: 44px; min-height: 44px; font-size: 28px; background: transparent; }
+[data-qimirror-root] .qi-home .home-detail-dialog h2 { font-size: 42px; margin-bottom: 28px; }
+[data-qimirror-root] .qi-home .home-detail-dialog h3 { font-size: 17px; margin-top: 30px; margin-bottom: 12px; }
+[data-qimirror-root] .qi-home .home-detail-dialog p { color: var(--home-muted); margin: 20px 0; font-size: 15px; }
+[data-qimirror-root] .qi-home .home-detail-dialog > a { display: inline-block; text-decoration: underline; padding: 8px 0; font-size: 14px; }
+[data-qimirror-root] .qi-home .home-detail-dialog p.home-detail-note { border-top: 1px solid var(--home-line); padding-top: 22px; margin-top: 32px; font-size: 12px; }
+@keyframes qimirror-home-ink-draw { from { stroke-dashoffset: 800; } to { stroke-dashoffset: 0; } }
+@keyframes qimirror-home-drawer-in { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes qimirror-home-drawer-out { from { transform: translateX(0); } to { transform: translateX(100%); } }
+@keyframes qimirror-home-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes qimirror-home-backdrop-out { from { opacity: 1; } to { opacity: 0; } }
+
+/* Ink edges and paper grain are static SVG textures; only their enclosing layer moves. */
+[data-qimirror-root] .qi-home .home-flow { position: absolute; inset: 0; overflow: hidden; z-index: -1; pointer-events: none; }
+[data-qimirror-root] .qi-home .home-paper-grain { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .045; mix-blend-mode: multiply; }
+[data-qimirror-root] .qi-home .home-ink-scroll, [data-qimirror-root] .qi-home .home-flow-drift { position: absolute; inset: 0; }
+[data-qimirror-root] .qi-home .home-ink-art { display: block; width: 100%; height: 100%; overflow: visible; }
+[data-qimirror-root] .qi-home .home-flow-drift { animation: qimirror-home-flow-drift 18s ease-in-out infinite alternate; transform-origin: center; }
+[data-qimirror-root] .qi-home .home-flow-culture .home-paper-grain { opacity: .055; }
+[data-qimirror-root] .qi-home .home-flow-culture .home-ink-art { padding: 14px; }
+[data-qimirror-root] .qi-home .home-balance-mark { position: absolute; inset: 0; display: grid; place-content: center; color: #606f5d; }
+[data-qimirror-root] .qi-home .home-balance-mark span { font-family: var(--qi-chinese); font-size: 23px; letter-spacing: 9px; margin-left: 9px; }
+[data-qimirror-root] .qi-home .home-motion-toggle { display: inline-flex; align-items: center; gap: 9px; min-height: 44px; padding: 8px 0; background: transparent; font-size: 12px; color: var(--home-muted); }
+[data-qimirror-root] .qi-home .home-motion-toggle:disabled { cursor: default; }
+[data-qimirror-root] .qi-home .home-motion-toggle span { width: 13px; text-align: center; }
+[data-qimirror-root] .qi-home .home-orbit-lines { position: absolute; inset: 0; width: 100%; height: 100%; color: #a8b69d; stroke: currentColor; stroke-width: .8; }
+[data-qimirror-root] .qi-home .home-orbit-turn { transform-box: view-box; transform-origin: 50% 50%; animation: qimirror-home-orbit-turn 80s linear infinite; }
+[data-qimirror-root] .qi-home .home-orbit-core { width: 49%; aspect-ratio: 1; animation: qimirror-home-orbit-turn 56s linear infinite reverse; }
+[data-qimirror-root] .qi-home[data-ambient-motion='paused'] .home-flow-drift, [data-qimirror-root] .qi-home[data-ambient-motion='paused'] .home-orbit-turn, [data-qimirror-root] .qi-home[data-ambient-motion='paused'] .home-orbit-core, [data-qimirror-root] .qi-home [data-visible='false'] .home-flow-drift, [data-qimirror-root] .qi-home [data-visible='false'] .home-orbit-turn, [data-qimirror-root] .qi-home [data-visible='false'] .home-orbit-core { animation-play-state: paused; }
+@keyframes qimirror-home-flow-drift { from { transform: translate(-3px, 0) scale(1); } to { transform: translate(4px, 5px) scale(1.012); } }
+@keyframes qimirror-home-orbit-turn { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+/* Progressive enhancement: unsupported browsers retain the fully visible static layout. */
+@supports (animation-timeline: view()) {
+  [data-qimirror-root] .qi-home .home-cover { view-timeline-name: --home-cover; view-timeline-axis: block; }
+  [data-qimirror-root] .qi-home .home-flow-hero .home-ink-scroll { animation: qimirror-home-ink-pass linear both; animation-timeline: --home-cover; animation-range: exit 0% exit 100%; }
+  [data-qimirror-root] .qi-home .home-demo-reveal { animation: qimirror-home-preview-settle linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; transform-origin: center top; }
+  [data-qimirror-root] .qi-home .home-artwork { animation: qimirror-home-ink-emerge linear both; animation-timeline: view(); animation-range: entry 0% entry 70%; }
+  [data-qimirror-root] .qi-home[data-ambient-motion='paused'] .home-ink-scroll, [data-qimirror-root] .qi-home[data-ambient-motion='paused'] .home-demo-reveal, [data-qimirror-root] .qi-home[data-ambient-motion='paused'] .home-artwork { animation: none; transform: none; opacity: 1; }
+}
+@keyframes qimirror-home-ink-pass { from { transform: translateY(0) scale(1); opacity: 1; } to { transform: translateY(95px) scale(1.055); opacity: .55; } }
+@keyframes qimirror-home-preview-settle { from { transform: translateY(28px) scale(.965); opacity: .78; } to { transform: translateY(0) scale(1); opacity: 1; } }
+@keyframes qimirror-home-ink-emerge { from { transform: translateY(22px) scale(.96); opacity: .35; } to { transform: translateY(0) scale(1); opacity: 1; } }
+
+@media (min-width: 761px) and (max-height: 760px) {
+  [data-qimirror-root] .qi-home .home-cover { min-height: 540px; padding-top: 72px; }
+  [data-qimirror-root] .qi-home .home-masthead { height: 72px; }
+  [data-qimirror-root] .qi-home .home-hero { min-height: 406px; padding: 8px 24px 15px; }
+  [data-qimirror-root] .qi-home .home-title { width: 460px; }
+  [data-qimirror-root] .qi-home .home-heading { font-size: 30px; margin-bottom: 10px; }
+  [data-qimirror-root] .qi-home .home-actions { margin-top: 15px; }
+  [data-qimirror-root] .qi-home .home-cover-foot { padding-top: 8px; padding-bottom: 8px; }
+}
+@media (max-width: 960px) {
+  [data-qimirror-root] .qi-home .home-masthead nav { gap: 20px; }
+  [data-qimirror-root] .qi-home .home-section-intro { gap: 6%; }
+  [data-qimirror-root] .qi-home .home-demo-body { grid-template-columns: 220px 1fr; }
+  [data-qimirror-root] .qi-home .home-demo-navigation { padding: 24px 16px; }
+  [data-qimirror-root] .qi-home .home-demo-stage { padding: 24px; }
+  [data-qimirror-root] .qi-home .home-demo-media-2, [data-qimirror-root] .qi-home .home-demo-media-3 { grid-template-columns: 1fr; }
+  [data-qimirror-root] .qi-home .home-demo-follow { min-height: 150px; gap: 10px; }
+  [data-qimirror-root] .qi-home .home-demo-ink svg { max-height: 180px; }
+  [data-qimirror-root] .qi-home .home-finale-symbol { display: none; }
+  [data-qimirror-root] .qi-home .home-footer { flex-wrap: wrap; gap: 15px 24px; }
+}
+@media (max-width: 760px) {
+  [data-qimirror-root] .qi-home .home-masthead { height: 76px; grid-template-columns: 1fr auto; gap: 14px; padding: 0 6%; }
+  [data-qimirror-root] .qi-home .home-masthead nav { display: none; }
+  [data-qimirror-root] .qi-home .home-header-entry { font-size: 12px; }
+  [data-qimirror-root] .qi-home .home-wordmark > span { font-size: 10px; gap: 8px; }
+  [data-qimirror-root] .qi-home .home-wordmark { gap: 7px; }
+  [data-qimirror-root] .qi-home .home-symbol-small { width: 28px; height: 28px; }
+  [data-qimirror-root] .qi-home .home-hero { min-height: 460px; padding: 30px 20px 40px; }
+  [data-qimirror-root] .qi-home .home-cover { min-height: 0; padding-top: 76px; }
+  [data-qimirror-root] .qi-home .home-title { width: min(100%, 420px); margin-bottom: 18px; }
+  [data-qimirror-root] .qi-home .home-heading { font-size: 27px; margin-bottom: 15px; }
+  [data-qimirror-root] .qi-home .home-intro { font-size: 15px; max-width: 330px; }
+  [data-qimirror-root] .qi-home .home-actions { flex-direction: column; gap: 8px; margin-top: 24px; }
+  [data-qimirror-root] .qi-home .home-hero-note { font-size: 11px; margin-top: 18px; }
+  [data-qimirror-root] .qi-home .home-cover-foot { padding: 8px 6% 16px; font-size: 11px; gap: 12px; }
+  [data-qimirror-root] .qi-home .home-cover-foot > span { max-width: 145px; }
+  [data-qimirror-root] .qi-home .home-cover-foot a span { margin-left: 5px; }
+  [data-qimirror-root] .qi-home .home-section { width: 88%; padding: 60px 0; }
+  [data-qimirror-root] .qi-home h2 { font-size: 30px; }
+  [data-qimirror-root] .qi-home .home-section-intro { grid-template-columns: 1fr; gap: 24px; margin-bottom: 30px; }
+  [data-qimirror-root] .qi-home .home-section-intro > p { font-size: 15px; max-width: 450px; }
+  [data-qimirror-root] .qi-home .home-kicker { font-size: 13px; margin-bottom: 18px; }
+  [data-qimirror-root] .qi-home .home-demo-bar { padding: 11px 13px; gap: 8px; flex-wrap: wrap; }
+  [data-qimirror-root] .qi-home .home-demo-bar > p { order: 3; flex-basis: 100%; font-size: 10px; }
+  [data-qimirror-root] .qi-home .home-demo-play { font-size: 12px; padding: 8px 10px; }
+  [data-qimirror-root] .qi-home .home-demo-body { display: flex; flex-direction: column; }
+  [data-qimirror-root] .qi-home .home-demo-navigation { display: contents; }
+  [data-qimirror-root] .qi-home .home-demo-tabs { flex-direction: row; gap: 0; padding: 8px 6px; border-bottom: 1px solid var(--home-line); }
+  [data-qimirror-root] .qi-home .home-demo-tabs button { flex: 1; gap: 6px; padding: 9px 5px; font-size: 12px; justify-content: center; }
+  [data-qimirror-root] .qi-home .home-demo-number { font-size: 9px; }
+  [data-qimirror-root] .qi-home .home-demo-arrow { display: none; }
+  [data-qimirror-root] .qi-home .home-demo-caption { order: 2; padding: 21px 18px; min-height: 142px; }
+  [data-qimirror-root] .qi-home .home-demo-caption p { font-size: 14px; }
+  [data-qimirror-root] .qi-home .home-demo-stage { padding: 23px 16px; min-height: 300px; }
+  [data-qimirror-root] .qi-home .home-demo-choice { min-height: 254px; gap: 10%; }
+  [data-qimirror-root] .qi-home .home-demo-wheel { width: 46%; }
+  [data-qimirror-root] .qi-home .home-demo-wheel > span { font-size: 12px; padding: 2px 4px; }
+  [data-qimirror-root] .qi-home .home-demo-wheel b { right: -15px; padding: 2px 10px; font-size: 17px; }
+  [data-qimirror-root] .qi-home .home-demo-wheel > span:nth-of-type(3) { left: -10px; }
+  [data-qimirror-root] .qi-home .home-demo-form { width: 42%; }
+  [data-qimirror-root] .qi-home .home-demo-form > span { font-size: 10px; }
+  [data-qimirror-root] .qi-home .home-demo-form h3 { font-size: 31px; margin: 8px 0; }
+  [data-qimirror-root] .qi-home .home-demo-form p { font-size: 13px; margin-bottom: 20px; }
+  [data-qimirror-root] .qi-home .home-demo-form .home-demo-sample { font-size: 10px; }
+  [data-qimirror-root] .qi-home .home-demo-media { min-height: 254px; }
+  [data-qimirror-root] .qi-home .home-demo-media-2, [data-qimirror-root] .qi-home .home-demo-media-3 { grid-template-columns: 1fr; gap: 20px; align-items: center; }
+  [data-qimirror-root] .qi-home .home-demo-reference figcaption { flex-wrap: wrap; font-size: 9px; gap: 2px; }
+  [data-qimirror-root] .qi-home .home-demo-follow { min-height: 160px; gap: 12px; }
+  [data-qimirror-root] .qi-home .home-demo-place { font-size: 25px; }
+  [data-qimirror-root] .qi-home .home-demo-follow p { font-size: 10px; padding: 0 12px; }
+  [data-qimirror-root] .qi-home .home-frame-corners { inset: 8px; }
+  [data-qimirror-root] .qi-home .home-demo-ink p, [data-qimirror-root] .qi-home .home-demo-ink > span { font-size: 10px; }
+  [data-qimirror-root] .qi-home .home-demo-bottom { flex-direction: column; gap: 3px; padding: 14px 18px; font-size: 10px; }
+  [data-qimirror-root] .qi-home .home-paths { grid-template-columns: 1fr; gap: 30px; margin-top: 35px; }
+  [data-qimirror-root] .qi-home .home-paths p { font-size: 14px; }
+  [data-qimirror-root] .qi-home .home-paths a { font-size: 13px; }
+  [data-qimirror-root] .qi-home .home-culture { display: flex; flex-direction: column; margin: 10px auto; }
+  [data-qimirror-root] .qi-home .home-artwork { height: 260px; min-height: 260px; }
+  [data-qimirror-root] .qi-home .home-culture-copy { padding: 20px 24px 38px; }
+  [data-qimirror-root] .qi-home .home-culture-copy > p:not(.home-kicker) { font-size: 15px; }
+  [data-qimirror-root] .qi-home .home-technology { grid-template-columns: 1fr; gap: 18px; }
+  [data-qimirror-root] .qi-home .home-tech-explanation { padding-top: 18px; }
+  [data-qimirror-root] .qi-home .home-large-copy { font-size: 20px; }
+  [data-qimirror-root] .qi-home .home-tech-explanation > p:not(.home-large-copy) { font-size: 15px; }
+  [data-qimirror-root] .qi-home .home-finale { width: 88%; flex-direction: column; align-items: flex-start; padding: 42px 0; gap: 20px; }
+  [data-qimirror-root] .qi-home .home-finale h2 { font-size: 28px; }
+  [data-qimirror-root] .qi-home .home-finale .home-primary { margin-left: 0; }
+  [data-qimirror-root] .qi-home .home-footer { width: 88%; align-items: flex-start; flex-direction: column; padding: 28px 0 58px; gap: 10px; }
+  [data-qimirror-root] .qi-home .home-footer > a:last-child { margin-left: 0; }
+  [data-qimirror-root] .qi-home .home-detail-dialog { padding: 22px 25px 35px; width: min(440px, 94%); }
+  [data-qimirror-root] .qi-home .home-detail-header { margin-bottom: 40px; }
+  [data-qimirror-root] .qi-home .home-detail-dialog h2 { font-size: 37px; }
+}
+@media (max-width: 360px) {
+  [data-qimirror-root] .qi-home .home-hero { padding: 22px 18px 30px; min-height: 420px; }
+  [data-qimirror-root] .qi-home .home-heading { font-size: 26px; }
+  [data-qimirror-root] .qi-home .home-intro { font-size: 15px; }
+  [data-qimirror-root] .qi-home .home-hero-note { font-size: 10px; }
+  [data-qimirror-root] .qi-home .home-primary { min-width: 232px; font-size: 15px; }
+  [data-qimirror-root] .qi-home .home-header-entry { font-size: 11px; }
+  [data-qimirror-root] .qi-home .home-header-entry span { padding-left: 3px; }
+  [data-qimirror-root] .qi-home .home-demo-tabs button { font-size: 11px; gap: 3px; }
+  [data-qimirror-root] .qi-home .home-demo-form h3 { font-size: 26px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-qimirror-root] .qi-home *, [data-qimirror-root] .qi-home *::before, [data-qimirror-root] .qi-home *::after, [data-qimirror-root] .qi-home ::backdrop { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

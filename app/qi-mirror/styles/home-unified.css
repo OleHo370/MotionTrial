@@ -1,0 +1,151 @@
+/* Imported Qi Mirror styles. Every selector is gated by the additive page wrapper. */
+/* Daylight page with the original deep-green Tai Chi stage. Layout and motion remain component-owned. */
+body:has([data-qimirror-root]):has(.qi-home) { background: #f7f8f5; color-scheme: light; }
+[data-qimirror-root] .qi-landing.qi-home {
+  --home-bg: #f7f8f5;
+  --home-fg: #1e2521;
+  --home-muted: #5e6961;
+  --home-line: #d5dbd4;
+  --home-accent: #4b6454;
+  --home-surface: #ffffff;
+  --home-paper: var(--home-bg);
+  --home-ink: var(--home-fg);
+  --home-moss: var(--home-accent);
+  --ink-on-dark: 0;
+  --ink-primary: #253c30;
+  --ink-secondary: #7f8e82;
+  --ink-accent: #596f5e;
+  color: var(--home-fg);
+  background: var(--home-bg);
+  -webkit-font-smoothing: antialiased;
+}
+[data-qimirror-root] .qi-home ::selection { color: var(--home-bg); background: var(--home-accent); }
+[data-qimirror-root] .qi-home .home-scene, [data-qimirror-root] .qi-home .home-scene-experience, [data-qimirror-root] .qi-home .home-scene-idea { color: var(--home-fg); background: var(--home-bg); }
+[data-qimirror-root] .qi-home .home-scene + .home-scene::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 5%;
+  right: 5%;
+  height: 1px;
+  background: var(--home-line);
+  opacity: .65;
+  pointer-events: none;
+}
+
+/* A quiet shared header and a single high-contrast action treatment. */
+[data-qimirror-root] .qi-home .home-masthead {
+  background: #f7f8f5ed;
+  border-color: #d5dbd4b0;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+[data-qimirror-root] .qi-home .home-wordmark i { background: #777f77; }
+[data-qimirror-root] .qi-home .home-symbol-small { color: var(--home-fg); }
+[data-qimirror-root] .qi-home .home-symbol-small [fill='#f7f6f2'] { fill: var(--home-bg); }
+[data-qimirror-root] .qi-home .home-masthead nav { color: var(--home-muted); }
+[data-qimirror-root] .qi-home .home-masthead nav a, [data-qimirror-root] .qi-home .home-text-link { transition: color 180ms ease; }
+[data-qimirror-root] .qi-home .home-masthead nav a:hover, [data-qimirror-root] .qi-home .home-text-link:hover { color: var(--home-fg); }
+[data-qimirror-root] .qi-home .home-header-entry { font-size: 13px; }
+[data-qimirror-root] .qi-home .home-primary, [data-qimirror-root] .qi-home .practice-studio-entry {
+  color: #f7f8f5;
+  background: #293d31;
+  border: 1px solid #293d31;
+  border-radius: 5px;
+  font-weight: 500;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+[data-qimirror-root] .qi-home .home-primary:hover, [data-qimirror-root] .qi-home .practice-studio-entry:hover { background: #3b5343; border-color: #3b5343; }
+[data-qimirror-root] .qi-home .home-text-link { color: #44574a; }
+
+/* The brush wordmark carries the cultural character; headings share one voice. */
+[data-qimirror-root] .qi-home .home-qi-mark, [data-qimirror-root] .qi-home .home-mirror-mark { filter: grayscale(1); mix-blend-mode: multiply; opacity: .94; }
+[data-qimirror-root] .qi-home .home-heading, [data-qimirror-root] .qi-home .home-exhibit-chapter h3, [data-qimirror-root] .qi-home .practice-studio-message h3, [data-qimirror-root] .qi-home .home-closing > span {
+  font-family: var(--qi-body);
+  font-weight: 400;
+  letter-spacing: -.04em;
+}
+[data-qimirror-root] .qi-home .home-heading { font-weight: 500; line-height: 1.08; }
+[data-qimirror-root] .qi-home .home-scene-heading h2, [data-qimirror-root] .qi-home .practice-studio-heading h2, [data-qimirror-root] .qi-home .home-idea-copy h2 { font-weight: 400; letter-spacing: -.04em; }
+[data-qimirror-root] .qi-home .home-intro, [data-qimirror-root] .qi-home .home-cover-foot, [data-qimirror-root] .qi-home .home-scene-heading > p, [data-qimirror-root] .qi-home .home-scene-experience .home-scene-heading > p, [data-qimirror-root] .qi-home .practice-studio-heading > p, [data-qimirror-root] .qi-home .practice-studio-message p, [data-qimirror-root] .qi-home .home-idea-copy > p, [data-qimirror-root] .qi-home .home-idea-copy p.home-idea-truth, [data-qimirror-root] .qi-home .home-footer, [data-qimirror-root] .qi-home .home-footer > span { color: var(--home-muted); }
+[data-qimirror-root] .qi-home .home-idea-copy > p:first-of-type { color: #46554a; }
+[data-qimirror-root] .qi-home .home-hero-note { color: var(--home-muted); }
+
+/* The wheel is part of the page, with no separate coloured stage. */
+[data-qimirror-root] .qi-home .home-exhibit {
+  --exhibit-ink: var(--home-bg);
+  --exhibit-paper: var(--home-fg);
+  --exhibit-muted: var(--home-muted);
+  --exhibit-line: var(--home-line);
+  --exhibit-accent: var(--home-accent);
+  background: transparent;
+}
+[data-qimirror-root] .qi-home .home-exhibit-tab[aria-selected='true'] { background: #3f5a4606; }
+[data-qimirror-root] .qi-home .home-exhibit-tab:hover { background: #3f5a460b; }
+[data-qimirror-root] .qi-home .home-exhibit-tabs::after { height: 1px; }
+[data-qimirror-root] .qi-home .home-exhibit-next, [data-qimirror-root] .qi-home .home-detail-trigger { border-bottom-color: #89978b; }
+[data-qimirror-root] .qi-home .home-wheel-core, [data-qimirror-root] .qi-home .home-wheel[data-phase='3'] .home-wheel-core { color: #435a49; }
+[data-qimirror-root] .qi-home .home-wheel-symbol [fill='#f7f6f2'], [data-qimirror-root] .qi-home .home-wheel[data-phase='3'] .home-wheel-symbol [fill='#f7f6f2'] { fill: var(--home-bg); }
+[data-qimirror-root] .qi-home .home-wheel-rim { stroke: #7c8d80; }
+[data-qimirror-root] .qi-home .home-wheel-ticks { stroke: #7e9283; }
+[data-qimirror-root] .qi-home .home-wheel-geometry { stroke: #7e9283; }
+[data-qimirror-root] .qi-home .home-formation-canvas { filter: invert(1) grayscale(.7); }
+
+/* One hierarchy for selected controls, secondary copy and figure captions. */
+[data-qimirror-root] .qi-home .practice-mode { color: var(--home-muted); border-bottom-color: var(--home-line); }
+[data-qimirror-root] .qi-home .practice-mode:hover { color: var(--home-fg); }
+[data-qimirror-root] .qi-home .practice-mode[aria-selected='true'] { color: var(--home-fg); border-bottom-color: var(--home-accent); }
+[data-qimirror-root] .qi-home .practice-mode-hint { color: var(--home-muted); }
+[data-qimirror-root] .qi-home .practice-study-caption { color: #44574a; border-top-color: var(--home-line); }
+[data-qimirror-root] .qi-home .practice-study-caption > span:last-child { color: var(--home-muted); }
+[data-qimirror-root] .qi-home .practice-study-focus, [data-qimirror-root] .qi-home .practice-study-flow { stroke: #7b8d7d; }
+[data-qimirror-root] .qi-home .practice-study-flow circle { fill: #7b8d7d; }
+[data-qimirror-root] .qi-home .home-balance-mark span { color: #3e5143; }
+[data-qimirror-root] .qi-home .home-balance-mark::after { color: #945a47; border-color: #945a47; }
+[data-qimirror-root] .qi-home .home-closing { border-top-color: var(--home-line); }
+[data-qimirror-root] .qi-home .home-detail-dialog {
+  background: var(--home-surface);
+  border-left: 1px solid var(--home-line);
+  box-shadow: -20px 0 80px #18261d12;
+}
+[data-qimirror-root] .qi-home .home-detail-dialog::backdrop { background: #18241c70; }
+[data-qimirror-root] .qi-home .home-detail-header { color: var(--home-muted); }
+[data-qimirror-root] .qi-home .home-detail-dialog p { color: var(--home-muted); }
+[data-qimirror-root] .qi-home .home-detail-trigger:hover { color: var(--home-accent); border-color: var(--home-accent); }
+[data-qimirror-root] .qi-home :is(a,button,[tabindex]):focus-visible, [data-qimirror-root] .qi-home .home-practice-studio :is(button,a,[tabindex]):focus-visible {
+  outline-color: var(--home-accent);
+}
+
+/* Only the Tai Chi experience returns to its original ink-green palette. */
+[data-qimirror-root] .qi-home .home-scene-experience {
+  --home-bg: #182521;
+  --home-fg: #f3f1e8;
+  --home-muted: #b4c1b8;
+  --home-line: #43534a;
+  --home-accent: #dfd2ad;
+  --home-paper: var(--home-bg);
+  --home-ink: var(--home-fg);
+  --home-moss: var(--home-accent);
+  --ink-on-dark: 1;
+  --ink-primary: #e2e4da;
+  --ink-secondary: #879b91;
+  --ink-accent: #b9c6b4;
+  color-scheme: dark;
+}
+[data-qimirror-root] .qi-home .home-scene-experience .home-exhibit-tab[aria-selected='true'] { background: #ffffff09; }
+[data-qimirror-root] .qi-home .home-scene-experience .home-exhibit-tab:hover { background: #ffffff07; }
+[data-qimirror-root] .qi-home .home-scene-experience .home-exhibit-next { border-bottom-color: #849386; }
+[data-qimirror-root] .qi-home .home-scene-experience .home-wheel-core { color: #c9d4c4; }
+[data-qimirror-root] .qi-home .home-scene-experience .home-wheel[data-phase='3'] .home-wheel-core { color: #d5ddc8; }
+[data-qimirror-root] .qi-home .home-scene-experience .home-wheel-rim { stroke: #829586; }
+[data-qimirror-root] .qi-home .home-scene-experience .home-wheel-ticks { stroke: #a5b7a6; }
+[data-qimirror-root] .qi-home .home-scene-experience .home-wheel-geometry { stroke: #9bb2a0; }
+[data-qimirror-root] .qi-home .home-scene-experience .home-formation-canvas { filter: none; }
+@media (min-width: 761px) and (min-aspect-ratio: 1 / 1) {
+  [data-qimirror-root] .qi-home .home-heading { font-size: clamp(36px, 5.6cqw, 66px); }
+  [data-qimirror-root] .qi-home .practice-studio-heading h2 { font-size: clamp(26px, 3.4cqw, 42px); }
+  [data-qimirror-root] .qi-home .home-idea-copy h2 { font-size: clamp(28px, 3.5cqw, 42px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-qimirror-root] .qi-home .home-primary, [data-qimirror-root] .qi-home .practice-studio-entry, [data-qimirror-root] .qi-home .home-masthead nav a, [data-qimirror-root] .qi-home .home-text-link { transition: none; }
+}

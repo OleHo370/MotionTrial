@@ -1,0 +1,58 @@
+{
+  "checkedAt": "2026-10-17T14:58:41.483Z",
+  "license": "SIL Open Font License 1.1",
+  "policy": "Two existing self-hosted Chinese font assets, preserved unchanged with their original SIL OFL 1.1 licenses. Unused Caveat entries omitted from this homepage package.",
+  "officialRepository": "https://github.com/google/fonts",
+  "fonts": [
+    {
+      "family": "Ma Shan Zheng",
+      "cssFamily": "Qi Ma Shan Zheng",
+      "file": "ma-shan-zheng-regular.ttf",
+      "weight": "400",
+      "folder": "mashanzheng",
+      "remote": "MaShanZheng-Regular.ttf",
+      "licenseFile": "MaShanZheng-OFL.txt",
+      "commit": "406197b91ff39a93061c2c2eeaee67ddf2ae1f0d",
+      "note": "The original font lacks traditional 氣 (U+6C23). This brand character is supplied by the separate licensed WenKai TC subset; all other checked Chinese characters use Ma Shan Zheng.",
+      "sourceUrl": "https://raw.githubusercontent.com/google/fonts/406197b91ff39a93061c2c2eeaee67ddf2ae1f0d/ofl/mashanzheng/MaShanZheng-Regular.ttf",
+      "licenseUrl": "https://raw.githubusercontent.com/google/fonts/406197b91ff39a93061c2c2eeaee67ddf2ae1f0d/ofl/mashanzheng/OFL.txt",
+      "metadataUrl": "https://raw.githubusercontent.com/google/fonts/406197b91ff39a93061c2c2eeaee67ddf2ae1f0d/ofl/mashanzheng/METADATA.pb",
+      "bytes": 5857936,
+      "sha256": "6d2546bb189c732a8ca29af9e22457b152387d158aa459e4ac2ce1e51788b7fb",
+      "internalVersion": "Version 2.003",
+      "licenseSha256": "d7bdb1cee215b689e23c2f95672a6084c790542170648267a55114103d756a08",
+      "coverage": {
+        "checkedCharacterCount": 139,
+        "checkedCharacters": "一七三下为之九习二云五亮从以似作你倒先入八六其再分刻动势十单卷原双台右启吸呼四在境墨太奏如始字宜实封尾山峰工左己底开式形循慢戏手拗拦挥捶探揽搂搬收方无有极格梭此步每气水海游独琵琶生界白的相着研示究穿立第练翅耳肱背脚膝自节范虚行见观贯起蹬身转轮通速遇野针镜闪闭间雀静鞭页首马高鬃鹤",
+        "missingCharacters": "",
+        "passed": true
+      }
+    },
+    {
+      "family": "LXGW WenKai TC",
+      "cssFamily": "Qi WenKai Brand",
+      "file": "lxgw-wenkai-tc-qi.ttf",
+      "weight": "400",
+      "folder": "lxgwwenkaitc",
+      "remote": "LXGWWenKaiTC-Regular.ttf",
+      "licenseFile": "LXGWWenKaiTC-OFL.txt",
+      "commit": "4e5f06dbb274a27ebe71ed54ea706b3ee40eabd9",
+      "sourceOverride": "https://fonts.gstatic.com/l/font?kit=w8gDH20td8wNsI3f40DmtXZb48uKNdrP1o4&skey=48fda7aef9028035&v=v11",
+      "googleCssUrl": "https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&text=%E6%B0%A3&display=swap",
+      "note": "Official Google Fonts text=氣 subset, downloaded unchanged. Source CSS preserved in artifacts/qi-type-20261017/font-sources/lxgw-wenkai-tc-qi.css. Restrict the font-face to unicode-range U+6C23.",
+      "sourceUrl": "https://fonts.gstatic.com/l/font?kit=w8gDH20td8wNsI3f40DmtXZb48uKNdrP1o4&skey=48fda7aef9028035&v=v11",
+      "licenseUrl": "https://raw.githubusercontent.com/google/fonts/4e5f06dbb274a27ebe71ed54ea706b3ee40eabd9/ofl/lxgwwenkaitc/OFL.txt",
+      "metadataUrl": "https://raw.githubusercontent.com/google/fonts/4e5f06dbb274a27ebe71ed54ea706b3ee40eabd9/ofl/lxgwwenkaitc/METADATA.pb",
+      "bytes": 2176,
+      "sha256": "431d6c1a60e68d5834013be95bc529ea2935803ce38d1873f00115d92a02d4aa",
+      "internalVersion": "Version 1.330",
+      "licenseSha256": "4fff27d35db0e22cd81d58da6f20e09f415cf354a3338e3cf1fc0eb9222c7174",
+      "coverage": {
+        "checkedCharacterCount": 1,
+        "checkedCharacters": "氣",
+        "missingCharacters": "",
+        "passed": true
+      }
+    }
+  ]
+}
