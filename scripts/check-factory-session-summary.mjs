@@ -45,7 +45,7 @@ function sdkFixture(){
             state.streamGate=()=>{options.abortSignal.removeEventListener('abort',cancel);resolve();};
           });
           for(const event of state.events.splice(0))yield event;
-          const body=JSON.parse(prompt),output=body.entries?structured(body):
+          const body=JSON.parse(prompt),output=body.entries?{entries:(body.conversationEntries??body.entries).map(entry=>({entryId:entry.entryId,text:entry.allowedText[0]}))}:
             {entries:body.issues.map(issue=>({issueId:issue.issueId,text:issue.allowedText[0]}))};
           yield {type:'result',success:true,structuredOutput:state.outputs.shift()??output};
         },async close(){if(!record.closed){record.closed=true;state.closeCalls++;}}};
@@ -157,7 +157,19 @@ await check('Structured summary output covers every factual theme and rejects ex
     {entries:output.entries.map((entry,i)=>i?entry:{...entry,text:'Your right hand moved too fast.'})}])
     assert.equal(validatePracticeSummaryOutput(invalid,evidence),null);
   const schema=practiceSummaryOutputSchema(evidence);assert.equal(schema.additionalProperties,false);
-  assert.equal(schema.properties.entries.minItems,evidence.entries.length);
+  assert.equal(schema.properties.entries.minItems,(evidence.conversationEntries??evidence.entries).length);
+});
+await check('Conversational summary synthesizes a practice priority without narrating the numeric ledger or inventing confidence',()=>{
+  const body=payload('conversational-summary'),evidence=practiceSummaryEvidence(normalizePracticeSummaryRequest(body));
+  assert.equal(evidence.conversationEntries.length,3);
+  const model={entries:evidence.conversationEntries.map(entry=>({entryId:entry.entryId,text:entry.allowedText[0]}))};
+  const messages=validatePracticeSummaryOutput(model,evidence);assert.ok(messages);
+  assert.equal(messages.length,3);assert.ok(messages.every(text=>text.length>35));
+  const text=messages.join(' ');
+  assert.match(text,/pace|timing/i);assert.match(text,/next|practice|try/i);
+  assert.doesNotMatch(text,/\b\d+ attempts?\b|[1-5] of 5|confidence|afraid|fear|nervous|diagnos|cured|perfect/i);
+  const altered={entries:model.entries.map((entry,index)=>index===1?{...entry,text:'Be confident and make your hand movements larger because you were afraid to move.'}:entry)};
+  assert.equal(validatePracticeSummaryOutput(altered,evidence),null);
 });
 await check('The full 200-attempt limit retains early corrections; 201 attempts are rejected without truncation',()=>{
   const body=payload();

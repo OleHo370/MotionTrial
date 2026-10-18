@@ -43,8 +43,10 @@ try{
     results:stepIds.map(stepId=>({stepId,status:'matched'}))});
   assert.equal(summary.result.source,'factory');assert.equal(summary.result.sessionId,'live-software-summary');
   const text=summary.result.messages.join(' ');
-  assert.match(text,/5 of the five steps/);assert.match(text,/left hand.*too quickly/i);
-  assert.match(text,/right hand.*too slowly/i);assert.match(text,/unclear tracking/i);
+  assert.equal(summary.result.messages.length,3);
+  assert.match(text,/whole sequence|five-step sequence/i);
+  assert.match(text,/getting ahead.*falling behind|timing.*hands/i);
+  assert.match(text,/unclear|unassessed/i);
   const report={provenance:'Labeled software attempts; real authenticated Factory SDK. No person, webcam or USB.',
     passed:true,coldFeedbackMs:cold?.elapsedMs??null,sessionPreparationMs:preparation.elapsedMs,
     preparedFeedbackMs:warm?.elapsedMs??null,finalSummaryMs:summary.elapsedMs,messages:summary.result.messages};

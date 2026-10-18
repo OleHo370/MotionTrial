@@ -13,8 +13,9 @@ import {createAttemptReview,observeAttemptReview,finalizeAttemptReview,REVIEW_RU
 import {createEndTargetSession,evaluateEndTargets} from './practice-end-targets.js';
 import {compactPracticeFeedback} from './practice-compact-feedback.js';
 import {descriptivePracticeFeedback,practiceAiWordingIssues} from './practice-descriptive-feedback.js';
+import {derivePracticeFeedbackContext} from './practice-feedback-context.js';
 import {createPracticeAiFeedback} from './practice-ai-feedback.js';
-import {createPracticeSessionHistory,createPracticeSummaryClient,localPracticeSessionSummary} from './practice-session-summary.js';
+import {createPracticeSessionHistory,createPracticeSummaryClient,localPracticeSessionSummary,practiceSessionStats} from './practice-session-summary.js';
 import {createLesson3DPreview} from './first-three-study-3d.js';
 import {getLiveTargetHighlights} from './practice-target-highlight.js';
 import {createDisplaySmoother} from './practice-display-smoothing.js';
@@ -66,9 +67,11 @@ let feedbackWordingSource='local';
 let feedbackCycle=null;
 let feedbackAttemptSequence=0;
 let feedbackAttemptId=null;
+let feedbackContext=null;
 let summarySequence=0;
 let summaryCycle=null;
 let lessonSummary=null;
+let lessonSummaryStats=null;
 const step=()=>state.manifest?.steps[state.index],reference=()=>state.refs[state.index];
 const guidance=()=>state.guidanceRefs[state.index];
 const pathReference=()=>state.pathRefs[state.index];
@@ -139,7 +142,7 @@ async function toggleTeacher3D(show=!lesson3D.getState().visible){
   if(show)await lesson3D.show();
   else{lesson3D.hide();$('toggle-teacher-3d').focus();}
 }
-function clearEvidence(){cancelSummaryFlow();cancelFeedbackFlow();feedbackWordingSource='local';hardwareFeedback.neutral();state.placement=createStartPositionSession(guidance(),controlOptions());state.positioning=null;state.fixedFrame=null;state.movement=null;state.feedback=null;state.endTargets=null;state.targetStatus=null;state.screenLayout=null;state.teacherFreezePending=false;state.teacherBoundaryAtMs=null;state.teacherIntro=false;state.attemptStartedAtMs=null;state.attemptInterrupted=null;state.attemptCameraGeneration=null;state.reviewAction=null;for(const i of INDICES)state.trails.set(i,[]);seedScreenTargets();}
+function clearEvidence(){cancelSummaryFlow();cancelFeedbackFlow();feedbackWordingSource='local';feedbackContext=null;hardwareFeedback.neutral();state.placement=createStartPositionSession(guidance(),controlOptions());state.positioning=null;state.fixedFrame=null;state.movement=null;state.feedback=null;state.endTargets=null;state.targetStatus=null;state.screenLayout=null;state.teacherFreezePending=false;state.teacherBoundaryAtMs=null;state.teacherIntro=false;state.attemptStartedAtMs=null;state.attemptInterrupted=null;state.attemptCameraGeneration=null;state.reviewAction=null;for(const i of INDICES)state.trails.set(i,[]);seedScreenTargets();}
 function cameraFeedAvailable(){const v=$('camera-video');return !!v.srcObject&&v.videoWidth>0&&v.videoHeight>0;}
 function screenGuides(frame){return projectFourPointGuides(guidance(),null,frame.aspect,frame);}
 function screenPaths(frame,session){return projectPracticeTubes(pathReference(),frame,session);}
@@ -197,9 +200,13 @@ function render(){
   overlay.dataset.descriptive=String(summarizing||state.feedback?.speechStyle==='descriptive');
   const speaking=(summarizing||state.phase==='feedback')&&feedbackSpeech.isBusy();overlay.dataset.speaking=String(speaking);
   if($('overlay-label'))put('overlay-label',summarizing?'Session review':'Movement review');
+  $('overlay-reason').hidden=summarizing;
+  $('summary-stats').hidden=!summarizing;
+  $('summary-sections').hidden=!summarizing;
+  overlay.setAttribute('aria-describedby',summarizing?'summary-stats summary-sections':'overlay-reason');
   if(summarizing){
     put('overlay-title','Your practice summary');put('overlay-value','Complete');
-    put('overlay-reason',lessonSummary.messages.join('\n\n'));
+    renderLessonSummary();
     if($('feedback-ai-source'))$('feedback-ai-source').hidden=lessonSummary.source!=='factory';
     put('feedback-continuation',summaryCycle?.pendingAi?'Preparing your session summary…'
       :summaryCycle?.speechDone?'Practice complete.':speaking?'Your session summary is being read.':'Take a moment to review your session.');
@@ -219,6 +226,23 @@ function render(){
     button.setAttribute('aria-current',Number(button.dataset.index)===state.index?'step':'false');
     button.dataset.result=state.results.get(state.manifest.steps[Number(button.dataset.index)].id)?.status||'';
   }
+}
+function renderLessonSummary(){
+  if(!lessonSummary||!lessonSummaryStats)return;
+  const values=[`${lessonSummaryStats.matched} / ${lessonSummaryStats.total}`,lessonSummaryStats.attempts,
+    lessonSummaryStats.retries,lessonSummaryStats.unclear];
+  ['summary-matched','summary-attempts','summary-retries','summary-unclear'].forEach((id,i)=>put(id,String(values[i])));
+  const sections=$('summary-sections'),text=lessonSummary.messages.join('\n\n');
+  // Avoid rebuilding an announced summary every animation frame. Model text is
+  // always textContent; stat values and headings are owned by the application.
+  if(sections.dataset.transcript===text)return;
+  sections.dataset.transcript=text;
+  const headings=['The takeaway','Practice priorities','Next time'];
+  sections.replaceChildren(...lessonSummary.messages.map((message,i)=>{
+    const section=document.createElement('section');section.className='summary-section';
+    if(headings[i]){const heading=document.createElement('h3');heading.textContent=headings[i];section.append(heading);}
+    const paragraph=document.createElement('p');paragraph.textContent=message;section.append(paragraph);return section;
+  }));
 }
 function renderProgress(){
   const duration=Math.max(.01,(step()?.teacherFreezeSeconds??0)-(practiceStart()??0));
@@ -490,7 +514,7 @@ function speakFeedback(cycle){
   if(!currentFeedbackCycle(cycle)||cycle.speechStarted)return;
   cycle.pendingAi=false;cycle.speechStarted=true;cycle.readingDeadlineMs=null;
   sessionHistory.record({attemptId:feedbackAttemptId,stepId:cycle.stepId,status:state.feedback.status,
-    messages:state.feedback.messages,issues:practiceAiWordingIssues(state.feedback)});
+    messages:state.feedback.messages,issues:practiceAiWordingIssues(state.feedback),...(feedbackContext?{context:feedbackContext}:{})});
   const speaking=feedbackSpeech.speakReview(state.feedback,{onComplete(reason){
     if(!currentFeedbackCycle(cycle)||cycle.speechDone)return;
     cycle.speechDone=true;
@@ -523,7 +547,7 @@ function startFeedbackPresentation({requestAi=true}={}){
   if(!requestAi||!wordingIssues.length){speakFeedback(cycle);return;}
   cycle.pendingAi=true;startFeedbackLeadIn(cycle);render();
   void Promise.resolve().then(()=>currentFeedbackCycle(cycle)?aiFeedback.request({attemptId:`review-${cycle.id}-${cycle.operation}`,stepId:cycle.stepId,status:local.status,
-    messages:compactPracticeFeedback(local).messages,issues:wordingIssues}):null).then(result=>{
+    messages:compactPracticeFeedback(local).messages,issues:wordingIssues,...(feedbackContext?{context:feedbackContext}:{})}):null).then(result=>{
     if(!currentFeedbackCycle(cycle)||state.feedback!==local)return;
     if(result?.source==='factory'){
       // Only wording changes. The local outcome, issues and automatic action stay intact.
@@ -534,7 +558,9 @@ function startFeedbackPresentation({requestAi=true}={}){
 }
 function beginReview(review,action){
   cancelFeedbackFlow();feedbackWordingSource='local';feedbackAttemptId=`attempt-${++feedbackAttemptSequence}`;
-  state.feedback=descriptivePracticeFeedback(review);state.reviewAction=action;video.pause();phase('feedback');
+  feedbackContext=derivePracticeFeedbackContext({step:step(),review,session:state.movement,
+    reference:guidance(),pathReference:pathReference()});
+  state.feedback=descriptivePracticeFeedback(review,feedbackContext);state.reviewAction=action;video.pause();phase('feedback');
   startFeedbackPresentation();
 }
 function completeFeedback(){
@@ -596,6 +622,7 @@ function finish(){
 function cancelSummaryFlow(){
   if(summaryCycle){summaryCycle=null;aiSummary.cancel();feedbackSpeech.cancel();}
   lessonSummary=null;
+  lessonSummaryStats=null;
 }
 function currentSummaryCycle(cycle){
   return !!cycle&&summaryCycle===cycle&&state.operation===cycle.operation&&state.phase==='finished'&&!state.active;
@@ -622,6 +649,7 @@ function summaryReadingMs(){
 }
 function startLessonSummary(){
   const payload=sessionHistory.snapshot([...state.results.values()]);
+  lessonSummaryStats=practiceSessionStats(payload);
   lessonSummary=localPracticeSessionSummary(payload);
   const cycle={id:++summarySequence,operation:state.operation,pendingAi:true,leadInDone:false,
     speechStarted:false,speechDone:false,readingDeadlineMs:null};
@@ -763,7 +791,7 @@ state.camera=createFollowCamera({video:$('camera-video'),canvas:$('camera-overla
     }else if(['demonstrating','grace'].includes(state.phase)&&(!status.running||generation!==state.attemptCameraGeneration)){
       state.attemptInterrupted='The camera stopped or changed during this attempt. Set up and try again.';
     }else if(state.phase==='feedback'&&(!status.running||(state.attemptCameraGeneration!==null&&generation!==state.attemptCameraGeneration))){
-      cancelFeedbackFlow();feedbackWordingSource='local';
+      cancelFeedbackFlow();feedbackWordingSource='local';feedbackContext=null;
       state.reviewAction='retry';state.feedback=descriptivePracticeFeedback({status:'unknown',passed:false,percent:null,messages:['The camera stopped or changed.']});
       state.attemptCameraGeneration=null;
       if(status.running&&!state.paused)startFeedbackPresentation({requestAi:false});

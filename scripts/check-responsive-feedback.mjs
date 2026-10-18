@@ -134,8 +134,9 @@ await check('Final AI summary receives all five successes, earlier retries, uncl
   assert.deepEqual(payload.attempts.map(attempt=>attempt.status),['mismatch','unknown','match','match','match','match','match']);
   assert.ok(payload.results.every(result=>result.status==='matched'));
   assert.doesNotMatch(JSON.stringify(payload),/landmarks|cameraFrame|videoFrame|relax your hands|putting together a summary/i);
-  assert.match(h.env.lessonSummary.messages.join(' '),/7 attempts|seven attempts/);
-  assert.match(h.env.lessonSummary.messages.join(' '),/unclear/);
+  assert.deepEqual(h.env.lessonSummaryStats,{matched:5,total:5,attempts:7,retries:2,unclear:1});
+  assert.equal(h.env.lessonSummary.messages.length,3);assert.doesNotMatch(h.env.lessonSummary.messages.join(' '),/\b7 attempts\b/);
+  assert.match(h.env.lessonSummary.messages.join(' '),/attempts could not be fully assessed.*separate from the measured corrections/);
   const intro=h.speech.utterances.at(-1);h.summary.reply(0);await h.flush();
   assert.equal(h.speech.utterances.at(-1),intro,'Early summary cannot interrupt the final lead-in');
   await h.finishSpeech();assert.deepEqual([...h.speech.utterances.at(-1).args[0].messages],summaryMessages);
@@ -147,8 +148,8 @@ await check('Manual completion remains unverified in final summary; delayed AI w
   const h=harness({stateOverrides:{index:4}});
   for(const step of h.state.manifest.steps.slice(0,4))h.state.results.set(step.id,{stepId:step.id,status:'matched'});
   await h.call('recordAndAdvance','manual');const intro=h.speech.utterances.at(-1);
-  assert.equal(h.state.phase,'finished');assert.match(h.env.lessonSummary.messages[0],/4 of 5|4 of five/);
-  assert.match(h.env.lessonSummary.messages[0],/manually|not verified/);
+  assert.equal(h.state.phase,'finished');assert.equal(h.env.lessonSummaryStats.matched,4);
+  assert.match(h.env.lessonSummary.messages[0],/Manually.*unverified/);
   assert.equal(h.summary.calls[0].payload.results.at(-1).status,'manual');
   await h.finishSpeech();assert.equal(h.speech.utterances.at(-1),intro);
   h.summary.reply(0,['You completed four movements with matching feedback. The final movement was advanced manually and was not verified as a match.']);

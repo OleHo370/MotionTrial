@@ -13,8 +13,9 @@ import {createAttemptReview as realCreateAttemptReview,observeAttemptReview as r
 import {createEndTargetSession,evaluateEndTargets} from '../public/practice-end-targets.js';
 import {compactPracticeFeedback} from '../public/practice-compact-feedback.js';
 import {descriptivePracticeFeedback,practiceAiWordingIssues} from '../public/practice-descriptive-feedback.js';
+import {derivePracticeFeedbackContext} from '../public/practice-feedback-context.js';
 import {createPracticeAiFeedback} from '../public/practice-ai-feedback.js';
-import {createPracticeSessionHistory,createPracticeSummaryClient,localPracticeSessionSummary} from '../public/practice-session-summary.js';
+import {createPracticeSessionHistory,createPracticeSummaryClient,localPracticeSessionSummary,practiceSessionStats} from '../public/practice-session-summary.js';
 
 const require=createRequire(import.meta.url),{parse}=require('next/dist/compiled/acorn');
 const controllerURL=new URL('../public/first-three.js',import.meta.url);
@@ -106,11 +107,11 @@ function controllerHarness({functions=null,overrides={},stateOverrides={},speech
     fetch:async()=>({ok:false,json:async()=>({configured:false})}),
     performance:{now:()=>clock.now},setTimeout:setTimer,clearTimeout:id=>timers.delete(id),
     requestAnimationFrame:()=>1,cancelAnimationFrame(){},
-    $,video,INDICES:indices,POINT_COUNT:'four',feedbackSpeech,createEndTargetSession,evaluateEndTargets,compactPracticeFeedback,descriptivePracticeFeedback,practiceAiWordingIssues,
+    $,video,INDICES:indices,POINT_COUNT:'four',feedbackSpeech,createEndTargetSession,evaluateEndTargets,compactPracticeFeedback,descriptivePracticeFeedback,practiceAiWordingIssues,derivePracticeFeedbackContext,
     // Optional AI wording is disabled by default in deterministic controller QA.
     // Integration checks explicitly inject a non-networking fetch fixture.
     aiFeedback:createPracticeAiFeedback({fetchImpl:null}),feedbackSequence:0,feedbackWordingSource:'local',
-    aiSummary:createPracticeSummaryClient({fetchImpl:null}),localPracticeSessionSummary,
+    aiSummary:createPracticeSummaryClient({fetchImpl:null}),localPracticeSessionSummary,practiceSessionStats,
     sessionHistory:createPracticeSessionHistory({sessionId:'constructed-controller-session'}),
     lesson3D:{update(){},destroy(){},getState:()=>({visible:false}),show:async()=>{},hide(){},resetView(){}},
     hardwareFeedback:{neutral(){events.push({kind:'hardware-neutral',at:clock.now});},

@@ -1,5 +1,7 @@
 // Summaries use the complete retained attempt history, never camera frames or
 // landmarks. Every sentence offered to Droid is generated from recorded facts.
+import { normalizeCoachingContext, conversationalSummaryEntries, coachingOutputSchema,
+  validateCoachingOutput } from './factory-conversational-coaching.mjs';
 const names={15:'Left hand',16:'Right hand',27:'Left foot',28:'Right foot',33:'Left hand',34:'Right hand',35:'Left foot',36:'Right foot'};
 const stepIds=['first-three-01','first-three-02','first-three-03','first-six-04','first-six-05'];
 const measuredCodes=['too_fast','too_slow','late_start','off_guide','hold_drift','endpoint_unreached','movement_incomplete'];
@@ -18,7 +20,7 @@ export function normalizePracticeSummaryRequest(value){
   const attempts=[],seenAttempts=new Set(),results=[],seenResults=new Set();
   for(const source of value.attempts){
     const stepId=canonicalStep(source?.stepId);
-    if(!object(source)||!keys(source,['attemptId','stepId','status','messages','issues'])||!id(source.attemptId)
+    if(!object(source)||!keys(source,['attemptId','stepId','status','messages','issues','context'])||!id(source.attemptId)
       ||seenAttempts.has(source.attemptId)||!stepId||!['match','mismatch','unknown'].includes(source.status)
       ||!Array.isArray(source.messages)||!source.messages.length||source.messages.length>8
       ||!source.messages.every(message=>text(message,600))||source.messages.join(' ').length>2400
@@ -32,7 +34,10 @@ export function normalizePracticeSummaryRequest(value){
       if(seenIssues.has(identity))return null;
       seenIssues.add(identity);issues.push({index:issue.index??null,code:issue.code,limb:names[issue.index]??null});
     }
-    seenAttempts.add(source.attemptId);attempts.push({attemptId:source.attemptId,stepId,status:source.status,messages:[...source.messages],issues});
+    const context=source.context===undefined?undefined:normalizeCoachingContext(source.context,issues);
+    if(source.context!==undefined&&!context)return null;
+    seenAttempts.add(source.attemptId);attempts.push({attemptId:source.attemptId,stepId,status:source.status,messages:[...source.messages],issues,
+      ...(context?{context}:{})});
   }
   for(const source of value.results){
     const stepId=canonicalStep(source?.stepId);
@@ -132,12 +137,15 @@ export function practiceSummaryEvidence(request){
       'The recorded feedback did not identify a specific hand or foot correction. Continue matching the demonstration and reaching the targets in your next practice.',
     ]});
   }
-  return{matched,manual,unknown,uncertainTiming,attemptCount:request.attempts.length,repeatAttempts,
+  const evidence={matched,manual,unknown,uncertainTiming,attemptCount:request.attempts.length,repeatAttempts,
     laterReachedSteps:[...laterReachedSteps].sort((left,right)=>left-right),entries,
-    transcript:request.attempts.map(({attemptId,stepId,status,messages})=>({attemptId,stepId,status,messages}))};
+    transcript:request.attempts.map(({attemptId,stepId,status,messages,context})=>({attemptId,stepId,status,messages,
+      ...(context?{context}:{})}))};
+  return{...evidence,conversationEntries:conversationalSummaryEntries(request,evidence)};
 }
 
 export function practiceSummaryOutputSchema(evidence){
+  if(evidence.conversationEntries)return coachingOutputSchema(evidence.conversationEntries);
   return{type:'object',properties:{entries:{type:'array',minItems:evidence.entries.length,maxItems:evidence.entries.length,
     items:{oneOf:evidence.entries.map(entry=>({type:'object',properties:{entryId:{const:entry.entryId},
       text:{type:'string',enum:[...new Set(entry.allowedText)]}},required:['entryId','text'],additionalProperties:false}))}}},
@@ -145,6 +153,10 @@ export function practiceSummaryOutputSchema(evidence){
 }
 
 export function validatePracticeSummaryOutput(output,evidence){
+  if(evidence.conversationEntries){
+    const conversational=validateCoachingOutput(output,evidence.conversationEntries,{maxWords:350,maxChars:3600,maxParagraphChars:800});
+    if(conversational)return conversational;
+  }
   if(!object(output)||!keys(output,['entries'])||!Array.isArray(output.entries)||output.entries.length!==evidence.entries.length)return null;
   const supplied=new Map(evidence.entries.map(entry=>[entry.entryId,entry])),accepted=new Map();
   for(const entry of output.entries){
@@ -158,6 +170,6 @@ export function validatePracticeSummaryOutput(output,evidence){
 
 export function localPracticeSummary(request,reason='factory-not-configured'){
   const evidence=practiceSummaryEvidence(request);
-  const messages=evidence.entries.map(entry=>entry.allowedText[0]);
+  const messages=(evidence.conversationEntries??evidence.entries).map(entry=>entry.allowedText[0]);
   return{source:'local',sessionId:request.sessionId,messages,reason};
 }

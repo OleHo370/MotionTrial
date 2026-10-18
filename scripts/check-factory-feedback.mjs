@@ -61,7 +61,10 @@ function sdkFixture(){
             state.streamGate=()=>{options.abortSignal?.removeEventListener('abort',canceled);resolve();};
           });
           for(const event of state.events.splice(0))yield event;
-          const automatic=state.autoOutput?{entries:JSON.parse(prompt).issues.map(issue=>({issueId:issue.issueId,text:issue.allowedText.at(-1)}))}:null;
+          const promptBody=JSON.parse(prompt);
+          const automatic=state.autoOutput?{entries:promptBody.entries
+            ?promptBody.entries.map(entry=>({entryId:entry.entryId,text:entry.allowedText.at(-1)}))
+            :promptBody.issues.map(issue=>({issueId:issue.issueId,text:issue.allowedText.at(-1)}))}:null;
           yield {type:'result',success:true,structuredOutput:state.outputs.shift()??automatic??output()};
         },
         async close(){if(!session.closed){session.closed=true;state.closeCalls++;}},
@@ -145,7 +148,7 @@ async function serviceChecks(){
       const uncertain=normalizeFeedbackRequest(payload({status:'unknown',issues:[{index,code}]})),issue=uncertain.issues[0];
       const choices=factoryIssueSentences(issue);assert.equal(choices.length,2,`${index}:${code}`);
       for(const text of choices){
-        assert.match(text,new RegExp(issue.limb,'i'));assert.ok((text.match(/\./g)??[]).length>=2,text);
+        assert.match(text,new RegExp(issue.limb,'i'));assert.ok((text.match(/\./g)??[]).length>=1,text);
         assert.doesNotMatch(text,/too fast|too slow|moved faster|moved slower|correctly completed/);
         assert.deepEqual(validateFactoryFeedbackOutput(output([{issueId:issue.issueId,text}]),uncertain),[text]);
       }
@@ -171,6 +174,26 @@ async function serviceChecks(){
     assert.equal(validateFactoryFeedbackOutput(excessive,dense),null,'Over-200-word compositions keep the local fallback');
   });
   const fixture=await serverFixture(createFactoryPracticeFeedbackService);
+  await check('Grounded upward-hand context reaches the conversational HTTP protocol and consolidates the shared pace correction',async()=>{
+    const f=await serverFixture(createFactoryPracticeFeedbackService);f.state.autoOutput=true;
+    try{
+      const body=payload({attemptId:'qa-context-upward',issues:[{index:33,code:'too_slow'},{index:34,code:'too_slow'},{index:34,code:'off_guide'}],
+        context:{version:'practice-feedback-context-v1',limbs:[{index:33,expectedDirection:'up'},
+          {index:34,expectedDirection:'up',observedDirection:'right'}]}});
+      const response=await f.request(undefined,{body});assert.equal(response.status,200);assert.equal(response.json.source,'factory');
+      assert.equal(response.json.status,'mismatch');assert.equal(response.json.attemptId,body.attemptId);
+      const prompt=JSON.parse(f.state.prompts[0].prompt);assert.equal(prompt.task,'conversational-grounded-feedback');
+      assert.deepEqual(prompt.context,body.context);assert.equal(prompt.entries.length,2);
+      assert.deepEqual(prompt.entries[0].facts.indices,[33,34]);assert.equal(prompt.entries[0].facts.code,'too_slow');
+      assert.deepEqual(prompt.entries[1].facts.indices,[34]);assert.equal(prompt.entries[1].facts.code,'off_guide');
+      assert.equal(response.json.messages.length,2);const text=response.json.messages.join(' ');
+      assert.match(text,/hands/i);assert.match(text,/upward/i);assert.match(text,/right hand/i);assert.match(text,/sideways/i);
+      assert.doesNotMatch(text,/confidence|afraid|fear|diagnos/i);assert.ok(!Object.hasOwn(response.json,'passed'));
+      assert.doesNotMatch(f.state.prompts[0].prompt,/landmarks|frames|CONSTRUCTED_PRIVATE/);
+      const changed={...body,attemptId:'qa-context-invalid',context:{...body.context,frames:[]}};
+      assert.equal((await f.request(undefined,{body:changed})).status,400);assert.equal(f.state.sessions.length,1);
+    }finally{await f.close();}
+  });
   try{
     await check('HTTP handler rejects foreign origins, remote hosts, wrong methods, MIME and oversized bodies before SDK use',async()=>{
       for(const headers of [{Origin:'https://foreign.example'},{Origin:fixture.origin.replace('127.0.0.1','localhost')},

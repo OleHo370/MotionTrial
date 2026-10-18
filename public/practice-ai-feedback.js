@@ -1,5 +1,6 @@
 // Optional wording only. This helper never receives camera frames or landmarks,
 // and never changes the local review's status, evidence or progression.
+import {normalizePracticeFeedbackContext} from './practice-feedback-context-schema.js';
 const statuses=new Set(['match','mismatch','unknown']);
 const issueCodes=new Set(['too_fast','too_slow','late_start','off_guide','hold_drift',
   'endpoint_unreached','movement_incomplete','tracking_unknown','reference_unknown','attempt_incomplete','timing_unknown']);
@@ -20,7 +21,10 @@ function requestSummary(payload){
       ||issue.code==='timing_unknown'&&!indices.has(issue.index))return null;
     issues.push({index:issue.index??null,code:issue.code});
   }
-  return {attemptId:payload.attemptId,stepId:payload.stepId,status:payload.status,messages:[...payload.messages],issues};
+  const context=payload.context===undefined?undefined:normalizePracticeFeedbackContext(payload.context,issues);
+  if(payload.context!==undefined&&!context)return null;
+  return {attemptId:payload.attemptId,stepId:payload.stepId,status:payload.status,messages:[...payload.messages],issues,
+    ...(context?{context}:{})};
 }
 function validWording(result,payload){
   return result?.source==='factory'&&result.attemptId===payload.attemptId&&result.stepId===payload.stepId

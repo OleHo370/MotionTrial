@@ -1,7 +1,7 @@
 /** Pure software checks: no Factory call, microphone, webcam or Arduino access. */
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
-import {createPracticeSessionHistory,createPracticeSummaryClient,localPracticeSessionSummary,practiceSummaryPayload}
+import {createPracticeSessionHistory,createPracticeSummaryClient,localPracticeSessionSummary,practiceSummaryPayload,practiceSessionStats}
   from '../public/practice-session-summary.js';
 
 const checks=[];
@@ -46,6 +46,18 @@ const deferred=()=>{let resolve;const promise=new Promise(done=>{resolve=done;})
   checks.push('Starting a new lesson clears attempt identifiers and requires a fresh valid session; duplicate result steps are rejected.');
 }
 {
+  const history=createPracticeSessionHistory({sessionId:'context-session'});
+  const context={version:'practice-feedback-context-v1',limbs:[{index:33,expectedDirection:'up'}]};
+  assert.equal(history.record(attempt('context-retry',{context})),true);
+  context.limbs[0].expectedDirection='down';
+  const saved=history.getAttempts();assert.equal(saved[0].context.limbs[0].expectedDirection,'up');
+  saved[0].context.limbs[0].expectedDirection='left';
+  const snapshot=history.snapshot();assert.equal(snapshot.attempts[0].context.limbs[0].expectedDirection,'up');
+  assert.deepEqual(practiceSummaryPayload(snapshot).attempts[0].context,snapshot.attempts[0].context);
+  assert.doesNotMatch(JSON.stringify(snapshot),/landmarks|cameraFrame|confidence|fear/);
+  checks.push('Grounded movement context survives the complete lesson journal and remote payload without caller mutation or raw tracking data.');
+}
+{
   const payload=fixture();
   payload.attempts.push(attempt('unknown-1',{status:'unknown',messages:['Tracking unclear.'],
     issues:[{index:16,code:'too_slow'},{index:28,code:'tracking_unknown'}]}));
@@ -54,20 +66,19 @@ const deferred=()=>{let resolve;const promise=new Promise(done=>{resolve=done;})
   payload.attempts.push(attempt('match-1',{status:'match',messages:['Targets reached.'],issues:[]}));
   const result=localPracticeSessionSummary(payload),text=result.messages.join(' ');
   assert.equal(result.source,'local');assert.equal(result.sessionId,payload.sessionId);
-  assert.match(text,/5 of 5 movements with matching feedback/);assert.match(text,/4 attempts/);
-  assert.match(text,/2 attempts that needed another try/);assert.match(text,/left hand moved too fast on 2 attempts/);
-  assert.match(text,/right foot moved away from the beam on 1 attempt/);
-  assert.match(text,/right hand moved too slowly on 1 attempt/);
-  assert.match(text,/Tracking was unclear on 1 attempt/);
-  assert.match(text,/Those unclear observations were kept separate from measured movement mistakes/);
+  assert.deepEqual(practiceSessionStats(payload),{matched:5,total:5,attempts:4,retries:3,unclear:1});
+  assert.match(text,/left hand|hands|pace/i);
+  assert.match(text,/rhythm|pace/i);assert.match(text,/inside the beam/);
+  assert.match(text,/attempts could not be fully assessed.*separate from the measured corrections/i);
+  assert.equal(result.messages.length,3);assert.doesNotMatch(text,/\b\d+ attempts?\b/);
   assert.doesNotMatch(text,/right foot moved too slowly|right foot moved too fast|improved|corrected|perfect/);
   checks.push('Local final wording includes retries, successful attempts and anatomical issue counts; aliases do not double-count, and a measured hand error remains distinct from uncertain foot tracking in the same review.');
 }
 {
   const payload=fixture();payload.attempts.push(attempt('retry-slow',{issues:[{index:33,code:'too_slow'}]}));
   const text=localPracticeSessionSummary(payload).messages.join(' ');
-  assert.match(text,/moved too fast on 1 attempt and moved too slowly on 1 attempt/);
-  assert.equal((text.match(/match the teacher's pace/g)??[]).length,1);
+  assert.match(text,/got ahead of the teacher and some fell behind/);
+  assert.equal((text.match(/main focus/g)??[]).length,1);
   assert.doesNotMatch(text,/slow down.*keep up|keep up.*slow down/);
   checks.push('Fast and slow observations across separate attempts are retained, while the next-practice advice gives one coherent pacing instruction.');
 }
@@ -75,14 +86,14 @@ const deferred=()=>{let resolve;const promise=new Promise(done=>{resolve=done;})
   const payload=fixture();payload.attempts=[attempt('matched-uncertain',{status:'match',
     messages:['Targets reached.','Left hand: timing unclear.'],issues:[]})];
   const text=localPracticeSessionSummary(payload).messages.join(' ');
-  assert.match(text,/One completed attempt reached the targets while timing was unclear/);
+  assert.match(text,/timing was unclear, speed could not be assessed/);
   assert.doesNotMatch(text,/timing matched|pace was correct|tracking was unclear/i);
   checks.push('A matching endpoint with unassessed timing retains that uncertainty without inventing a timing pass or tracking failure.');
 }
 {
   const payload=fixture();payload.results[0].status='manual';
   const text=localPracticeSessionSummary(payload).messages.join(' ');
-  assert.match(text,/4 of 5/);assert.match(text,/One movement was advanced manually/);assert.match(text,/not verified as a match/);
+  assert.equal(practiceSessionStats(payload).matched,4);assert.match(text,/Manually advanced steps remain unverified/);
   checks.push('Manual advancement reduces the verified completion count and is explicitly distinguished from a matching movement.');
 }
 {
@@ -90,8 +101,21 @@ const deferred=()=>{let resolve;const promise=new Promise(done=>{resolve=done;})
   for(let i=0;i<201;i++)history.record(attempt(`retry-${i}`,{issues:[{index:28,code:'too_slow'}]}));
   const snapshot=history.snapshot();assert.equal(snapshot.attempts.length,201);
   assert.equal(practiceSummaryPayload(snapshot),null);
-  assert.match(localPracticeSessionSummary(snapshot).messages.join(' '),/right foot moved too slowly on 201 attempts/);
+  const result=localPracticeSessionSummary(snapshot);assert.match(result.messages.join(' '),/right foot fell behind the teacher/);
+  assert.doesNotMatch(result.messages.join(' '),/left foot fell behind|feet fell behind/);
+  assert.deepEqual(practiceSessionStats(snapshot),{matched:0,total:5,attempts:201,retries:200,unclear:0});
   checks.push('All local retries are retained beyond the remote cap; an oversized lesson uses every local attempt rather than silently omitting early feedback.');
+}
+{
+  const payload={sessionId:'reference-only-uncertainty',attempts:[attempt('missing-reference',{
+    status:'unknown',messages:['The teacher reference was unavailable.'],issues:[{index:null,code:'reference_unknown'}]})],results:[]};
+  const result=localPracticeSessionSummary(payload),text=result.messages.join(' ');
+  assert.equal(result.messages.length,3);assert.match(text,/teacher reference.*first priority/i);
+  assert.match(text,/movement targets unavailable/);assert.match(text,/demonstration.*targets to load/i);
+  assert.match(text,/attempts could not be fully assessed.*separate from the measured corrections/i);
+  assert.doesNotMatch(text,/tracking was unclear|camera|clearer view|hands and feet visible|too fast|too slow|confidence|fear/i);
+  assert.deepEqual(practiceSessionStats(payload),{matched:0,total:5,attempts:1,retries:0,unclear:1});
+  checks.push('An unavailable teacher reference produces reference-recovery guidance rather than inventing a camera fault or movement correction.');
 }
 {
   const payload=fixture();payload.attempts=Array.from({length:200},(_,i)=>attempt(`large-${i}`,

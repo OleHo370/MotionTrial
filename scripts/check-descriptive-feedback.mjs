@@ -48,8 +48,10 @@ const review=(status,issues=[],limbs=[])=>({status,passed:status==='match',issue
   ]);
   const result=descriptivePracticeFeedback(original);
   assert.equal(result.messages.length,2);
-  assert.equal((result.messages.join(' ').match(/Your left hand moved faster/g)??[]).length,1);
-  assert.match(result.messages[1],/right foot moved outside.*right foot.*speed was not assessed/);
+  assert.equal((result.messages.join(' ').match(/Your left hand moved too quickly/g)??[]).length,1);
+  assert.match(result.messages[1],/right foot.*left the progress beam/);
+  assert.deepEqual(practiceAiWordingIssues(result),practiceAiWordingIssues(original),
+    'Focusing the spoken main ideas must retain the typed timing limitation for the final summary.');
   assert.equal(result.issues.length,3,'Canonical wording deduplication must not remove grader issues.');
   checks.push('Legacy and current indices deduplicate only the wording annotations; measured speed and guide errors remain factual and preserve original evidence.');
 }
@@ -123,7 +125,7 @@ const review=(status,issues=[],limbs=[])=>({status,passed:status==='match',issue
   const payload=history.snapshot([{stepId:'first-three-01',status:'matched'}]);
   assert.deepEqual(practiceSummaryPayload(payload),payload);
   const result=localPracticeSessionSummary(payload);
-  assert.match(result.messages.join(' '),/One completed attempt reached the targets while timing was unclear/);
+  assert.match(result.messages.join(' '),/timing was unclear, speed could not be assessed/);
   assert.doesNotMatch(result.messages.join(' '),/moved too fast|moved too slowly/);
   assert.equal(practiceSummaryPayload({...payload,attempts:[{...payload.attempts[0],issues:[issue(null,'timing_unknown')]}]}),null);
   checks.push('Descriptive and AI timing wording retains its grounded uncertainty annotation in the final summary without becoming an observed speed problem.');
@@ -136,8 +138,10 @@ const review=(status,issues=[],limbs=[])=>({status,passed:status==='match',issue
   history.record({attemptId:'constructed-mixed-review',stepId:'first-three-01',status:local.status,
     messages:local.messages,issues:practiceAiWordingIssues(local)});
   const summary=localPracticeSessionSummary(history.snapshot());
-  assert.match(summary.messages.join(' '),/left hand moved too fast/);
-  assert.match(summary.messages.join(' '),/Those unclear observations were kept separate from measured movement mistakes/);
+  assert.match(summary.messages.join(' '),/left hand got ahead of the teacher/);
+  assert.doesNotMatch(summary.messages.join(' '),/right hand got ahead|hands got ahead/);
+  assert.match(summary.messages.join(' '),/attempts could not be fully assessed.*separate from the measured corrections/);
+  assert.deepEqual(history.snapshot().attempts[0].issues,practiceAiWordingIssues(local));
   assert.doesNotMatch(summary.messages.join(' '),/right foot moved too fast|right foot moved too slowly/);
   checks.push('A mixed review summarizes its measured left-hand mistake while preserving separate right-foot tracking uncertainty.');
 }
@@ -151,14 +155,41 @@ const review=(status,issues=[],limbs=[])=>({status,passed:status==='match',issue
   const original=review('unknown',issues,limbs),result=descriptivePracticeFeedback(original);
   assert.ok(result.messages.join(' ').split(/\s+/).length<=200);
   assert.ok(result.messages.length<=6&&result.messages.every(message=>message.length<=600));
-  for(const name of ['left hand','right hand','left foot','right foot'])
-    assert.ok(result.messages.some(message=>message.includes(name)&&/did not finish its movement/.test(message)
-      &&/left the progress beam/.test(message)&&/speed could not be assessed/.test(message)));
+  assert.ok(result.messages.length<=3,'Dense feedback presents the principal ideas instead of reading every issue aloud.');
+  assert.doesNotMatch(result.messages.join(' '),/too fast|too slow|timing matched|perfect/i);
   assert.deepEqual(result.issues,original.issues);
   const history=createPracticeSessionHistory({sessionId:'constructed-dense-session'});
   assert.equal(history.record({attemptId:'constructed-dense-review',stepId:'first-six-05',status:result.status,
     messages:result.messages,issues:practiceAiWordingIssues(result)}),true);
-  checks.push('Dense four-limb feedback consolidates complete sentences and corrections within the history budget while retaining every measured issue.');
+  checks.push('Dense feedback presents a bounded set of main ideas while retaining all original measured issues and uncertainty for the journal.');
+}
+
+{
+  const original=review('mismatch',[issue(33,'too_slow'),issue(34,'too_slow'),issue(34,'off_guide')]);
+  const context={version:'practice-feedback-context-v1',limbs:[
+    {index:33,expectedDirection:'up'},{index:34,expectedDirection:'up'}
+  ]};
+  const result=descriptivePracticeFeedback(original,context),text=result.messages.join(' ');
+  assert.equal(result.messages.length,2);assert.match(text,/Both hands moved too slowly on the way up/);
+  assert.match(text,/right hand also left the progress beam on the way up/);
+  assert.equal((text.match(/too slowly/g)??[]).length,1,'The shared hand pacing issue is expressed once.');
+  assert.doesNotMatch(text,/left hand moved too slowly.*right hand moved too slowly|drifted sideways/);
+  assert.deepEqual(result.issues,original.issues);assert.equal(result.status,'mismatch');
+  const wrongDirection=structuredClone(context);wrongDirection.limbs[1].observedDirection='right';
+  const explained=descriptivePracticeFeedback(original,wrongDirection).messages.join(' ');
+  assert.match(explained,/right hand also drifted sideways while the guide led upward/);
+  assert.doesNotMatch(explained,/anatomical right|to your right|fear|confidence/i);
+  checks.push('Shared hand pacing is expressed once with the upward motion context; a sideways excursion is mentioned only when supplied by the grounded context.');
+}
+{
+  const context={version:'practice-feedback-context-v1',practiceFocus:'range',
+    limbs:[{index:33,expectedDirection:'up'},{index:36,expectedDirection:'hold'}]};
+  const original=review('unknown',[issue(33,'too_slow'),issue(36,'tracking_unknown')]);
+  const text=descriptivePracticeFeedback(original,context).messages.join(' ');
+  assert.doesNotMatch(text,/room to travel|larger|full movement feel familiar|coordinated|fear|confidence/i);
+  assert.match(text,/right foot/);assert.match(text,/could not clearly track/);
+  assert.deepEqual(original.issues,[issue(33,'too_slow'),issue(36,'tracking_unknown')]);
+  checks.push('Slow hands and an unclear foot do not invent limited range, coordination problems or an emotional explanation.');
 }
 
 console.log(JSON.stringify({checks:checks.length,provenance:'Constructed review, fetch and history fixtures; no live camera, speech or paid AI.',details:checks},null,2));
