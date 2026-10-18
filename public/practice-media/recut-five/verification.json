@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "five-clip-media-export-v1",
+  "sourceFrameRange": [
+    15,
+    465
+  ],
+  "sourceEndFrameExclusive": true,
+  "sourceTimeRangeSeconds": [
+    0.5,
+    15.5
+  ],
+  "preview": {
+    "frameCount": 450,
+    "durationSeconds": 15.0,
+    "fps": 30,
+    "width": 450,
+    "height": 360,
+    "codec": "h264",
+    "pixelExactToMaster": true,
+    "src": "/practice-media/recut-five/demonstration.mp4",
+    "sha256": "4f8075d6c60afa189b5fc952a043332c2aee8caeab98d40018a1fbb9282bee61",
+    "bytes": 10084607,
+    "method": "Packet remux: exact source pictures, no encoding or temporal resampling"
+  },
+  "zip": {
+    "src": "/practice-media/recut-five/five-continuous-clips.zip",
+    "sha256": "96a360e455754b0c9d3ef7b1da3dd0d791c0518d53ef539ff7b101ae0403811a",
+    "bytes": 10121613,
+    "entries": [
+      "step-01.mp4",
+      "step-02.mp4",
+      "step-03.mp4",
+      "step-04.mp4",
+      "step-05.mp4"
+    ],
+    "originalClipBytesPreserved": true
+  },
+  "sourceAssets": {
+    "step-01.mp4": "aea3227151edb8c9ec6442e89dc560f97f70ec1d9792f3fcb931c02563d2a8f1",
+    "step-02.mp4": "ecd5cc110d6c4270cdc6a597712ce0b3b826d706077410c6cd4e4eab0c0df3d8",
+    "step-03.mp4": "8f9f28a4a254e83e777961f75c0864fecb9032158b75df851b2c31292726a778",
+    "step-04.mp4": "f09cbfa56034057177fe0040821a9199e847a985b9bcb0f47f1cf7899e1c66b5",
+    "step-05.mp4": "06ac04ce654f16eaf873fefa7a0c01fa17bfed6d4f5245f21c1659a8e3fe68a2",
+    "master.mp4": "55681d7b587c6082322fd5e02f53b969d56c27bdafd7f8c6983f83bd787b6ed9",
+    "master.poses.json": "c28ebc10230819558f0e444201851a60c13f9edf2b6faee48a7d9dae4b025939",
+    "manifest.json": "52874a1ac6f01bd5308aeb1d0deb3f6b36ada6ff1baa9f7fe40a749a7a9d706d"
+  },
+  "allSourceAssetsUnchanged": true,
+  "newInferencePerformed": false
+}

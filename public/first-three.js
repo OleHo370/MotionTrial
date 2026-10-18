@@ -13,7 +13,6 @@ import {createAttemptReview,observeAttemptReview,finalizeAttemptReview,REVIEW_RU
 import {getLiveTargetHighlights} from './practice-target-highlight.js';
 import {createDisplaySmoother} from './practice-display-smoothing.js';
 import {prepareTeacherDisplayGuides,getTeacherDisplayPoints} from './teacher-point-display.js';
-import {prepareSixthAssessmentReference} from './sixth-assessment-reference.js';
 import {createFeedbackSpeech} from './practice-feedback-speech.js';
 import {attachArduinoFeedback} from './arduino-feedback-ui.js';
 import {FULL_HEIGHT_LAYOUT_RULES as TARGET_LAYOUT,cameraViewportBounds,createFullHeightLayout} from './full-height-layout.js';
@@ -55,7 +54,7 @@ const state={manifest:null,data:null,sources:new Map(),sourceId:null,loading:fal
 const step=()=>state.manifest?.steps[state.index],reference=()=>state.refs[state.index];
 const guidance=()=>state.guidanceRefs[state.index];
 const pathReference=()=>state.pathRefs[state.index];
-const total=()=>state.manifest?.steps.length||6;
+const total=()=>state.manifest?.steps.length||5;
 const practiceStart=()=>step()?.practiceStartSeconds??step()?.startSeconds;
 const recording=()=>state.sources.get(step()?.sourceId);
 function practiceMode(){return state.index===5&&state.stepSixMode==='arms-only'?'arms-only':'full-body';}
@@ -74,7 +73,7 @@ function syncPracticeModeUI(){
     :'Head near the top · feet near the bottom · palms and feet tracked');
   put('camera-framing',practiceMode()==='arms-only'?'Head at the top, waist at the bottom.':'Head near the top, feet near the bottom.');
   put('hardware-controls-scope',practiceMode()==='arms-only'?'both palms':'all four points');
-  put('practice-feedback-scope',practiceMode()==='arms-only'?'Step 6 receives arms-only feedback for both palms.':'All six clips receive four-point practice feedback.');
+  put('practice-feedback-scope',practiceMode()==='arms-only'?'Step 6 receives arms-only feedback for both palms.':'All five clips receive four-point practice feedback.');
   put('practice-framing-help',practiceMode()==='arms-only'
     ?'Frame your head at the top and waist at the bottom of the preview. Step 6 palm targets use this head-to-waist height with the same proportions in both directions.'
     :'Stand with your head near the top and feet near the bottom of the preview. Target spacing uses this full standing height across all steps.');
@@ -543,18 +542,23 @@ async function boot(){
     state.sources=new Map(sources.map(source=>[source.id,source]));
     if(manifest.steps.some(s=>!state.sources.has(s.sourceId)||!Number.isFinite(s.startSeconds)||!Number.isFinite(s.endSeconds)||s.startSeconds<0||s.endSeconds<=s.startSeconds||s.endSeconds>state.sources.get(s.sourceId).video.durationSeconds+.001))throw new Error('A teaching interval does not match its source recording.');
     const lesson=prepareRecutLesson(manifest,state.sources,LESSON_CONTROLS.referenceOptions);
-    manifest.steps=lesson.steps;manifest.continuity={version:lesson.version,seams:lesson.seams,coverage:lesson.coverage};
-    const sixth=prepareSixthAssessmentReference(lesson,sources[0],
-      await readJson('/practice-media/recut-six/clip-06-assessment-targets.json'));
-    state.refs=lesson.references.map((ref,i)=>i===5?sixth.guidanceReference:ref);
-    state.guidanceRefs=lesson.guidanceReferences.map((ref,i)=>i===5?sixth.guidanceReference:ref);
-    state.pathRefs=manifest.steps.map((s,i)=>i===5?sixth.pathReference:preparePracticeTubes(state.guidanceRefs[i],s,state.sources));
+    // Prepare the complete archived source for its exact shared boundaries,
+    // then expose only the first five original clips in this lesson.
+    manifest.title='Five continuous movements';manifest.steps=lesson.steps.slice(0,5);
+    const endFrame=manifest.steps.at(-1).sourceEndFrameExclusive;
+    manifest.continuity={version:lesson.version,seams:lesson.seams.slice(0,4),sourceCoverage:lesson.coverage,
+      coverage:{...lesson.coverage,endFrameExclusive:endFrame,frameCount:endFrame-lesson.coverage.firstFrame,
+        endSeconds:endFrame/lesson.coverage.fps,
+        note:'The selected first five original clips retain their exact source frames and shared finish boundaries.'}};
+    state.refs=lesson.references.slice(0,5);
+    state.guidanceRefs=lesson.guidanceReferences.slice(0,5);
+    state.pathRefs=manifest.steps.map((s,i)=>preparePracticeTubes(state.guidanceRefs[i],s,state.sources));
     if(state.guidanceRefs.some((ref,i)=>!ref.referenceUsable||!prepareStartPosition(ref).usable
       ||!state.pathRefs[i].referenceUsable||!INDICES.every(index=>ref.guides.find(guide=>guide.index===index)?.valid)))
-      throw new Error('Practice targets could not load for all six clips. Reload to retry.');
+      throw new Error('Practice targets could not load for all five clips. Reload to retry.');
     fitPortraitCamera();
     $('step-list').replaceChildren(...manifest.steps.map((s,index)=>{const li=document.createElement('li'),button=document.createElement('button');button.dataset.index=String(index);button.textContent=`${index+1}. ${s.title}`;button.addEventListener('click',()=>choose(index,true));li.append(button);return li;}));
-    state.ready=true;const requested=Number(new URLSearchParams(location.search).get('step'));await choose(Number.isInteger(requested)&&requested>=1&&requested<=total()?requested-1:0);
+    state.ready=true;const requested=Number(new URLSearchParams(location.search).get('step'));await choose(Number.isInteger(requested)&&requested>=1?Math.min(requested,total())-1:0);
   }catch(error){$('load-error').textContent=error.message;$('load-error').hidden=false;put('status','The lesson could not load. Reload to retry.');}
 }
 state.camera=createFollowCamera({video:$('camera-video'),canvas:$('camera-overlay'),deviceSelect:$('camera-device'),startButton:$('start-camera'),stopButton:$('stop-camera'),mirrorCheckbox:$('mirror-preview'),skeletonCheckbox:$('learner-skeleton'),statusElement:$('camera-status'),pointIndices:INDICES,getPointIndices:activeControlIndices,showConnections:false,pointColors:FOUR_POINT_COLORS,adaptSample:LESSON_CONTROLS.liveAdapter,onObservation:observe,onState(status){

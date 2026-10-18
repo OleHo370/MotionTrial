@@ -63,8 +63,8 @@ function controllerHarness({functions=null,overrides={},stateOverrides={},speech
     getAttribute:()=>'/practice-media/recut-six/master.mp4'};
   const frame={hip:{x:.5,y:.5},scale:.5,aspect:1};
   const indices=[33,34,35,36];
-  const refs=Array.from({length:6},()=>({referenceUsable:true,usable:true,guides:indices.map(index=>({index,valid:true}))}));
-  const steps=Array.from({length:6},(_,index)=>({id:`step-${index+1}`,title:`Movement ${index+1}`,
+  const refs=Array.from({length:5},()=>({referenceUsable:true,usable:true,guides:indices.map(index=>({index,valid:true}))}));
+  const steps=Array.from({length:5},(_,index)=>({id:`step-${index+1}`,title:`Movement ${index+1}`,
     sourceId:'master',startSeconds:.5+index,endSeconds:1.5+index,
     practiceStartSeconds:.5+index,teacherFreezeSeconds:1.5+index,screenshots:{start:'start.png',end:'end.png'}}));
   const review={result:{status:'match',passed:true,percent:null,messages:['Close enough'],reason:'Close enough'},created:[],observed:[],finalized:[]};
@@ -431,9 +431,9 @@ await check('Camera loss during review cancels the cached success instead of adv
   assert.notEqual(h.state.phase,'feedback');assert.equal(h.video.paused,true);
 });
 
-await check('All six clips use watch once, squares, full attempt and review; only a real completed match advances',async()=>{
+await check('All five clips use watch once, squares, full attempt and review; only a real completed match advances',async()=>{
   const h=controllerHarness();await h.call('watchDemonstration','lesson');
-  for(let index=0;index<6;index++){
+  for(let index=0;index<5;index++){
     assert.equal(h.state.index,index);assert.equal(h.state.phase,'watching');
     const createdBefore=h.review.created.length;
     h.video.currentTime=h.state.manifest.steps[index].teacherFreezeSeconds;await h.call('finishWatch');
@@ -444,8 +444,8 @@ await check('All six clips use watch once, squares, full attempt and review; onl
     h.clock.now+=3000;await h.call('tick');
     assert.equal(h.state.results.get(`step-${index+1}`).status,'matched');
   }
-  assert.equal(h.state.phase,'finished');assert.equal(h.state.results.size,6);
-  assert.equal(h.review.created.length,6);assert.equal(h.review.finalized.length,6);
+  assert.equal(h.state.phase,'finished');assert.equal(h.state.results.size,5);
+  assert.equal(h.review.created.length,5);assert.equal(h.review.finalized.length,5);
   assert.ok([...h.state.results.values()].every(result=>result.status==='matched'));
 });
 

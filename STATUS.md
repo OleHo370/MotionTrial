@@ -2,6 +2,12 @@
 
 Updated: 2026-10-17.
 
+## Latest: keep only the first five lesson clips — 2026-10-17
+
+The first-three practice lesson now offers five clips and completes after clip 5, with no sixth step or step-6 arms-only option in navigation. Former `?step=6` links open the last retained clip. The original first five clip bytes, teaching boundaries, source observations, target positions, review/progress rules and hardware warnings are unchanged. The complete original archive remains available for provenance; selected coverage is frames 15–464 (0.5–15.5 seconds), with the original frame-465 finish target retained. The page's preview and download now link to a 15-second first-five demonstration and a ZIP containing exactly the five original clip files.
+
+Verification: the five-clip controller/browser checks confirm unchanged first-five references, geometry across five camera aspects, completion after five matches/manual continuation, excluded-step URL handling and no sixth playback. The existing 32 controller groups now exercise five clips, and all 14 triangle-only hardware groups pass. The new preview has exactly 450 frames at 30 fps, with every decoded pixel identical to the original source range; ZIP entries retain original SHA-256 values. No webcam or physical Arduino was used. Current QA: `scripts/check-five-clip-lesson.mjs`; media reproduction: `scripts/prepare-five-clip-exports.py`; evidence: `artifacts/five-clip-lesson-review/` and `public/practice-media/recut-five/verification.json`.
+
 ## Latest: hardware warnings for triangle-only controls — 2026-10-17
 
 During the normal imitation and finish allowance, a palm or foot with a progress beam retains its original beam-distance warning. A control whose finish triangle has no drawable beam now uses distance from that triangle's center. The controller derives this selection from the same projected guides used for drawing, across all six steps; arms-only mode considers only its selected palms. The existing broad 0.42-unit warning, 0.34-unit recovery, 250 ms warning delay and 200 ms recovery delay are unchanged. Missing/stale tracking, watch-only playback, positioning, review, pause and stopped practice remain neutral. Raw tracking, marker sizes, progress, review outcomes, USB transport and firmware remain unchanged.
