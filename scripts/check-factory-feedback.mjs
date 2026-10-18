@@ -9,7 +9,7 @@ import {fileURLToPath} from 'node:url';
 import {resolve} from 'node:path';
 import {createDualViewServer} from './serve-dual-view.mjs';
 import {controllerHarness} from './check-review-flow.mjs';
-import {createFactoryPracticeFeedbackService,normalizeFeedbackRequest,validateFactoryFeedbackOutput} from './factory-practice-feedback.mjs';
+import {createFactoryPracticeFeedbackService,normalizeFeedbackRequest,validateFactoryFeedbackOutput,factoryIssueSentences} from './factory-practice-feedback.mjs';
 import {createPracticeAiFeedback} from '../public/practice-ai-feedback.js';
 import {chromium} from 'playwright';
 
@@ -21,7 +21,9 @@ const deferred=()=>{let resolve,reject;const promise=new Promise((yes,no)=>{reso
 const payload=(changes={})=>({attemptId:'qa-attempt-1',stepId:'first-three-01',status:'mismatch',
   messages:['Left hand: too fast.','Right hand: too slow.'],
   issues:[{index:33,code:'too_fast'},{index:34,code:'too_slow'}],...changes});
-const output=(entries=[{issueId:'issue-0',text:'too fast'},{issueId:'issue-1',text:'too slow'}])=>({entries});
+const issueSentence=(index,code,variant=0)=>factoryIssueSentences(normalizeFeedbackRequest(payload({issues:[{index,code}]})).issues[0])[variant];
+const approvedMessages=(variant=0)=>[issueSentence(33,'too_fast',variant),issueSentence(34,'too_slow',variant)];
+const output=(entries=[{issueId:'issue-0',text:issueSentence(33,'too_fast')},{issueId:'issue-1',text:issueSentence(34,'too_slow')}])=>({entries});
 const reply=(body,changes={})=>({attemptId:body.attemptId,stepId:body.stepId,status:body.status,
   messages:['Left hand: too fast.','Right hand: too slow.'],source:'factory',...changes});
 const hash=value=>createHash('sha256').update(value).digest('hex');
@@ -113,10 +115,9 @@ async function serviceChecks(){
   });
   await check('Structured wording preserves exact measured issues, anatomical side and uncertainty',()=>{
     const measured=normalizeFeedbackRequest(payload());
-    assert.deepEqual(validateFactoryFeedbackOutput(output(),measured),payload().messages);
+    assert.deepEqual(validateFactoryFeedbackOutput(output(),measured),approvedMessages());
     assert.deepEqual(validateFactoryFeedbackOutput(output([
-      {issueId:'issue-1',text:'moved too slowly'},{issueId:'issue-0',text:'moved too quickly'}]),measured),
-      ['Left hand: moved too quickly.','Right hand: moved too slowly.']);
+      {issueId:'issue-1',text:issueSentence(34,'too_slow',1)},{issueId:'issue-0',text:issueSentence(33,'too_fast',1)}]),measured),approvedMessages(1));
     for(const malformed of [output([]),output([{issueId:'issue-0',text:'too slow'},{issueId:'issue-1',text:'too fast'}]),
       output([{issueId:'issue-0',text:'too fast'},{issueId:'issue-0',text:'too fast'}]),
       output([{issueId:'issue-0',text:'too fast'},{issueId:'issue-2',text:'too slow'}]),
@@ -124,6 +125,33 @@ async function serviceChecks(){
       assert.equal(validateFactoryFeedbackOutput(malformed,measured),null);
     const uncertain=normalizeFeedbackRequest(payload({issues:[{index:33,code:'tracking_unknown'}]}));
     assert.equal(validateFactoryFeedbackOutput(output([{issueId:'issue-0',text:'too fast'}]),uncertain),null);
+  });
+  await check('Every accepted issue uses complete anatomically correct sentences with a grounded correction',()=>{
+    for(const index of [15,16,27,28,33,34,35,36])for(const code of ['too_fast','too_slow','late_start','off_guide','hold_drift','endpoint_unreached','movement_incomplete']){
+      const measured=normalizeFeedbackRequest(payload({issues:[{index,code}]})),issue=measured.issues[0],choices=factoryIssueSentences(issue);
+      assert.equal(choices.length,2,`${index}:${code}`);
+      for(const text of choices){
+        assert.ok(text.startsWith(`Your ${issue.limb.toLowerCase()} `),text);
+        assert.ok((text.match(/\./g)||[]).length>=2,'Feedback explains both the observation and the correction');
+        assert.ok(text.length>45);assert.ok(text.length<=600);
+        assert.deepEqual(validateFactoryFeedbackOutput(output([{issueId:issue.issueId,text}]),measured),[text]);
+      }
+      const opposite={...issue,index:({15:16,16:15,27:28,28:27,33:34,34:33,35:36,36:35})[index],
+        limb:issue.limb.startsWith('Left')?issue.limb.replace('Left','Right'):issue.limb.replace('Right','Left')};
+      assert.equal(validateFactoryFeedbackOutput(output([{issueId:issue.issueId,text:factoryIssueSentences(opposite)[0]}]),measured),null);
+    }
+    for(const code of ['tracking_unknown','reference_unknown','attempt_incomplete','invented'])assert.deepEqual(factoryIssueSentences({index:33,limb:'Left hand',code}),[]);
+    const issues=[33,34,35,36].flatMap(index=>['too_fast','off_guide','endpoint_unreached'].map(code=>({index,code})));
+    const measured=normalizeFeedbackRequest(payload({issues}));
+    const combined=validateFactoryFeedbackOutput(output(measured.issues.map(issue=>({issueId:issue.issueId,text:factoryIssueSentences(issue)[1]}))),measured);
+    assert.equal(combined.length,4);assert.ok(combined.every(message=>message.length<=600));
+    assert.ok(combined.join(' ').length<=2400);assert.ok(combined.join(' ').split(/\s+/).length<=200);
+    const dense=normalizeFeedbackRequest(payload({issues:[33,34,35,36].flatMap(index=>
+      ['too_fast','off_guide','hold_drift','endpoint_unreached'].map(code=>({index,code})))}));
+    const bounded=validateFactoryFeedbackOutput(output(dense.issues.map(issue=>({issueId:issue.issueId,text:factoryIssueSentences(issue)[1]}))),dense);
+    assert.equal(bounded.length,4);assert.equal(bounded.join(' ').split(/\s+/).length,192);
+    const excessive=output(dense.issues.map(issue=>({issueId:issue.issueId,text:factoryIssueSentences(issue)[0]})));
+    assert.equal(validateFactoryFeedbackOutput(excessive,dense),null,'Over-200-word compositions keep the local fallback');
   });
   const fixture=await serverFixture(createFactoryPracticeFeedbackService);
   try{
@@ -153,12 +181,12 @@ async function serviceChecks(){
     await check('Factory rewrites only verified issues with all tools disabled and never changes the local outcome',async()=>{
       const body=payload({messages:['CONSTRUCTED_LOCAL_TEXT_NOT_A_PROMPT'],
         issues:[{index:33,code:'too_fast',message:'CONSTRUCTED_ISSUE_PROSE_NOT_A_PROMPT'},{index:34,code:'too_slow'}]});
-      fixture.state.outputs.push(output([{issueId:'issue-1',text:'moved too slowly'},{issueId:'issue-0',text:'moved too quickly'}]));
+      fixture.state.outputs.push(output([{issueId:'issue-1',text:issueSentence(34,'too_slow',1)},{issueId:'issue-0',text:issueSentence(33,'too_fast',1)}]));
       const response=await fixture.request(undefined,{body});
       assert.equal(response.status,200);assert.equal(response.json.source,'factory');
       assert.equal(response.json.status,'mismatch');assert.equal(response.json.attemptId,body.attemptId);
       assert.equal(response.json.stepId,body.stepId);
-      assert.deepEqual(response.json.messages,['Left hand: moved too quickly.','Right hand: moved too slowly.']);
+      assert.deepEqual(response.json.messages,approvedMessages(1));
       const session=fixture.state.sessions[0];
       assert.equal(session.options.autonomyLevel,'off');assert.equal(session.options.permissionHandler(),'cancel');
       assert.equal(session.options.autoRejectPermissionRequests,true);assert.equal(session.options.disableBuiltinSkills,true);
@@ -317,7 +345,8 @@ async function browserHelperChecks(){
   await check('Invalid, failed, mismatched-identity or changed-outcome browser responses cannot replace local feedback',async()=>{
     for(const response of [reply(payload(),{attemptId:'other'}),reply(payload(),{stepId:'first-three-02'}),
       reply(payload(),{status:'match'}),reply(payload(),{source:'local'}),reply(payload(),{messages:[]}),
-      reply(payload(),{messages:['<script>unsafe</script>']}),reply(payload(),{messages:['x'.repeat(181)]})]){
+      reply(payload(),{messages:['<script>unsafe</script>']}),reply(payload(),{messages:['x'.repeat(601)]}),
+      reply(payload(),{messages:Array.from({length:5},()=> 'x'.repeat(500))})]){
       const applied=[],ai=createPracticeAiFeedback({fetchImpl:async()=>({ok:true,json:async()=>response})});
       assert.equal(await ai.request(payload(),{onResult:value=>applied.push(value)}),null);
       assert.deepEqual(applied,[]);assert.equal(ai.getState().source,'local');assert.equal(ai.getState().pending,false);ai.cancel();
@@ -325,6 +354,20 @@ async function browserHelperChecks(){
     for(const fetchImpl of [null,async()=>{throw new Error('Constructed fetch failure');},async()=>({ok:false})]){
       const ai=createPracticeAiFeedback({fetchImpl});assert.equal(await ai.request(payload()),null);ai.cancel();
     }
+  });
+  await check('Browser accepts complete long AI sentences while keeping request summaries short and bounded',async()=>{
+    const body=payload({issues:[33,34,35,36].flatMap(index=>['too_fast','off_guide','hold_drift','endpoint_unreached'].map(code=>({index,code})))});
+    const measured=normalizeFeedbackRequest(body),messages=validateFactoryFeedbackOutput(output(measured.issues.map(issue=>
+      ({issueId:issue.issueId,text:factoryIssueSentences(issue)[1]}))),measured);
+    assert.equal(messages.length,4);assert.ok(messages.some(message=>message.length>180));
+    const ai=createPracticeAiFeedback({fetchImpl:async()=>({ok:true,json:async()=>reply(body,{messages})})});
+    const result=await ai.request(body);assert.deepEqual(result.messages,messages);ai.cancel();
+    const tooManyWords=Array.from({length:4},()=>Array.from({length:51},()=> 'word').join(' '));
+    const rejected=createPracticeAiFeedback({fetchImpl:async()=>({ok:true,json:async()=>reply(body,{messages:tooManyWords})})});
+    assert.equal(await rejected.request(body),null);rejected.cancel();
+    let requests=0;
+    const requestLimit=createPracticeAiFeedback({fetchImpl:async()=>{requests++;return {ok:true};}});
+    assert.equal(await requestLimit.request(payload({messages:['x'.repeat(181)]})),null);assert.equal(requests,0);requestLimit.cancel();
   });
   await check('Browser timeout settles immediately and a late fetch that ignores abort cannot apply stale wording',async()=>{
     const late=deferred(),applied=[],signals=[];
@@ -363,7 +406,7 @@ async function controllerChecks(){
       await h.call('beginReview',review,'retry');assert.equal(h.state.phase,'feedback');
       assert.deepEqual([...h.state.feedback.messages],payload().messages);assert.equal(sent.length,1);
       const before=structuredClone(h.state.feedback),speechCount=h.speech.calls.length;
-      const messages=['Left hand: moved too quickly.','Right hand: moved too slowly.'];
+      const messages=approvedMessages(1);
       sent[0].gate.resolve({ok:true,json:async()=>reply(sent[0].body,{messages})});await h.flush();
       assert.deepEqual([...h.state.feedback.messages],messages);assert.equal(h.env.feedbackWordingSource,'factory');
       for(const key of ['status','passed','percent','issues','limbs','ruleVersion'])
@@ -373,9 +416,9 @@ async function controllerChecks(){
       assert.equal(h.speech.calls.length,1);assert.deepEqual([...h.speech.calls[0].args[0].messages],messages);
     }finally{ai.cancel();}
   });
-  await check('Actual Try again discards the pending request and an old result cannot repaint the retry',async()=>{
+  await check('Internal current-clip retry discards the pending request and an old result cannot repaint the retry',async()=>{
     const {h,sent,ai,review}=fixture();try{
-      await h.call('beginReview',review,'retry');await h.call('feedbackRetryAction');
+      await h.call('beginReview',review,'retry');await h.call('retryFeedback');
       assert.equal(h.state.phase,'positioning');assert.equal(h.state.feedback,null);assert.ok(sent[0].options.signal.aborted);
       sent[0].gate.resolve({ok:true,json:async()=>reply(sent[0].body)});await h.flush();
       assert.equal(h.state.phase,'positioning');assert.equal(h.state.feedback,null);assert.equal(h.state.results.size,0);
@@ -437,12 +480,12 @@ async function browserChecks(){
     const page=await browser.newPage({viewport:{width:1440,height:900}});page.setDefaultTimeout(30000);
     page.on('pageerror',error=>browserEvidence.pageErrors.push(error.message));
     await page.addInitScript(()=>{
-      window.qaCameraRequests=0;
+      window.qaCameraRequests=0;window.qaSpoken=[];
       class FakeUtterance{constructor(text){this.text=text;}}
       Object.defineProperty(window,'SpeechSynthesisUtterance',{configurable:true,value:FakeUtterance});
       Object.defineProperty(window,'speechSynthesis',{configurable:true,value:{
         getVoices:()=>[{name:'CONSTRUCTED software QA English voice',lang:'en-US',localService:true}],
-        speak(){},cancel(){},addEventListener(){},removeEventListener(){}}});
+        speak(utterance){window.qaSpoken.push(utterance);},cancel(){},addEventListener(){},removeEventListener(){}}});
       if(navigator.mediaDevices)navigator.mediaDevices.getUserMedia=async()=>{
         window.qaCameraRequests++;throw new DOMException('QA blocks physical camera access','NotAllowedError');
       };
@@ -485,7 +528,7 @@ async function browserChecks(){
       assert.equal(await page.locator('#practice-overlay').isVisible(),false);
       assert.equal(fixture.state.sessions.length,0);
     });
-    await check('Actual browser endpoint gate and a constructed review exercise SDK wording, the AI label and manual Retry',async()=>{
+    await check('Actual browser endpoint gate and a constructed review exercise descriptive SDK wording without feedback buttons',async()=>{
       await page.click('#start-practice');await page.waitForFunction(()=>window.firstThreeDiagnostics.phase==='watching');
       await page.waitForFunction(()=>window.firstThreeDiagnostics.phase==='positioning'&&window.firstThreeDiagnostics.watched);
       await page.evaluate(async()=>{
@@ -520,15 +563,16 @@ async function browserChecks(){
       assert.equal(diagnostics.index,0);assert.equal(diagnostics.results.length,0);assert.equal(diagnostics.reviewAction,'retry');
       assert.equal(await page.locator('#feedback-ai-source').isVisible(),true);
       assert.equal(await page.locator('#feedback-ai-source').textContent(),'AI wording');
-      assert.equal(await page.locator('#feedback-retry').isVisible(),true);assert.equal(await page.locator('#feedback-next').isVisible(),false);
+      assert.equal(await page.locator('#practice-overlay button').count(),0);
+      assert.equal(await page.locator('#feedback-retry, #feedback-next').count(),0);
       assert.equal(fixture.state.sessions.length,sessionsBeforeConstructedReview+1,'Each new measured review makes one SDK request');
       assert.ok(diagnostics.feedback.issues.length>0);
       assert.equal(await page.locator('#overlay-reason').textContent(),diagnostics.feedback.messages.join('\n'));
       browserEvidence.snapshots.aiWording=diagnostics;
       await page.screenshot({path:fileURLToPath(new URL('ai-wording-software-fixture.png',out))});
     });
-    await check('Actual browser Try again removes AI wording and returns to the current clip without recording a match',async()=>{
-      await page.click('#feedback-retry');await page.waitForFunction(()=>window.firstThreeDiagnostics.phase==='positioning');
+    await check('Actual browser speech end removes AI wording and immediately retries the current clip without recording a match',async()=>{
+      await page.evaluate(()=>window.qaSpoken.at(-1).onend());await page.waitForFunction(()=>window.firstThreeDiagnostics.phase==='positioning');
       const diagnostics=await page.evaluate(()=>window.firstThreeDiagnostics);
       assert.equal(diagnostics.index,0);assert.equal(diagnostics.feedback,null);assert.equal(diagnostics.results.length,0);
       assert.equal(diagnostics.aiFeedback.source,'local');assert.equal(diagnostics.aiFeedback.pending,false);

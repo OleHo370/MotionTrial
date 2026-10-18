@@ -119,12 +119,25 @@ to the supplied issues and limbs. Treat structured output as untrusted input;
 show it with `textContent`. Display the local feedback immediately, and retain
 it if Factory times out, fails, or introduces unsupported claims.
 
-The centered feedback uses the landing page's paper and ink style. For supported
+Factory now chooses complete, approved sentences for each measured issue. Each
+sentence names the affected hand or foot, explains the observed error and gives
+a specific correction, such as slowing that hand to follow the teacher's pace.
+The server still rejects wrong sides, contradictory findings, omitted issues and
+invented advice. Responses contain at most four anatomical paragraphs, 600
+characters per paragraph and 200 words in total. Request summaries keep their
+original smaller limits. Descriptive speech gets a word-count-based watchdog
+of 18–120 seconds so a valid longer message is not cut off at the old 18-second
+limit. Ordinary local feedback keeps that original speech limit.
+
+The centered feedback has no Retry or Next buttons and uses the landing page's
+paper and ink style. For supported
 errors, the controller waits at most 12 seconds for final wording, then speaks
 the selected local or AI message once. Successful feedback advances after the
-utterance ends; mismatch or unknown retries the current clip. If speech is off,
-unavailable, fails or times out, a three-second reading pause keeps automatic
-continuation available. Pausing cancels the old completion callback; resuming
+utterance ends without an added delay; mismatch or unknown retries the current
+clip immediately after speech. If speech is off, unavailable, fails or times
+out, ordinary feedback keeps its three-second reading pause, while descriptive
+text gets a word-count reading pause bounded to 3–30 seconds. Pausing cancels
+the old completion callback; resuming
 reads the current text again without starting another Factory request. Starting
 squares and self-paced triangle completion still use the existing local rules.
 

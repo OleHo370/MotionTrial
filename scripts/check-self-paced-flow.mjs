@@ -124,10 +124,10 @@ async function controllerChecks(){
     for(let n=0;n<20;n++){h.clock.now+=1000;await h.call('observe',observed(h.clock.now));await h.call('tick');}
     assert.equal(h.review.finalized.length,1);assert.equal(h.state.phase,'feedback');assert.equal(h.state.index,0);
   });
-  await check('The actual Try again click discards endpoint evidence and permits retrying even a successful review',async()=>{
+  await check('Internal retry discards endpoint evidence and success advances when its message ends',async()=>{
     const h=controllerHarness({speechOptions:{enabled:true}});await attempt(h);await completeTargets(h);
     const previousSession=h.state.endTargets;assert.equal(h.state.feedback.status,'match');assert.equal(h.speech.busy,true);
-    await h.call('feedbackRetryAction');
+    await h.call('retryFeedback');
     assert.equal(h.state.phase,'positioning');assert.equal(h.state.index,0);assert.equal(h.state.results.size,0);
     assert.equal(h.state.feedback,null);assert.equal(h.state.movement,null);assert.equal(h.speech.busy,false);
     await attempt(h);assert.notEqual(h.state.endTargets,previousSession);
@@ -136,7 +136,7 @@ async function controllerChecks(){
     h.clock.now+=30;await h.call('observe',observed(h.clock.now));
     h.clock.now+=30;await h.call('observe',observed(h.clock.now));
     assert.equal(h.state.phase,'feedback');assert.equal(h.review.finalized.length,2);
-    await h.call('feedbackNextAction');assert.equal(h.state.index,1);assert.equal(h.state.results.get('step-1').status,'matched');
+    await h.finishSpeech();assert.equal(h.state.index,1);assert.equal(h.state.results.get('step-1').status,'matched');
   });
   await check('Incomplete sequential, missing and stale inputs cannot trigger production finishAttempt',async()=>{
     const h=controllerHarness();await attempt(h);await boundary(h);
@@ -166,9 +166,9 @@ async function controllerChecks(){
     for(const status of ['mismatch','unknown']){
       const h=controllerHarness();h.review.result={status,passed:false,percent:null,
         issues:[{index:33,code:status==='mismatch'?'too_fast':'tracking_unknown'}],messages:['Constructed result']};
-      await attempt(h);await completeTargets(h);await h.call('feedbackNextAction');
+      await attempt(h);await completeTargets(h);await h.call('completeFeedback');
       assert.equal(h.state.phase,'positioning');assert.equal(h.state.index,0);assert.equal(h.state.results.size,0);
-      await h.call('feedbackRetryAction');assert.equal(h.state.phase,'positioning');assert.equal(h.state.results.size,0);
+      await h.call('retryFeedback');assert.equal(h.state.phase,'positioning');assert.equal(h.state.results.size,0);
     }
   });
 }
@@ -196,12 +196,12 @@ async function browserChecks(){
     const page=await browser.newPage({viewport:{width:1440,height:900}});page.setDefaultTimeout(30000);
     page.on('pageerror',error=>pageErrors.push(error.message));
     await page.addInitScript(()=>{
-      window.qaCameraRequests=0;
+      window.qaCameraRequests=0;window.qaSpoken=[];
       class FakeUtterance{constructor(text){this.text=text;}}
       Object.defineProperty(window,'SpeechSynthesisUtterance',{configurable:true,value:FakeUtterance});
       Object.defineProperty(window,'speechSynthesis',{configurable:true,value:{
         getVoices:()=>[{name:'CONSTRUCTED software QA English voice',lang:'en-US',localService:true}],
-        speak(){},cancel(){},addEventListener(){},removeEventListener(){}}});
+        speak(utterance){window.qaSpoken.push(utterance);},cancel(){},addEventListener(){},removeEventListener(){}}});
       if(navigator.mediaDevices)navigator.mediaDevices.getUserMedia=async()=>{
         window.qaCameraRequests++;throw new DOMException('QA blocks physical webcam access','NotAllowedError');
       };
@@ -237,7 +237,8 @@ async function browserChecks(){
       assert.equal(await page.locator('#step-list button').count(),5);
       assert.equal(await page.evaluate(()=>window.qaCameraRequests),0);
       assert.equal(await page.locator('#practice-overlay').isVisible(),false);
-      assert.equal(await page.locator('#feedback-retry').count(),1);assert.equal(await page.locator('#feedback-next').count(),1);
+      assert.equal(await page.locator('#practice-overlay button').count(),0);
+      assert.equal(await page.locator('#feedback-retry, #feedback-next').count(),0);
     });
     await check('Actual browser watch/readiness/attempt flow waits at the teacher boundary until all triangles have fresh support',async()=>{
       await page.click('#start-practice');
@@ -266,7 +267,7 @@ async function browserChecks(){
       });
       await page.waitForFunction(()=>window.firstThreeDiagnostics.phase==='feedback');
       assert.equal(await page.locator('#practice-overlay').isVisible(),true);
-      assert.equal(await page.locator('#feedback-retry').isVisible(),true);
+      assert.equal(await page.locator('#practice-overlay button').count(),0);
       assert.equal(await page.locator('#overlay-value').isVisible(),false);
       const message=await page.locator('#overlay-reason').textContent();
       assert.ok(message.length<350);assert.doesNotMatch(message,/automatically|next clip follows|[0-9]+ s\b/i);
@@ -276,10 +277,10 @@ async function browserChecks(){
         cameraRequests:window.qaCameraRequests}));
       await page.screenshot({path:fileURLToPath(new URL('compact-feedback.png',out))});
     });
-    await check('The actual Try again button stays available after waiting and resets only the current clip',async()=>{
+    await check('Spoken feedback ends with immediate current-clip retry and needs no feedback button',async()=>{
       await page.waitForTimeout(3200);assert.equal(await page.evaluate(()=>window.firstThreeDiagnostics.phase),'feedback');
       assert.equal(await page.evaluate(()=>window.firstThreeDiagnostics.index),0);
-      await page.click('#feedback-retry');
+      await page.evaluate(()=>window.qaSpoken.at(-1).onend());
       await page.waitForFunction(()=>window.firstThreeDiagnostics.phase==='positioning');
       const d=await page.evaluate(()=>window.firstThreeDiagnostics);
       assert.equal(d.index,0);assert.equal(d.feedback,null);assert.equal(d.results.length,0);assert.equal(d.watched,true);

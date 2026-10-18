@@ -242,6 +242,8 @@ async function browserChecks(){
       assert.equal(d.results.length,1);assert.equal(d.results[0].status,'manual');
       assert.equal(await page.locator('#next').isDisabled(),true);
       assert.equal(await page.locator('#completion').isVisible(),true);
+      assert.equal(await page.locator('#completion button').count(),0);
+      assert.equal(await page.locator('#practice-overlay button').count(),0);
       assert.match(await page.locator('#completion-description').textContent(),/0 \/ 5 movements.*1 manually continued/);
       assert.equal(await page.evaluate(()=>window.qaCameraRequests),0);
       snapshots.manualCompletion={index:d.index,phase:d.phase,results:d.results};

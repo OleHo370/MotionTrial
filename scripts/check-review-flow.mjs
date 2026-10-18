@@ -62,7 +62,7 @@ function controllerHarness({functions=null,overrides={},stateOverrides={},speech
   const elements=new Map(),events=[],clock={now:1000},cameraState={running:true,generation:1};
   const timers=new Map();let nextTimer=0;
   const setTimer=(fn,delay=0)=>{const id=++nextTimer;timers.set(id,{at:clock.now+delay,fn});return id;};
-  const $=id=>{if(!elements.has(id)){const created=element();if(['overlay-value','feedback-next'].includes(id))created.hidden=true;
+  const $=id=>{if(!elements.has(id)){const created=element();if(id==='overlay-value')created.hidden=true;
     elements.set(id,created);}return elements.get(id);};
   const video={currentTime:.5,readyState:4,seeking:false,ended:false,paused:true,
     videoWidth:450,videoHeight:360,playbackRate:.5,
@@ -153,8 +153,8 @@ function controllerHarness({functions=null,overrides={},stateOverrides={},speech
   const actualFunctions=functions??[...definitions.keys()].filter(name=>!presentationAndIO.has(name));
   for(const name of actualFunctions){assert.ok(definitions.has(name),`Actual controller function ${name} exists`);vm.runInContext(definitions.get(name),context);}
   if(cameraHandler?.body)vm.runInContext(`function cameraOnState(${cameraHandler.params.map(slice).join(',')})${slice(cameraHandler.body)}`,context);
-  for(const [id,name]of [['replay','replayAction'],['feedback-retry','feedbackRetryAction'],['feedback-next','feedbackNextAction']])
-    if(clickHandlers.has(id)&&(id==='replay'||typeof context[id==='feedback-retry'?'retryFeedback':'completeFeedback']==='function'))
+  for(const [id,name]of [['replay','replayAction']])
+    if(clickHandlers.has(id))
       vm.runInContext(`globalThis.${name}=${clickHandlers.get(id)}`,context);
   if(interruptedMediaHandler)vm.runInContext(`globalThis.mediaInterruptionAction=${slice(interruptedMediaHandler)}`,context);
   if(speechChangeHandler)vm.runInContext(`globalThis.speechSettingAction=${slice(speechChangeHandler)}`,context);
@@ -283,7 +283,7 @@ await check('A finalized review requests spoken feedback once; redraws and timer
   assert.equal(h.review.finalized.length,1);assert.equal(h.state.phase,'feedback');
 });
 
-await check('Spoken feedback holds while speaking, and optional Next cancels speech and advances once',async()=>{
+await check('Spoken feedback holds while speaking, and internal continuation cancels speech and advances once',async()=>{
   const h=controllerHarness({speechOptions:{enabled:true}});await attempt(h);await review(h);
   h.clock.now+=3000;await h.call('tick');
   assert.equal(h.state.phase,'feedback');assert.equal(h.state.remainingMs,0);
@@ -296,12 +296,14 @@ await check('Spoken feedback holds while speaking, and optional Next cancels spe
   assert.equal(h.speech.busy,false);
 });
 
-await check('The actual feedback renderer presents compact center issues and optional actions without a countdown',async()=>{
+await check('The actual feedback renderer presents center issues without feedback buttons or a countdown',async()=>{
   const h=controllerHarness({speechOptions:{enabled:true}});await attempt(h);await review(h);
   for(const name of ['controls','renderPosition','renderFlowStatus','renderProgress'])h.env[name]=()=>{};
   vm.runInContext(definitions.get('render'),h.env);
   await h.call('render');assert.equal(h.elements.get('overlay-value').textContent,'Complete');
   assert.equal(h.elements.get('overlay-value').hidden,true);
+  assert.equal(h.elements.has('feedback-retry'),false);assert.equal(h.elements.has('feedback-next'),false);
+  assert.equal(clickHandlers.has('feedback-retry'),false);assert.equal(clickHandlers.has('feedback-next'),false);
   h.clock.now+=3000;await h.call('tick');
   assert.equal(h.state.phase,'feedback');assert.equal(h.elements.get('overlay-value').textContent,'Complete');
   assert.equal(h.elements.get('practice-overlay').hidden,false);
@@ -330,7 +332,7 @@ await check('Muted or unsupported speech automatically continues after a three-s
   }
 });
 
-await check('Unknown and mismatch speech cannot mark a pass; Try again works even while the announcement is speaking',async()=>{
+await check('Unknown and mismatch speech cannot mark a pass; internal retry cancels the active announcement',async()=>{
   for(const status of ['unknown','mismatch']){
     const h=controllerHarness({speechOptions:{enabled:true}});
     h.review.result={status,passed:false,percent:null,messages:['Constructed issue'],reason:'Constructed issue'};
@@ -368,7 +370,7 @@ await check('Pausing feedback cancels speech and resumes with one fresh announce
   await h.finishSpeech();assert.equal(h.state.index,1);assert.equal(h.speech.calls.length,2);
 });
 
-await check('Pausing feedback retains the compact outcome and optional continuation remains usable on resume',async()=>{
+await check('Pausing feedback retains the compact outcome and internal continuation remains usable on resume',async()=>{
   const h=controllerHarness({speechOptions:{enabled:true}});await attempt(h);await review(h);
   h.clock.now+=3000;await h.call('tick');assert.equal(h.state.phase,'feedback');assert.equal(h.state.remainingMs,0);
   await h.call('pause');assert.equal(h.state.paused,true);assert.equal(h.env.feedbackSpeech.isBusy(),false);

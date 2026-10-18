@@ -2,6 +2,14 @@
 
 Updated: 2026-10-18.
 
+## Latest: button-free feedback and full Factory sentences — 2026-10-18
+
+Retry and success feedback now have no buttons. The centered paper-and-ink layout remains, and the controller retries the current clip or advances a match immediately after the spoken message ends, with no extra delay. Factory feedback uses complete sentences that identify the affected hand or foot, explain the measured error and give a specific correction. Output remains grounded in the supplied issue codes and anatomical side; unsupported claims and wrong-side wording keep the local fallback. Tracking, triangle completion, timing, progress and Arduino rules are unchanged.
+
+Responses allow at most four anatomical paragraphs, 600 characters each and 200 words total. Longer messages use a captured word-count speech watchdog bounded to 18–120 seconds, preserving the original 18-second limit for ordinary feedback. Muted/unavailable/error speech uses the existing reading fallback, scaled to 3–30 seconds for descriptive text. Long feedback stays within the practice stage and can scroll on short screens; every sentence remains in the displayed and spoken text.
+
+Verification: 124 unit tests, TypeScript checking, 29 Factory, 17 spoken automatic-flow, 32 review-flow, 15 self-paced, 12 five-clip, 21 speech and 14 hardware-guidance groups pass. Browser checks prove zero retry/success/completion buttons, immediate single speech-end transitions, full-sentence speech/display, cancellation and readable desktop/mobile layouts including a 200-word response. A real authenticated Factory request through an isolated HTTP server returned two full descriptive hand paragraphs in 10.8 seconds using labeled software issues. No learner frames were sent. The finished live lesson was reloaded after safely updating the loopback server; its selected HP camera and 0.75× speed were restored without starting the camera. USB feedback was reconnected to the existing board. Guide: `docs/factory-feedback-integration.md`; evidence: `artifacts/spoken-auto-feedback-review/` and `artifacts/factory-feedback-review/`.
+
 ## Latest: centered feedback and automatic continuation after speech — 2026-10-18
 
 Feedback now sits in the center of the teacher/webcam stage, using the Qi Mirror landing page's local Instrument Serif and Manrope fonts, light paper wash, ink text and muted accent. The floating dialog/card, rounded border, shadow, dimming and backdrop blur are removed. Small text controls remain optional; no button is required to continue. After the spoken message ends, matched attempts advance to the next clip and mismatch or unknown returns to this clip's starting squares. The fifth matched clip completes the lesson. Triangle completion still gives the learner unlimited time before review, with the existing tracking, tempo, guide geometry, progress and hardware rules.

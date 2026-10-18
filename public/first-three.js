@@ -54,7 +54,7 @@ const state={manifest:null,data:null,sources:new Map(),sourceId:null,loading:fal
   cameraRunning:false,completionNotice:null,screenLayout:null,teacherFreezePending:false,teacherBoundaryAtMs:null,teacherIntro:false,
   watched:false,watchPurpose:null,attemptStartedAtMs:null,attemptInterrupted:null,attemptCameraGeneration:null,
   reviewAction:null,pausePhase:null,endTargets:null,targetStatus:null,stepSixMode:'full-body',trails:new Map(INDICES.map(i=>[i,[]])),lastDrawn:undefined,lastSample:null};
-const FEEDBACK_FLOW_RULES={aiWaitMs:12000,readingMs:3000};
+const FEEDBACK_FLOW_RULES={aiWaitMs:12000,readingMs:3000,maximumReadingMs:30000};
 const aiFeedback=createPracticeAiFeedback({timeoutMs:FEEDBACK_FLOW_RULES.aiWaitMs});
 let feedbackSequence=0;
 let feedbackWordingSource='local';
@@ -159,6 +159,7 @@ function render(){
   renderPosition();renderFlowStatus();renderProgress();
   put('teacher-tracking-note',`${activeControlIndices().length} tutorial points · includes approximate guides`);
   const overlay=$('practice-overlay');overlay.hidden=!state.active||state.paused||state.phase!=='feedback';overlay.dataset.mode='feedback';
+  overlay.dataset.descriptive=String(state.feedback?.speechStyle==='descriptive');
   const speaking=state.phase==='feedback'&&feedbackSpeech.isBusy();overlay.dataset.speaking=String(speaking);
   if(!overlay.hidden){
     const passed=state.feedback?.status==='match';
@@ -170,9 +171,6 @@ function render(){
       :feedbackCycle?.pendingAi?'Preparing spoken feedback…'
       :passed?(speaking?'Next step after the message.':'Continuing shortly.')
       :(speaking?'Try again after the message.':'Try again shortly.'));
-    $('feedback-retry').disabled=!state.camera?.getState().running;
-    $('feedback-next').hidden=!passed;$('feedback-next').disabled=!state.camera?.getState().running;
-    $('feedback-next').textContent=state.index===total()-1?'Finish lesson':'Next step';
   }
   for(const button of $('step-list').querySelectorAll('button')){
     button.setAttribute('aria-current',Number(button.dataset.index)===state.index?'step':'false');
@@ -434,6 +432,11 @@ function feedbackFlowDiagnostics(){return {automatic:true,aiWaitMs:FEEDBACK_FLOW
   readingMs:FEEDBACK_FLOW_RULES.readingMs,pendingAi:!!feedbackCycle?.pendingAi,
   speechStarted:!!feedbackCycle?.speechStarted,speechDone:!!feedbackCycle?.speechDone,
   readingDeadlineMs:feedbackCycle?.readingDeadlineMs??null};}
+function feedbackReadingMs(){
+  if(state.feedback?.speechStyle!=='descriptive')return FEEDBACK_FLOW_RULES.readingMs;
+  const words=(state.feedback.messages??[]).join(' ').trim().split(/\s+/).filter(Boolean).length;
+  return Math.min(FEEDBACK_FLOW_RULES.maximumReadingMs,Math.max(FEEDBACK_FLOW_RULES.readingMs,words*300));
+}
 function speakFeedback(cycle){
   if(!currentFeedbackCycle(cycle)||cycle.speechStarted)return;
   cycle.pendingAi=false;cycle.speechStarted=true;cycle.readingDeadlineMs=null;
@@ -441,10 +444,10 @@ function speakFeedback(cycle){
     if(!currentFeedbackCycle(cycle)||cycle.speechDone)return;
     cycle.speechDone=true;
     if(reason==='completed'){completeFeedback();return;}
-    cycle.readingDeadlineMs=performance.now()+FEEDBACK_FLOW_RULES.readingMs;render();
+    cycle.readingDeadlineMs=performance.now()+feedbackReadingMs();render();
   }});
   if(!currentFeedbackCycle(cycle))return;
-  if(!speaking&&!cycle.speechDone)cycle.readingDeadlineMs=performance.now()+FEEDBACK_FLOW_RULES.readingMs;
+  if(!speaking&&!cycle.speechDone)cycle.readingDeadlineMs=performance.now()+feedbackReadingMs();
   render();
 }
 function startFeedbackPresentation({requestAi=true}={}){
@@ -462,7 +465,7 @@ function startFeedbackPresentation({requestAi=true}={}){
     if(!currentFeedbackCycle(cycle)||state.feedback!==local)return;
     if(result?.source==='factory'){
       // Only wording changes. The local outcome, issues and automatic action stay intact.
-      state.feedback={...local,messages:result.messages,reason:result.messages[0],message:result.messages[0]};feedbackWordingSource='factory';
+      state.feedback={...local,messages:result.messages,reason:result.messages[0],message:result.messages[0],speechStyle:'descriptive'};feedbackWordingSource='factory';
     }
     speakFeedback(cycle);
   }).catch(()=>{if(currentFeedbackCycle(cycle))speakFeedback(cycle);});
@@ -664,11 +667,9 @@ $('start-practice').addEventListener('click',async()=>{
   state.active=true;state.paused=false;state.preview=false;state.visualOnly=false;state.awaitingCamera=true;video.pause();++state.operation;clearEvidence();phase('camera');$('start-camera').click();
 });
 $('practice-toggle').addEventListener('click',pause);$('end-practice').addEventListener('click',stop);
-$('feedback-retry').addEventListener('click',retryFeedback);
-$('feedback-next').addEventListener('click',completeFeedback);
 $('practice-full-body').addEventListener('click',()=>selectPracticeMode('full-body'));
 $('practice-arms-only').addEventListener('click',()=>selectPracticeMode('arms-only'));
-$('replay').addEventListener('click',async()=>{if(state.camera.getState().running){state.active=true;state.paused=false;if(state.watched)void returnToStart();else void watchDemonstration('lesson');}else if(await choose(state.index)){state.active=true;void watchDemonstration('preview');}});
+$('replay').addEventListener('click',async()=>{if(state.camera.getState().running){state.active=true;state.paused=false;if(state.phase==='feedback')retryFeedback();else if(state.watched)void returnToStart();else void watchDemonstration('lesson');}else if(await choose(state.index)){state.active=true;void watchDemonstration('preview');}});
 $('previous').addEventListener('click',()=>choose(Math.max(0,state.index-1),true));
 $('next').addEventListener('click',()=>{if(state.ready&&state.phase!=='finished'){state.active=true;recordAndAdvance('manual');}});
 $('speed').addEventListener('change',()=>{state.speed=Number($('speed').value);video.playbackRate=state.speed;if(state.active&&['demonstrating','grace'].includes(state.phase))void returnToStart('Playback speed changed. Start a fresh attempt from the squares.');});
@@ -677,7 +678,7 @@ $('start-camera').addEventListener('click',()=>feedbackSpeech.unlock());
 $('spoken-feedback').addEventListener('change',()=>{
   const enabled=$('spoken-feedback').checked;feedbackSpeech.unlock();feedbackSpeech.setEnabled(enabled);
   if(!enabled&&currentFeedbackCycle(feedbackCycle)&&feedbackCycle.speechStarted&&!feedbackCycle.speechDone){
-    feedbackCycle.speechDone=true;feedbackCycle.readingDeadlineMs=performance.now()+FEEDBACK_FLOW_RULES.readingMs;render();
+    feedbackCycle.speechDone=true;feedbackCycle.readingDeadlineMs=performance.now()+feedbackReadingMs();render();
   }
 });
 video.addEventListener('seeking',()=>{teacherDisplaySmoother.reset();state.lastDrawn=undefined;drawTeacher(true);});

@@ -11,20 +11,49 @@ const names = {15:'Left hand',16:'Right hand',27:'Left foot',28:'Right foot',33:
 const stepIds = new Set(['first-three-01','first-three-02','first-three-03','first-six-04','first-six-05']);
 // A closed vocabulary makes wording validation deterministic. Droid never decides
 // whether the motion passed, and never receives the camera or landmark data.
-const phrases = Object.freeze({
-  too_fast:['too fast','moved too quickly'],
-  too_slow:['too slow','moved too slowly'],
-  late_start:['started late','began too late'],
-  off_guide:['off the beam','moved outside the beam'],
-  hold_drift:['moved from its hold','did not stay at its hold'],
-  endpoint_unreached:['missed the triangle','did not reach the triangle'],
-  movement_incomplete:['movement incomplete','did not complete the movement'],
+const sentenceBuilders = Object.freeze({
+  too_fast:limb => [
+    `Your ${limb} moved faster than the demonstration. Slow down to follow the teacher's pace.`,
+    `Your ${limb} moved too quickly. Move more slowly with the teacher.`,
+  ],
+  too_slow:limb => [
+    `Your ${limb} moved more slowly than the demonstration. Move a little faster with the teacher.`,
+    `Your ${limb} moved too slowly. Follow the teacher's pace more closely.`,
+  ],
+  late_start:limb => [
+    `Your ${limb} began moving after the teacher. Start moving sooner with the demonstration.`,
+    `Your ${limb} started late. Begin its movement when the teacher begins.`,
+  ],
+  off_guide:limb => [
+    `Your ${limb} moved outside the progress beam. Keep it within the beam as you move.`,
+    `Your ${limb} left the progress beam. Follow the beam more closely.`,
+  ],
+  hold_drift:limb => [
+    `Your ${limb} moved away from its hold position. Keep it steady there.`,
+    `Your ${limb} left its hold position. Keep it steady in place.`,
+  ],
+  endpoint_unreached:limb => [
+    `Your ${limb} did not reach its target triangle. Move it into the triangle.`,
+    `Your ${limb} missed its target triangle. Move it into the triangle.`,
+  ],
+  movement_incomplete:limb => [
+    `Your ${limb} did not complete its movement. Follow the whole movement on your retry.`,
+    `Your ${limb} did not finish its movement. Complete it on retry.`,
+  ],
 });
 const unknownCodes = new Set(['reference_unknown','tracking_unknown','attempt_incomplete']);
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const plainText = (value,max) => typeof value === 'string' && value.length > 0 && value.length <= max
   && !/[\u0000-\u001f\u007f<>]/.test(value);
 const allowedKeys = (value,keys) => Object.keys(value).every(key => keys.includes(key));
+
+// Each wording carries its anatomical side and only the fact measured by its
+// issue code. Corrections are approved here rather than invented by the model.
+export function factoryIssueSentences(issue) {
+  if (!object(issue) || !Object.hasOwn(names,issue.index) || issue.limb !== names[issue.index]
+    || !Object.hasOwn(sentenceBuilders,issue.code)) return [];
+  return Object.freeze(sentenceBuilders[issue.code](issue.limb.toLowerCase()));
+}
 
 export function normalizeFeedbackRequest(value) {
   if (!object(value) || !allowedKeys(value,['attemptId','stepId','status','messages','issues'])
@@ -38,7 +67,7 @@ export function normalizeFeedbackRequest(value) {
   const seenIssues=new Set();
   for (const source of value.issues) {
     if (!object(source) || !allowedKeys(source,['index','code','message'])
-      || typeof source.code !== 'string' || !(Object.hasOwn(phrases,source.code) || unknownCodes.has(source.code))
+      || typeof source.code !== 'string' || !(Object.hasOwn(sentenceBuilders,source.code) || unknownCodes.has(source.code))
       || !(source.index == null || Number.isInteger(source.index) && Object.hasOwn(names,source.index))
       || source.message !== undefined && !plainText(source.message,500)) return null;
     const identity=`${names[source.index] ?? 'general'}:${source.code}`;
@@ -58,7 +87,7 @@ export function validateFactoryFeedbackOutput(output,request) {
   for (const entry of output.entries) {
     if (!object(entry) || !allowedKeys(entry,['issueId','text']) || accepted.has(entry.issueId)) return null;
     const issue=supplied.get(entry.issueId);
-    if (!issue || !issue.limb || !phrases[issue.code]?.includes(entry.text)) return null;
+    if (!issue || !factoryIssueSentences(issue).includes(entry.text)) return null;
     accepted.set(entry.issueId,entry.text);
   }
   const groups=new Map();
@@ -67,9 +96,10 @@ export function validateFactoryFeedbackOutput(output,request) {
     if (!groups.has(issue.limb)) groups.set(issue.limb,new Set());
     groups.get(issue.limb).add(accepted.get(issue.issueId));
   }
-  const messages=[...groups].map(([limb,parts]) => `${limb}: ${[...parts].join('; ')}.`);
-  return messages.length && messages.every(message => plainText(message,180))
-    && messages.join(' ').length <= 800 ? messages : null;
+  const messages=[...groups.values()].map(parts => [...parts].join(' '));
+  const text=messages.join(' ');
+  return messages.length && messages.length <= 4 && messages.every(message => plainText(message,600))
+    && text.length <= 2400 && text.split(/\s+/).length <= 200 ? messages : null;
 }
 
 export async function resolveDroidExecutable() {
@@ -124,7 +154,7 @@ async function readBody(req,maxBytes,signal) {
 function outputSchema(issues) {
   return {type:'object',properties:{entries:{type:'array',minItems:issues.length,maxItems:issues.length,
     items:{oneOf:issues.map(issue => ({type:'object',properties:{issueId:{const:issue.issueId},
-      text:{type:'string',enum:phrases[issue.code]}},required:['issueId','text'],additionalProperties:false}))}}},
+      text:{type:'string',enum:factoryIssueSentences(issue)}},required:['issueId','text'],additionalProperties:false}))}}},
     required:['entries'],additionalProperties:false};
 }
 function catalogOnlyException(tool) {
@@ -173,8 +203,10 @@ export function createFactoryPracticeFeedbackService({
         },
         autoRejectPermissionRequests:true,disableBuiltinSkills:true,mcpServers:[],abortSignal:signal,
         systemPrompt:'Rewrite only the supplied measured movement issues. Return JSON entries containing each issueId exactly once. '
-          + 'Choose one supplied allowedText fragment for that issue. No new issues, sides, claims, diagnosis, advice or prose. '
-          + 'The caller adds the anatomical limb name. Do not use tools or read files.'});
+          + 'Choose one supplied allowedText entry for that issue; each contains complete descriptive sentences and a gentle correction. '
+          + 'Prefer the shorter alternative when needed to keep all selected text within 200 words total. '
+          + 'Keep the anatomical limb name exactly as supplied. Do not add issues, sides, numeric claims, diagnosis or other advice. '
+          + 'Do not use tools or read files.'});
       // If startup finishes after cancellation, still dispose the late session.
       Promise.resolve(pendingSession).then(async value => {
         if (signal.aborted) {try {await value.close();} catch { /* Dispose a late canceled session. */ }}
@@ -188,7 +220,7 @@ export function createFactoryPracticeFeedbackService({
         throw new Error('Data or action tools still enabled.');
       modelTimer=setTimeout(() => controller.abort(),modelTimeoutMs);
       const prompt=JSON.stringify({stepId:request.stepId,status:request.status,issues:request.issues.map(issue =>
-        ({issueId:issue.issueId,limb:issue.limb,code:issue.code,allowedText:phrases[issue.code]}))});
+        ({issueId:issue.issueId,limb:issue.limb,code:issue.code,allowedText:factoryIssueSentences(issue)}))});
       const iterator=session.stream(prompt,{abortSignal:signal,outputFormat:{type:sdk.OutputFormatType.JsonSchema,
         schema:outputSchema(request.issues)}})[Symbol.asyncIterator]();
       while (true) {
@@ -249,7 +281,7 @@ export function createFactoryPracticeFeedbackService({
         clearTimeout(timer);
         if (!isConfigured()) {json(res,200,local(request,'factory-not-configured'));return true;}
         if (request.status !== 'mismatch' || !request.issues.length
-          || request.issues.some(issue => !issue.limb || !Object.hasOwn(phrases,issue.code))) {
+          || request.issues.some(issue => !issue.limb || !Object.hasOwn(sentenceBuilders,issue.code))) {
           json(res,200,local(request,'local-review-kept'));return true;
         }
         const timestamp=now();

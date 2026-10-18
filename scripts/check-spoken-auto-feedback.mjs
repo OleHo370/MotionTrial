@@ -19,6 +19,12 @@ const mismatch={status:'mismatch',passed:false,percent:null,issues:[{index:33,co
   messages:['Left hand: too fast.','Right hand: too slow.'],ruleVersion:'CONSTRUCTED review fixture'};
 const matched={status:'match',passed:true,percent:null,issues:[],messages:['Targets reached.']};
 const unknown={status:'unknown',passed:false,percent:null,issues:[{index:33,code:'tracking_unknown'}],messages:['Left hand: tracking unclear.']};
+const descriptiveMessages=[
+  'Your left hand moved faster than the demonstration. On your next attempt, slow it down so it follows the same pace as the teacher until it reaches the ending triangle.',
+  'Your right hand moved slower than the demonstration. On your next attempt, move it a little faster so it follows the same pace as the teacher until it reaches the ending triangle.',
+];
+const longMessages=['left hand','right hand','left foot','right foot'].map(limb=>
+  `Your ${limb} moved faster than the demonstration and left its movement beam before reaching the ending triangle. On your next attempt, slow this part of the movement down, keep its tracker inside the visible beam, and continue following the guide until the tracker is centered on its ending triangle.`);
 async function check(name,run){await run();checks.push(name);console.log(`PASS: ${name}`);}
 
 function aiFixture(){
@@ -87,11 +93,27 @@ async function controllerChecks(){
     const ai=aiFixture(),h=controllerHarness({speechOptions:{enabled:true},overrides:{aiFeedback:ai}});
     await h.call('beginReview',mismatch,'retry');assert.equal(h.state.phase,'feedback');
     assert.deepEqual([...h.state.feedback.messages],mismatch.messages);assert.equal(ai.calls.length,1);assert.equal(h.speech.calls.length,0);
-    const messages=['Left hand: moved too quickly.','Right hand: moved too slowly.'];ai.reply(0,messages);await h.flush();
+    const messages=descriptiveMessages;ai.reply(0,messages);await h.flush();
     assert.equal(h.env.feedbackWordingSource,'factory');assert.equal(h.speech.calls.length,1);
     assert.deepEqual([...h.speech.calls[0].args[0].messages],messages);assert.equal(h.state.feedback.status,'mismatch');
+    assert.equal(h.state.feedback.speechStyle,'descriptive');
+    const endedAt=h.clock.now;
     await h.finishSpeech();assert.equal(h.state.index,0);assert.equal(h.state.phase,'positioning');assert.equal(h.state.results.size,0);
+    assert.equal(h.clock.now,endedAt,'Normal voice end has no added reading or retry delay');
     assert.equal(h.state.feedback,null);assert.equal(ai.calls.length,1);
+  });
+  await check('Every long AI sentence is preserved for display and speech, without changing measured evidence or completion',async()=>{
+    const ai=aiFixture(),h=controllerHarness({speechOptions:{enabled:true},overrides:{aiFeedback:ai}});
+    const measured={...mismatch,issues:[33,34,35,36].map(index=>({index,code:'too_fast'})),ruleVersion:'CONSTRUCTED long wording QA'};
+    await h.call('beginReview',measured,'retry');const before=structuredClone(h.state.feedback);
+    ai.reply(0,longMessages);await h.flush();
+    assert.ok(longMessages.join(' ').split(/\s+/).length>=150);
+    assert.deepEqual([...h.state.feedback.messages],longMessages);
+    assert.deepEqual([...h.speech.calls[0].args[0].messages],longMessages);
+    for(const key of ['status','passed','issues','ruleVersion'])assert.deepEqual(h.state.feedback[key],before[key],key);
+    await h.advance(18001);await h.call('tick');assert.equal(h.state.phase,'feedback');assert.equal(h.state.results.size,0);
+    const endedAt=h.clock.now;await h.finishSpeech();assert.equal(h.clock.now,endedAt);
+    assert.equal(h.state.phase,'positioning');assert.equal(h.state.index,0);assert.equal(h.state.results.size,0);
   });
   await check('Factory timeout and rejected result fall back to exact local speech; late replies cannot repaint retry',async()=>{
     for(const failure of ['timeout','null']){
@@ -210,7 +232,7 @@ window.qaEnterReview=(review,index=0)=>{state.active=true;state.paused=false;sta
     await page.route('**/api/practice-feedback',async route=>{
       const body=route.request().postDataJSON();await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({
         source:'factory',attemptId:body.attemptId,stepId:body.stepId,status:body.status,
-        messages:['Left hand: moved too quickly.','Right hand: moved too slowly.']})});
+        messages:route.request().postDataJSON().issues.length===4?longMessages:descriptiveMessages})});
     });
     async function load(){await page.goto(`${base}/first-three.html?step=1`);
       await page.waitForFunction(()=>window.firstThreeDiagnostics?.ready&&!window.firstThreeDiagnostics.loading);
@@ -229,6 +251,8 @@ window.qaEnterReview=(review,index=0)=>{state.active=true;state.paused=false;sta
           radius:cardStyle.borderRadius,shadow:cardStyle.boxShadow,border:cardStyle.borderTopWidth,
           overlay:{x:a.x,y:a.y,width:a.width,height:a.height},grid:{x:b.x,y:b.y,width:b.width,height:b.height},
           card:{x:c.x,y:c.y,width:c.width,height:c.height},cameraRequests:window.qaCameraRequests,
+          buttons:overlay.querySelectorAll('button').length,
+          scrollHeight:card.scrollHeight,clientHeight:card.clientHeight,
           speech:window.qaSpoken[0].text,message:document.getElementById('overlay-reason').textContent};
       });
       assert.equal(appearance.role,'status');assert.equal(appearance.modal,null);assert.equal(appearance.position,'absolute');
@@ -236,7 +260,9 @@ window.qaEnterReview=(review,index=0)=>{state.active=true;state.paused=false;sta
       assert.equal(appearance.radius,'0px');assert.equal(appearance.shadow,'none');assert.equal(appearance.border,'0px');
       assert.ok(Math.abs(appearance.card.x+appearance.card.width/2-(appearance.grid.x+appearance.grid.width/2))<2);
       assert.ok(Math.abs(appearance.card.y+appearance.card.height/2-(appearance.grid.y+appearance.grid.height/2))<2);
-      assert.equal(appearance.cameraRequests,0);assert.match(appearance.speech,/moved too quickly/);
+      assert.equal(appearance.cameraRequests,0);assert.equal(appearance.buttons,0);
+      assert.equal(appearance.speech,descriptiveMessages.join(' '));assert.equal(appearance.message,descriptiveMessages.join('\n'));
+      assert.ok(appearance.scrollHeight<=appearance.clientHeight+1,'Typical full-sentence hand feedback fits without scrolling');
       assert.equal(await page.locator('#feedback-ai-source').isVisible(),true);
       snapshots.desktop=appearance;await page.screenshot({path:fileURLToPath(new URL('center-feedback-desktop.png',out))});
     });
@@ -246,20 +272,45 @@ window.qaEnterReview=(review,index=0)=>{state.active=true;state.paused=false;sta
       assert.equal(await page.evaluate(()=>window.firstThreeDiagnostics.index),0);
       assert.equal(await page.locator('#practice-overlay').isVisible(),false);
       await page.evaluate(review=>window.qaEnterReview(review),matched);await page.waitForFunction(()=>window.qaSpoken.length===2);
+      assert.equal(await page.locator('#practice-overlay button').count(),0);
       await page.evaluate(()=>window.qaSpoken.at(-1).onend());await page.waitForFunction(()=>window.firstThreeDiagnostics.index===1);
       assert.equal(await page.evaluate(()=>window.firstThreeDiagnostics.results[0].status),'matched');
       assert.equal(await page.evaluate(()=>window.qaCameraRequests),0);
     });
-    await check('Small portrait and landscape center strips fit the practice area and keep every error readable',async()=>{
-      for(const size of [{width:390,height:844},{width:844,height:390}]){
-        await page.setViewportSize(size);await load();await page.evaluate(review=>window.qaEnterReview(review),mismatch);
+    await check('Long full-sentence feedback remains completely readable and spoken on desktop, portrait and landscape',async()=>{
+      for(const size of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}]){
+        await page.setViewportSize(size);await load();await page.evaluate(review=>window.qaEnterReview(review),{
+          ...mismatch,issues:[33,34,35,36].map(index=>({index,code:'too_fast'})),
+        });
         await page.waitForFunction(()=>window.qaSpoken.length===1);
         const fit=await page.evaluate(()=>{const card=document.querySelector('#practice-overlay .overlay-card'),rect=card.getBoundingClientRect();
+          const grid=card.closest('.practice-grid').getBoundingClientRect(),style=getComputedStyle(card);
           return {left:rect.left,right:rect.right,top:rect.top,bottom:rect.bottom,width:rect.width,height:rect.height,
             scrollWidth:card.scrollWidth,clientWidth:card.clientWidth,message:document.getElementById('overlay-reason').textContent,
+            scrollHeight:card.scrollHeight,clientHeight:card.clientHeight,
+            pointerEvents:style.pointerEvents,overflowY:style.overflowY,
+            grid:{left:grid.left,right:grid.right,top:grid.top,bottom:grid.bottom},
+            speech:window.qaSpoken[0].text,buttons:document.querySelectorAll('#practice-overlay button').length,
+            textOverflow:getComputedStyle(document.getElementById('overlay-reason')).textOverflow,
             cameraRequests:window.qaCameraRequests};});
         assert.ok(fit.left>=-1&&fit.right<=size.width+1,JSON.stringify(fit));assert.ok(fit.scrollWidth<=fit.clientWidth+1);
-        assert.match(fit.message,/Left hand/);assert.match(fit.message,/Right hand/);assert.equal(fit.cameraRequests,0);
+        assert.ok(fit.top>=fit.grid.top-1&&fit.bottom<=fit.grid.bottom+1,JSON.stringify({size,...fit}));
+        if(fit.scrollHeight>fit.clientHeight+1){
+          assert.equal(fit.pointerEvents,'auto','Long feedback must accept scrolling when it cannot fit');
+          assert.ok(['auto','scroll'].includes(fit.overflowY));
+          const bottom=await page.evaluate(()=>{
+            const card=document.querySelector('#practice-overlay .overlay-card'),reason=document.getElementById('overlay-reason');
+            card.scrollTop=card.scrollHeight;
+            const range=document.createRange();range.selectNodeContents(reason);const last=Array.from(range.getClientRects()).at(-1);
+            return {scrollTop:card.scrollTop,maximum:card.scrollHeight-card.clientHeight,
+              lastBottom:last?.bottom,cardBottom:card.getBoundingClientRect().bottom};
+          });
+          assert.ok(Math.abs(bottom.scrollTop-bottom.maximum)<=1,'The bottom of long feedback is reachable');
+          assert.ok(bottom.lastBottom<=bottom.cardBottom+1,'The final sentence is visible after scrolling');
+          fit.scrolledToBottom=bottom;
+        }
+        assert.equal(fit.message,longMessages.join('\n'));assert.equal(fit.speech,longMessages.join(' '));
+        assert.equal(fit.buttons,0);assert.equal(fit.cameraRequests,0);assert.notEqual(fit.textOverflow,'ellipsis');
         snapshots[`${size.width}x${size.height}`]=fit;
         await page.screenshot({path:fileURLToPath(new URL(`center-feedback-${size.width}x${size.height}.png`,out))});
       }

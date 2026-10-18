@@ -205,6 +205,78 @@ const unknown={status:'unknown',percent:99,reason:'Your left foot was hidden.'};
 }
 
 {
+  const messages=[
+    'Your left hand moved too quickly during this motion. On the next attempt, let it travel more slowly toward the ending triangle while keeping the movement steady and staying within its progress beam.',
+    'Your right hand moved too slowly during this motion. On the next attempt, bring it toward the ending triangle a little sooner while keeping the movement steady and staying within its progress beam.',
+    'Your left foot moved outside its progress beam during this motion. On the next attempt, keep it closer to the beam as you move toward the ending triangle, without rushing to reach the target.',
+    'Your right foot moved away from its hold during this motion. On the next attempt, keep it near its holding target while the other tracked points complete their movements and reach their ending triangles.',
+  ];
+  const result={status:'mismatch',feedbackStyle:'compact',speechStyle:'descriptive',messages};
+  const before=JSON.stringify(result),f=fixture(),completed=[];f.speech.unlock();
+  assert.equal(f.speech.speakReview(result,{onComplete:reason=>completed.push(reason)}),true);
+  assert.equal(f.last().text,messages.join(' '),'Every descriptive sentence is spoken in full');
+  const budget=f.speech.getState().maximumSpeechMs;
+  assert.ok(budget>18000&&budget<=120000);
+  f.clock.advance(18000);assert.equal(f.speech.isBusy(),true);assert.deepEqual(completed,[]);
+  const end=f.last().onend;end();
+  assert.deepEqual(completed,['completed']);assert.equal(f.speech.isBusy(),false);assert.equal(f.clock.timers.size,0);
+  assert.equal(f.speech.getState().maximumSpeechMs,null);assert.equal(JSON.stringify(result),before);
+  end();f.clock.advance(120000);assert.deepEqual(completed,['completed']);f.speech.destroy();
+  checks.push('Descriptive feedback speaks every complete sentence, remains active beyond the old 18-second deadline, and settles immediately and exactly once on its actual end event without changing the review.');
+}
+
+{
+  const messages=[Array.from({length:250},(_,i)=>`constructed${i}`).join(' ')];
+  for(const speechStyle of [undefined,'brief','descriptive']){
+    const f=fixture(),completed=[];f.speech.unlock();
+    f.speech.speakReview({status:'mismatch',feedbackStyle:'compact',speechStyle,messages},
+      {onComplete:reason=>completed.push(reason)});
+    assert.equal(f.last().text,messages[0]);
+    const budget=f.speech.getState().maximumSpeechMs;
+    assert.equal(budget,speechStyle==='descriptive'?120000:18000);
+    f.clock.advance(budget-1);assert.equal(f.speech.isBusy(),true);assert.deepEqual(completed,[]);
+    f.clock.advance(1);assert.deepEqual(completed,['watchdog']);assert.equal(f.engine.cancels,1);
+    assert.equal(f.clock.timers.size,0);f.speech.destroy();
+  }
+  const f=fixture();f.speech.unlock();
+  f.speech.speakReview({status:'match',feedbackStyle:'compact',speechStyle:'descriptive',messages:['Targets reached.']});
+  assert.equal(f.speech.getState().maximumSpeechMs,18000);f.last().onend();f.speech.destroy();
+  checks.push('Only explicitly descriptive feedback receives a longer finite deadline, capped at two minutes; ordinary compact feedback and short descriptive feedback retain the original 18-second limit.');
+}
+
+{
+  const result={status:'mismatch',feedbackStyle:'compact',speechStyle:'descriptive',
+    messages:[Array.from({length:80},(_,i)=>`constructed${i}`).join(' ')]};
+  const f=fixture({voices:[]}),completed=[];f.speech.unlock();
+  f.speech.speakReview(result,{onComplete:reason=>completed.push(reason)});
+  const budget=f.speech.getState().maximumSpeechMs;
+  result.messages[0]+=' changed after request';
+  f.clock.advance(900);f.engine.changeVoices([english]);
+  assert.equal(f.speech.getState().maximumSpeechMs,budget);assert.doesNotMatch(f.last().text,/changed after request/);
+  const end=f.last().onend,error=f.last().onerror;
+  f.clock.advance(budget-901);f.engine.changeVoices([voice('Another local voice')]);
+  assert.equal(f.speech.isBusy(),true);assert.deepEqual(completed,[]);
+  f.clock.advance(1);assert.equal(f.clock.now,budget);assert.deepEqual(completed,['watchdog']);
+  end();error();f.clock.advance(120000);assert.deepEqual(completed,['watchdog']);assert.equal(f.clock.timers.size,0);f.speech.destroy();
+  checks.push('The descriptive deadline and spoken text are captured once per request, include voice-loading time, and cannot be extended by modified review text, later voice events or captured stale callbacks.');
+}
+
+{
+  for(const action of ['cancel','disable','destroy']){
+    const f=fixture(),completed=[];f.speech.unlock();
+    f.speech.speakReview({status:'mismatch',feedbackStyle:'compact',speechStyle:'descriptive',
+      messages:[Array.from({length:150},(_,i)=>`constructed${i}`).join(' ')]},
+      {onComplete:reason=>completed.push(reason)});
+    const end=f.last().onend,error=f.last().onerror;
+    f.clock.advance(18000);assert.equal(f.speech.isBusy(),true);
+    if(action==='cancel')f.speech.cancel();else if(action==='disable')f.speech.setEnabled(false);else f.speech.destroy();
+    assert.equal(f.speech.isBusy(),false);assert.equal(f.clock.timers.size,0);
+    end();error();f.clock.advance(120000);assert.deepEqual(completed,[]);f.speech.destroy();
+  }
+  checks.push('Canceling, disabling or destroying a longer descriptive announcement clears its extended watchdog and rejects late completion instead of continuing an abandoned review.');
+}
+
+{
   for(const resolve of ['timeout','voiceschanged']){
     const f=fixture({voices:[]}),completed=[];f.speech.unlock();
     assert.equal(f.speech.speakReview(match,{onComplete:reason=>completed.push(reason)}),true);

@@ -39,6 +39,8 @@ try {
   assert.equal(result.source, 'factory', 'Live SDK wording should pass validation.');
   assert.equal(result.status, body.status);
   assert.equal(result.attemptId, body.attemptId);
+  assert.match(result.messages[0], /^Your left hand .*\. .+\.$/);
+  assert.match(result.messages[1], /^Your right hand .*\. .+\.$/);
   assert.ok(result.messages.every(message => !message.includes(process.env.FACTORY_API_KEY)));
   console.log('PASS: real Factory SDK response through the practice HTTP endpoint.');
 } finally {

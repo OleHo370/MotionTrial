@@ -1,8 +1,15 @@
 // Local browser speech for an already-computed practice review. This module
 // never assesses movement, changes a result, or sends feedback to a service.
 const VOICE_WAIT_MS=1000,MAXIMUM_SPEECH_MS=18000;
+const MAXIMUM_DESCRIPTIVE_SPEECH_MS=120000;
 const clean=text=>typeof text==='string'?text.replace(/\s+/g,' ').trim():'';
 const sentence=text=>/[.!?]$/.test(text)?text:`${text}.`;
+
+function speechDeadline(result,text){
+  if(result?.speechStyle!=='descriptive')return MAXIMUM_SPEECH_MS;
+  const words=text.trim()?text.trim().split(/\s+/).length:0;
+  return Math.min(MAXIMUM_DESCRIPTIVE_SPEECH_MS,Math.max(MAXIMUM_SPEECH_MS,5000+words*600));
+}
 
 function reviewText(result){
   if(result?.feedbackStyle==='compact')return (result.messages??[]).map(clean).filter(Boolean).join(' ');
@@ -31,7 +38,8 @@ export function createFeedbackSpeech({
   let detachVoices=()=>{};
 
   function getState(){return {supported,enabled:isEnabled,unlocked,busy:!!active&&!destroyed,
-    message,voiceName:active?.utterance?.voice?.name||selectedVoice?.name||null};}
+    message,voiceName:active?.utterance?.voice?.name||selectedVoice?.name||null,
+    maximumSpeechMs:active?.maximumSpeechMs??null};}
   function publish(){
     const snapshot=getState(),key=JSON.stringify(snapshot);if(key===published)return;
     published=key;
@@ -149,12 +157,14 @@ export function createFeedbackSpeech({
       cancelActive({notify:false});readVoices();
       if(!supported||!isEnabled||!unlocked){message=readyMessage();publish();return false;}
       if(voiceState==='missing'||voiceState==='error'){message=readyMessage();publish();return false;}
-      const request={token:++sequence,text:reviewText(result),onComplete,utterance:null,voiceTimer:null,watchdog:null,started:false};
+      const text=reviewText(result);
+      const request={token:++sequence,text,maximumSpeechMs:speechDeadline(result,text),onComplete,utterance:null,voiceTimer:null,watchdog:null,started:false};
       active=request;message=selectedVoice?'Preparing spoken feedback…':'Loading an installed English voice…';
       try{
-        // This deadline includes voice discovery; it is never extended by
-        // voiceschanged, onstart, repeated callbacks, or browser queue delays.
-        request.watchdog=setTimer(()=>finish(request,'Speech timed out. Written feedback remains available.',{cancelSpeech:true,reason:'watchdog'}),MAXIMUM_SPEECH_MS);
+        // Capture the finite deadline once, allowing complete descriptive
+        // feedback at a conservative speaking pace. Voice discovery is included;
+        // voiceschanged, onstart, repeated callbacks and queues never extend it.
+        request.watchdog=setTimer(()=>finish(request,'Speech timed out. Written feedback remains available.',{cancelSpeech:true,reason:'watchdog'}),request.maximumSpeechMs);
         publish();if(!current(request))return false;
         if(selectedVoice)start(request);
         else request.voiceTimer=setTimer(()=>{
