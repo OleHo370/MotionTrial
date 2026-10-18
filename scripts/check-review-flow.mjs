@@ -95,7 +95,7 @@ function controllerHarness({functions=null,overrides={},stateOverrides={},speech
     REVIEW_RULES:{completionGraceMs:1000,feedbackMs:3000,maximumAgeMs:450},
     visible:p=>!!p&&Number.isFinite(p.x)&&Number.isFinite(p.y),
     render(){events.push({kind:'render',phase:context.state?.phase,at:clock.now});},
-    drawGuides(){},drawTeacher(){},seedScreenTargets(){},
+    drawGuides(){},drawTeacher(){},seedScreenTargets(){},syncPracticeModeUI(){},
     cameraFeedAvailable:()=>cameraState.running,
     put(id,text){$(id).textContent=text;},
     teacherReferenceReason:()=> 'Constructed unsupported teacher reference.',
@@ -131,7 +131,7 @@ function controllerHarness({functions=null,overrides={},stateOverrides={},speech
     practiceStart:()=>context.state.manifest.steps[context.state.index].practiceStartSeconds,
     recording:()=>({video:{frameCount:525,fps:30}})};
   Object.assign(context,helpers);
-  const presentationAndIO=new Set(['configureControlUI','controls','render','renderPosition','renderProgress',
+  const presentationAndIO=new Set(['configureControlUI','syncPracticeModeUI','controls','render','renderPosition','renderProgress',
     'nearestSample','renderFlowStatus','drawTeacher','drawGuides','readJson','validateData','frameRecording',
     'fitVisibilityTeacher','fitPortraitCamera','loadRecording','boot','seek','screenGuides','screenPaths',
     'seedScreenTargets','cameraFeedAvailable']);

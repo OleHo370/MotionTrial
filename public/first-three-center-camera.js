@@ -43,7 +43,7 @@ export function createFollowCamera({
   video, canvas, deviceSelect, startButton, stopButton,
   mirrorCheckbox, skeletonCheckbox, statusElement,
   onObservation = () => {}, onState = () => {},
-  pointIndices = null, showConnections = true, pointColors = {},adaptSample=withBodyPracticePoints,
+  pointIndices = null, getPointIndices = () => pointIndices, showConnections = true, pointColors = {},adaptSample=withBodyPracticePoints,
 }) {
   let stream = null;
   let client = null;
@@ -156,11 +156,12 @@ export function createFollowCamera({
     if (canvas.height !== height) canvas.height = height;
     const context = canvas.getContext('2d');
     if (!context) return;
+    const displayedIndices=getPointIndices();
     const points = new Map(lastDisplaySample.landmarks.filter((point) =>
       Number.isFinite(point.x) && Number.isFinite(point.y) && Number.isFinite(point.visibility)
       && point.visibility >= 0.45 && point.x >= 0 && point.x <= 1 && point.y >= 0 && point.y <= 1
       && (point.presence === undefined || Number.isFinite(point.presence) && point.presence >= 0.45 && point.presence <= 1),
-    ).filter((point)=>!pointIndices||pointIndices.includes(point.index)).map((point) => [point.index, point]));
+    ).filter((point)=>!displayedIndices||displayedIndices.includes(point.index)).map((point) => [point.index, point]));
     context.lineWidth = Math.max(2, width / 240);
     context.strokeStyle = '#67e8d5';
     context.fillStyle = '#a5fff1';

@@ -12,6 +12,8 @@ export const HARDWARE_GUIDANCE_RULES=Object.freeze({
   recoveryRadius:REVIEW_RULES.endpointRadius,
 });
 const INDICES=Object.freeze([33,34,35,36]);
+const selectionIndices=indices=>indices===undefined?INDICES:Array.isArray(indices)&&indices.length===2
+  &&new Set(indices).size===2&&[33,34].every(index=>indices.includes(index))?[33,34]:null;
 const NAMES={33:'Left hand',34:'Right hand',35:'Left foot',36:'Right foot'};
 const finitePoint=p=>!!p&&Number.isFinite(p.x)&&Number.isFinite(p.y);
 const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
@@ -36,15 +38,16 @@ function guideDistance(point,control){
     nearest=Math.min(nearest,segmentDistance(point,control.points[i-1],control.points[i]));
   return nearest;
 }
-function controlsFor(reference,pathReference){
-  const guides=reference?.guides,paths=pathReference?.paths;
+function controlsFor(reference,pathReference,indices,selected=false){
+  const sourceGuides=reference?.guides,paths=pathReference?.paths;
+  const guides=Array.isArray(sourceGuides)&&selected?sourceGuides.filter(g=>indices?.includes(g?.index)):sourceGuides;
   if(reference?.referenceUsable!==true||pathReference?.referenceUsable!==true
-    ||!Array.isArray(guides)||guides.length!==4||!Array.isArray(paths)
-    ||new Set(guides.map(g=>g?.index)).size!==4
+    ||!indices||!Array.isArray(guides)||guides.length!==indices.length||!Array.isArray(paths)
+    ||new Set(guides.map(g=>g?.index)).size!==indices.length
     ||new Set(paths.map(p=>p?.index)).size!==paths.length
     ||pathReference.referenceId!==undefined&&pathReference.referenceId!==reference.id)return null;
   const controls=[];
-  for(const index of INDICES){
+  for(const index of indices){
     const guide=guides.find(g=>g?.index===index),path=paths.find(p=>p?.index===index);
     if(guide?.valid!==true||!finitePoint(guide.start)||!finitePoint(guide.end))return null;
     const moving=guide.targetGeometry?.mode!=='hold'&&distance(guide.start,guide.end)
@@ -56,7 +59,7 @@ function controlsFor(reference,pathReference){
   }
   return controls;
 }
-const unknownLimbs=()=>INDICES.map(index=>({index,label:NAMES[index],status:'unknown',deviation:null,moving:null}));
+const unknownLimbs=(indices=INDICES)=>indices.map(index=>({index,label:NAMES[index],status:'unknown',deviation:null,moving:null}));
 const frameKey=f=>validFrame(f)?JSON.stringify([f.hip.x,f.hip.y,f.scale,f.aspect]):null;
 const controlKey=controls=>controls?JSON.stringify(controls):null;
 const rawKey=observation=>JSON.stringify([observation.sample.status,observation.aspectRatio,
@@ -69,23 +72,26 @@ const rawKey=observation=>JSON.stringify([observation.sample.status,observation.
  * Repeated render calls may expire a result but cannot accumulate support.
  */
 export function createHardwareGuidance(){
+  let activeIndices=INDICES;
   let result,mode,lastNowMs,lastSampleTMs,lastObservedAtMs,lastRawKey,lastValidAtMs;
   let previousReference,previousPathReference,previousFrameKey,previousControlKey,previousContext;
   let outsideSince,recoverySince;
   const snapshot=()=>({...result,limbs:result.limbs.map(limb=>({...limb}))});
   function clearEvidence(){mode='idle';outsideSince=new Map();recoverySince=null;lastValidAtMs=null;}
   function neutral(reason){
-    clearEvidence();result={state:'idle',reason,limbs:unknownLimbs()};return snapshot();
+    clearEvidence();result={state:'idle',reason,limbs:unknownLimbs(activeIndices)};return snapshot();
   }
   function reset(){
     clearEvidence();lastNowMs=null;lastSampleTMs=null;lastObservedAtMs=null;lastRawKey=null;
     previousReference=null;previousPathReference=null;previousFrameKey=null;previousControlKey=null;previousContext=undefined;
-    result={state:'idle',reason:'Practice is not active.',limbs:unknownLimbs()};return snapshot();
+    result={state:'idle',reason:'Practice is not active.',limbs:unknownLimbs(activeIndices)};return snapshot();
   }
   reset();
-  function update(reference,pathReference,observation,frame,{nowMs,active=false,contextKey=null}={}){
+  function update(reference,pathReference,observation,frame,{nowMs,active=false,contextKey=null,controlIndices}={}){
+    const indices=selectionIndices(controlIndices),armsOnly=controlIndices!==undefined&&!!indices;
+    activeIndices=indices??INDICES;
     if(!active){reset();return snapshot();}
-    const controls=controlsFor(reference,pathReference),fk=frameKey(frame),ck=controlKey(controls);
+    const controls=controlsFor(reference,pathReference,indices,armsOnly),fk=frameKey(frame),ck=controlKey(controls);
     if(previousReference!==reference||previousPathReference!==pathReference||previousFrameKey!==fk
       ||previousControlKey!==ck||previousContext!==contextKey){
       reset();previousReference=reference;previousPathReference=pathReference;
@@ -114,8 +120,8 @@ export function createHardwareGuidance(){
     }
     lastSampleTMs=sample.tMs;lastObservedAtMs=observedAtMs;lastRawKey=key;
     const points=new Map(sample.landmarks.map(point=>[point.index,point]));
-    if(sample.status!=='pose'||!INDICES.every(index=>trusted(points.get(index))))
-      return neutral('Keep both hands and both feet visible.');
+    if(sample.status!=='pose'||!indices.every(index=>trusted(points.get(index))))
+      return neutral(armsOnly?'Keep both palms visible.':'Keep both hands and both feet visible.');
     if(lastValidAtMs===null||observedAtMs-lastValidAtMs>REVIEW_RULES.maximumObservedGapMs)clearEvidence();
     lastValidAtMs=observedAtMs;
     const limbs=controls.map(control=>{
@@ -139,8 +145,8 @@ export function createHardwareGuidance(){
     const reason=state==='off'?(outside.length
       ?`${(sustained.length?sustained:outside).map(limb=>limb.label).join(' and ')} outside the general guideline.`
       :'Move fully inside the guidelines to clear the warning.')
-      :state==='good'?'All four points are within the general guidelines.'
-      :outside.length?'Checking movement outside the guideline.':'Checking all four points.';
+      :state==='good'?armsOnly?'Both palms are within the general guidelines.':'All four points are within the general guidelines.'
+      :outside.length?'Checking movement outside the guideline.':armsOnly?'Checking both palms.':'Checking all four points.';
     result={state,reason,limbs};return snapshot();
   }
   return {update,reset,getState:snapshot};

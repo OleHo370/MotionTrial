@@ -22,6 +22,8 @@ const startRulesFor=reference=>reference?.controlPointVersion===BODY_POINT_VERSI
     ?COMPACT_CENTER_START_POSITION_RULES:CENTER_START_POSITION_RULES:START_POSITION_RULES;
 const NAMES={15:'Left hand',16:'Right hand',27:'Left foot',28:'Right foot',...BODY_NAMES};
 const COLORS={...FOUR_POINT_COLORS,...BODY_COLORS};
+const selectedPalms=indices=>Array.isArray(indices)&&indices.length===2
+  &&new Set(indices).size===2&&[33,34].every(index=>indices.includes(index));
 const finitePoint=p=>!!p&&Number.isFinite(p.x)&&Number.isFinite(p.y);
 const inFrame=p=>finitePoint(p)&&p.x>=0&&p.x<=1&&p.y>=0&&p.y<=1;
 const copyFrame=frame=>frame?{hip:{...frame.hip},scale:frame.scale,aspect:frame.aspect}:null;
@@ -88,14 +90,18 @@ export function prepareAnchoredReference(original,step,data){
 }
 
 /**
- * All FOUR actual starts are needed. An absent optional endpoint does not erase
+ * All actual starts are needed by default; an explicit [33,34] selection needs
+ * both recorded palm starts only. An absent optional endpoint does not erase
  * its observed start: guide.valid describes start+end and is intentionally ignored.
  * Nothing is copied from the opposite side, generated, or gap-interpolated.
  */
-export function prepareStartPosition(reference){
+export function prepareStartPosition(reference,{controlIndices}={}){
   const rules=startRulesFor(reference);
   const guides=Array.isArray(reference?.guides)?reference.guides:[];
-  const targets=controlPointIndices(reference,START_POSITION_RULES.indices).map(index=>{
+  const selectionValid=controlIndices===undefined||selectedPalms(controlIndices);
+  const indices=controlIndices===undefined?controlPointIndices(reference,START_POSITION_RULES.indices)
+    :selectionValid?[33,34]:[];
+  const targets=indices.map(index=>{
     const matching=guides.filter(guide=>guide?.index===index),guide=matching.length===1?matching[0]:null;
     const support=actualSupport(guide);
     const valid=!!guide&&finitePoint(guide.start)&&inFrame(guide.startRaw)&&support.length>=2
@@ -106,16 +112,17 @@ export function prepareStartPosition(reference){
   });
   const missing=targets.filter(target=>!target.valid);
   const validId=typeof reference?.id==='string'&&reference.id.length>0;
-  const usable=validId&&!missing.length;
-  const unknownReason=!validId?'The teacher step has no valid reference identity.':missing.length
+  const usable=selectionValid&&validId&&targets.length>0&&!missing.length;
+  const unknownReason=!selectionValid?'Only both palm centers may be selected for arms-only practice.'
+    :!validId?'The teacher step has no valid reference identity.':missing.length
     ?`The teacher's ${missing.map(target=>target.label.toLowerCase()).join(' and ')} need clearer recorded starting positions.`:null;
   return {referenceId:reference?.id??null,usable,unknownReason,targets,
     key:JSON.stringify([reference?.id??null,targets.map(target=>[target.index,target.normalizedStart,target.startRaw,target.sourceSeconds,target.support])]),
     radius:rules.radius,rulesVersion:rules.version};
 }
 
-export function createStartPositionSession(reference){
-  const prepared=prepareStartPosition(reference);
+export function createStartPositionSession(reference,options){
+  const prepared=prepareStartPosition(reference,options);
   return {referenceId:prepared.referenceId,referenceKey:prepared.key,bodyFrame:null,aspect:null,
     firstNearAtMs:null,lastObservedAtMs:null,lastSampleTMs:null,nearSampleCount:0,heldMs:0,holdReady:false};
 }
@@ -125,8 +132,8 @@ function clearFrame(session){
 }
 
 /** Screen coordinates remain raw. Mirror the completed display layer separately. */
-export function projectStartPositionTargets(reference,session){
-  const prepared=prepareStartPosition(reference),body=session?.bodyFrame;
+export function projectStartPositionTargets(reference,session,options){
+  const prepared=prepareStartPosition(reference,options),body=session?.bodyFrame;
   const frameValid=session?.referenceKey===prepared.key&&body&&finitePoint(body.hip)
     &&Number.isFinite(body.scale)&&body.scale>=0.025&&Number.isFinite(body.aspect)&&body.aspect>0;
   return prepared.targets.map(target=>{
@@ -139,18 +146,19 @@ export function projectStartPositionTargets(reference,session){
 }
 
 /**
- * The first fresh, fully observed torso+four-point camera frame fixes the square
- * positions. Later hip movement cannot chase the squares around the screen.
+ * By default the first fresh, fully observed torso+four-point camera frame fixes
+ * the squares. The explicit two-palm mode instead uses the supplied head-to-waist
+ * frame and real palm observations. Later movement cannot chase the squares.
  * Distances use that same fixed torso frame; aspect changes invalidate the frame.
- * status=match means all four are currently near their squares. Only holdReady
+ * status=match means all active points are near their squares. Only holdReady
  * authorizes playback after 1500 ms of distinct, consecutive fresh observations.
  * A caller starts a new session for pause/retry/stop/step or camera changes.
  */
-export function evaluateStartPosition(reference,live,{attemptAspectRatio,nowMs,observedAtMs,session}){
-  const prepared=prepareStartPosition(reference);
-  const count=prepared.targets.length===8?'eight':'four';
+export function evaluateStartPosition(reference,live,{attemptAspectRatio,nowMs,observedAtMs,session,controlIndices,bodyFrame}){
+  const options={controlIndices},armsOnly=selectedPalms(controlIndices),prepared=prepareStartPosition(reference,options);
+  const count=armsOnly?'two':prepared.targets.length===8?'eight':'four';
   if(session.referenceId!==prepared.referenceId||session.referenceKey!==prepared.key){
-    Object.assign(session,createStartPositionSession(reference));
+    Object.assign(session,createStartPositionSession(reference,options));
   }
   const describe=(status,reason,limbs=[],allNear=false)=>({
     status,reason,limbs,allNear,heldMs:session.heldMs,progressMs:session.heldMs,
@@ -159,7 +167,7 @@ export function evaluateStartPosition(reference,live,{attemptAspectRatio,nowMs,o
   });
   const unknown=reason=>{
     clearHold(session);
-    return describe('unknown',reason,projectStartPositionTargets(reference,session).map(target=>({
+    return describe('unknown',reason,projectStartPositionTargets(reference,session,options).map(target=>({
       index:target.index,label:target.label,color:target.color,sourceValid:prepared.targets.find(item=>item.index===target.index).valid,
       valid:false,near:false,distance:null,target:target.point,
     })));
@@ -174,7 +182,7 @@ export function evaluateStartPosition(reference,live,{attemptAspectRatio,nowMs,o
     return unknown('Waiting for a fresh camera observation.');
   }
   if(!live||live.status!=='pose'||!Number.isFinite(live.tMs)||live.tMs<0||!Array.isArray(live.landmarks)){
-    return unknown('Keep your torso, both hands and both feet visible.');
+    return unknown(armsOnly?'Keep both palms visible.':'Keep your torso, both hands and both feet visible.');
   }
   const raw=new Map();
   for(const point of live.landmarks){
@@ -182,11 +190,17 @@ export function evaluateStartPosition(reference,live,{attemptAspectRatio,nowMs,o
     if(raw.has(point.index))return unknown('The camera observation has duplicate joint identities.');
     raw.set(point.index,point);
   }
-  const body=getFourPointBodyFrame(live,attemptAspectRatio);
+  // Arms-only uses a page-authored head-to-waist projection. This frame defines
+  // screen coordinates; it is never written into the raw learner observations.
+  const body=armsOnly?validFrame(bodyFrame)&&Math.abs(bodyFrame.aspect-attemptAspectRatio)<=.000001
+    ?bodyFrame:null:getFourPointBodyFrame(live,attemptAspectRatio);
   const missing=prepared.targets.map(target=>target.index).filter(index=>!tracked(raw.get(index)));
   if(!body||missing.length)return unknown(missing.length
     ?`${missing.map(index=>NAMES[index]).join(' and ')} temporarily hidden. All ${count} points must be visible together.`
-    :'Keep your torso visible to establish the starting positions.');
+    :armsOnly?'The head-to-waist camera framing is unavailable.':'Keep your torso visible to establish the starting positions.');
+  if(armsOnly&&session.bodyFrame&&!sameFrame(body,session.bodyFrame)){
+    clearFrame(session);return unknown('Camera framing changed. Establish fresh starting positions.');
+  }
   if(session.lastSampleTMs!==null&&(live.tMs<=session.lastSampleTMs||observedAtMs<=session.lastObservedAtMs)){
     return unknown('Waiting for a new camera observation.');
   }
@@ -194,15 +208,15 @@ export function evaluateStartPosition(reference,live,{attemptAspectRatio,nowMs,o
       ||observedAtMs-session.lastObservedAtMs>START_POSITION_RULES.maximumAgeMs))clearHold(session);
   session.lastSampleTMs=live.tMs;session.lastObservedAtMs=observedAtMs;
   if(!session.bodyFrame){
-    // A candidate that cannot place all four squares in view is not an anchor.
+    // A candidate that cannot place all active squares in view is not an anchor.
     // The learner may step back before the first usable frame is committed.
     const candidate={...session,bodyFrame:copyFrame(body),aspect:attemptAspectRatio};
-    if(projectStartPositionTargets(reference,candidate).some(target=>!target.valid)){
+    if(projectStartPositionTargets(reference,candidate,options).some(target=>!target.valid)){
       return unknown(`Leave more room around your body so all ${count} starting squares fit in the camera view.`);
     }
     session.bodyFrame=copyFrame(body);session.aspect=attemptAspectRatio;
   }
-  const targets=projectStartPositionTargets(reference,session);
+  const targets=projectStartPositionTargets(reference,session,options);
   if(targets.some(target=>!target.valid))return unknown('The starting squares fall outside the camera frame. Restart positioning with more room around your body.');
   const fixed=session.bodyFrame;
   const limbs=targets.map(target=>{

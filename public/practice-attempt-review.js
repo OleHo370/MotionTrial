@@ -150,10 +150,16 @@ function teacherTiming(path,guide,playbackRate){
  * used throughout; display mirroring has no role in the comparison.
  */
 export function createAttemptReview(reference,pathReference,
-  {bodyFrame,aspect,startAtMs=0,durationMs,playbackRate=1}={}){
+  {bodyFrame,aspect,startAtMs=0,durationMs,playbackRate=1,controlIndices}={}){
   const frame=copyFrame(bodyFrame),speed=Number.isFinite(playbackRate)&&playbackRate>0?playbackRate:1;
   const sourceDuration=Number.isFinite(durationMs)&&durationMs>0?durationMs:null;
-  const guides=Array.isArray(reference?.guides)?reference.guides:[];
+  // Only the explicitly requested two-palm exercise may omit lower-body
+  // controls. An arbitrary incomplete reference remains unknown by default.
+  const selectedPalms=Array.isArray(controlIndices)&&controlIndices.length===2
+    &&new Set(controlIndices).size===2&&[33,34].every(index=>controlIndices.includes(index));
+  const sourceGuides=Array.isArray(reference?.guides)?reference.guides:[];
+  const guides=controlIndices===undefined?sourceGuides:selectedPalms
+    ?sourceGuides.filter(guide=>controlIndices.includes(guide?.index)):[];
   const controls=guides.map(guide=>{
     const path=pathReference?.paths?.find(p=>p.index===guide.index);
     const displacement=finitePoint(guide.start)&&finitePoint(guide.end)?distance(guide.start,guide.end):0;
@@ -168,8 +174,10 @@ export function createAttemptReview(reference,pathReference,
       samples:[],observedIntervals:[],lastPoint:null,lastElapsedMs:null,lastValidElapsedMs:null,observedMs:0,offGuideMs:0,
       sampleCount:0,missingSamples:0,maximumDeviation:0,maximumForward:0};
   });
-  const anatomical=controls.length===4&&new Set(controls.map(c=>c.index)).size===4
-    &&[[15,16,27,28],[33,34,35,36]].some(set=>set.every(index=>controls.some(c=>c.index===index)));
+  const anatomical=selectedPalms?controls.length===2&&new Set(controls.map(c=>c.index)).size===2
+    &&[33,34].every(index=>controls.some(c=>c.index===index))
+    :controlIndices===undefined&&controls.length===4&&new Set(controls.map(c=>c.index)).size===4
+      &&[[15,16,27,28],[33,34,35,36]].some(set=>set.every(index=>controls.some(c=>c.index===index)));
   const referenceUsable=reference?.referenceUsable===true&&pathReference?.referenceUsable===true
     &&anatomical&&controls.every(c=>c.valid&&c.pathAvailable);
   const frameUsable=!!frame&&Number.isFinite(aspect)&&Math.abs(aspect-frame.aspect)<1e-6;

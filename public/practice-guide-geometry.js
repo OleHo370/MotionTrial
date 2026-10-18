@@ -5,11 +5,11 @@ import {projectFourPointGuides} from './four-point-game-runtime.js';
 import {projectPracticeTubes} from './practice-tube.js';
 
 export function projectPracticeGuideGeometry(reference,pathReference,placement,
-  {fixedFrame=null,movement=null}={}){
+  {fixedFrame=null,movement=null,controlIndices}={}){
   const frame=fixedFrame??placement?.bodyFrame;
   if(!frame)return {frame:null,starts:[],ends:[],routes:[]};
   return {frame,
-    starts:projectStartPositionTargets(reference,{...placement,bodyFrame:frame,aspect:frame.aspect}),
+    starts:projectStartPositionTargets(reference,{...placement,bodyFrame:frame,aspect:frame.aspect},{controlIndices}),
     ends:projectFourPointGuides(reference,null,frame.aspect,frame),
     routes:projectPracticeTubes(pathReference,frame,movement)};
 }
